@@ -1,0 +1,28 @@
+module kpsr_dds_geometry {
+
+    struct PoseEventData {
+        string frameId;
+        short seq; //@key
+        long timestamp;
+
+        boolean eulerAvailable;
+        boolean posCovarianceAvailable;
+
+        double x;
+        double y;
+        double z;
+
+        double roll;
+        double pitch;
+        double yaw;
+
+        double qx;
+        double qy;
+        double qz;
+        double qw;
+
+        sequence<double> positionCovariance;
+    };
+
+#pragma keylist PoseEventData seq
+};

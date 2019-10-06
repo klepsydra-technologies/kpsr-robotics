@@ -1,0 +1,6 @@
+[submodule "kpsr-build"]
+	path = kpsr-build
+	url = https://github.com/klepsydra-technologies/kpsr-build.git
+[submodule "thirdparties/googletest"]
+	path = thirdparties/googletest
+	url = https://github.com/klepsydra-technologies/googletest.git

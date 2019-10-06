@@ -1,0 +1,21 @@
+# - Config file for the Klepsydra package
+# It defines the following variables
+#  KPSR_ROBOTICS_INCLUDE_DIRS - include directories for Klepsydra
+#  KPSR_ROBOTICS_LIBRARIES    - libraries to link against
+#  KPSR_ROBOTICS_EXECUTABLE   - the bar executable
+
+# Compute paths
+get_filename_component(KPSR_ROBOTICS_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+set(KPSR_ROBOTICS_INCLUDE_DIRS "@EXPORT_INCLUDE_DIRS@")
+
+# Our library dependencies (contains definitions for IMPORTED targets)
+if(NOT TARGET klepsydra AND NOT KPSR_ROBOTICS_BINARY_DIR)
+  include("${KPSR_ROBOTICS_CMAKE_DIR}/KlepsydraRoboticsTargets.cmake")
+endif()
+
+
+# These are IMPORTED targets created by KlepsydraRoboticsTargets.cmake
+set(KPSR_ROBOTICS_CORE_LIBRARIES "@CORE_EXPORT_TARGETS@")
+set(KPSR_ROBOTICS_DDS_LIBRARIES "@DDS_EXPORT_TARGETS@")
+set(KPSR_ROBOTICS_ZMQ_LIBRARIES "@ZMQ_EXPORT_TARGETS@")
+

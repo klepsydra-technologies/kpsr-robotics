@@ -1,0 +1,7 @@
+build/**
+/build
+Config.cmake
+*.user
+**/**/config.h
+gen/**
+gen
