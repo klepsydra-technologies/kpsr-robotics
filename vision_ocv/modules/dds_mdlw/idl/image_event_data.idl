@@ -1,0 +1,15 @@
+module kpsr_dds_vision_ocv {
+
+    struct ImageData {
+        string frameId;
+        short seq; //@key
+        long timestamp;
+
+        unsigned long rows;
+        unsigned long cols;
+        unsigned long type;
+        sequence<octet> data;
+    };
+
+#pragma keylist ImageData seq
+};

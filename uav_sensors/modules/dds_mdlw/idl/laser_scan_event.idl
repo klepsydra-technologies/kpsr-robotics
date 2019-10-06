@@ -1,0 +1,19 @@
+module kpsr_dds_sensors {
+
+    struct LaserScanEvent {
+        string frameId;
+        short seq; //@key
+        long timestamp;
+        float angle_min;
+        float angle_max;
+        float angle_increment;
+        float time_increment;
+        float scan_time;
+        float range_min;
+        float range_max;
+        sequence<float> ranges;
+        sequence<float> intensities;
+    };
+
+#pragma keylist LaserScanEvent seq
+};
