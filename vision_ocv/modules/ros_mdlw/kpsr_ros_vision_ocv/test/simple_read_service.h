@@ -1,10 +1,11 @@
 #ifndef SIMPLE_READ_SERVICE_H
 #define SIMPLE_READ_SERVICE_H
 
-#include <iostream>
-
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
+
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/basic_file_sink.h"
 
 #include <klepsydra/core/service.h>
 #include <klepsydra/core/subscriber.h>
@@ -31,11 +32,15 @@ public:
     void execute() {}
 
     void onEventReceived(const kpsr::vision_ocv::ImageData & event) {
-        std::cout << "SimpleReadService. event received. " << event.seq
-                  << ". image type: " << event.img.type()
-                  << ". image rows: " << event.img.rows
-                  << ". image cols: " << event.img.cols
-                  << std::endl;
+        spdlog::info("SimpleReadService. event received. {}"
+                  ". image type: {}"
+                  ". image rows: {}"
+                  ". image cols: {}",
+                  event.seq,
+                  event.img.type(),
+                  event.img.rows,
+                  event.img.cols
+        );
         lastReadImg = event;
         receivedImage = true;
     }

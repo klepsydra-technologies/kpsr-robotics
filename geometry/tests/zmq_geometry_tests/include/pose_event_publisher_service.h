@@ -25,7 +25,9 @@
 #include <klepsydra/core/publisher.h>
 #include <klepsydra/geometry/pose_event_data.h>
 
-#include <iostream>
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/basic_file_sink.h"
+
 #include <random>
 
 const float angle_min = -3.14;
@@ -48,7 +50,7 @@ public:
     void stop() {}
 
     void execute() {
-        std::cout << "PoseEventDataPublisherService.runOnce" << std::endl;
+        spdlog::info("PoseEventDataPublisherService.runOnce");
         sensor.seq = _seq++;
         sensor.frameId = "BODY_FRAME";
         sensor.x = 10;

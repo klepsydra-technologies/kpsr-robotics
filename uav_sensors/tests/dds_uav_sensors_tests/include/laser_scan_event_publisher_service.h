@@ -21,8 +21,10 @@
 #ifndef LASER_SCAN_EVENT_PUBLISHER_SERVICE_H
 #define LASER_SCAN_EVENT_PUBLISHER_SERVICE_H
 
-#include <iostream>
 #include <random>
+
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/basic_file_sink.h"
 
 #include <klepsydra/core/service.h>
 #include <klepsydra/core/publisher.h>
@@ -49,7 +51,7 @@ public:
     void stop() {}
 
     void execute() {
-        std::cout << "LaserScanEventPublisherService.runOnce" << std::endl;
+        spdlog::info("LaserScanEventPublisherService.runOnce");
         sensor.seq = _seq++;
         sensor.frameId = "BODY_FRAME";
         sensor.angle_min = -3.14f;
@@ -68,14 +70,23 @@ public:
         sensor.intensities[1] = (((*dist)(*mt)*intensity));
         sensor.intensities[2] = (((*dist)(*mt)*intensity));
 
-        std::cout << "LaserScanEventPublisherService.runOnce. seq: " << sensor.seq
-                  << ". sensor.frameId: " << sensor.frameId
-                  << ". sensor.angle_min: " << sensor.angle_min
-                  << ". sensor.range_min: " << sensor.range_min
-                  << ". sensor.ranges.size(): " << sensor.ranges.size()
-                  << ". sensor.ranges[0]: " << sensor.ranges[0]
-                  << ". sensor.intensities.size(): " << sensor.intensities.size()
-                  << ". sensor.intensities[0]: " << sensor.intensities[0] << std::endl;
+        spdlog::info("LaserScanEventPublisherService.runOnce. seq: {}"
+                  ". sensor.frameId: {}"
+                  ". sensor.angle_min: {}"
+                  ". sensor.range_min: {}"
+                  ". sensor.ranges.size(): {}"
+                  ". sensor.ranges[0]: {}"
+                  ". sensor.intensities.size(): {}"
+                  ". sensor.intensities[0]: {}",
+                  sensor.seq,
+                  sensor.frameId,
+                  sensor.angle_min,
+                  sensor.range_min,
+                  sensor.ranges.size(),
+                  sensor.ranges[0],
+                  sensor.intensities.size(),
+                  sensor.intensities[0]
+        );
         _publisher->publish(sensor);
     }
 

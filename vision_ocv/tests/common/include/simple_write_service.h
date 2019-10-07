@@ -23,6 +23,9 @@
 
 #include <opencv2/opencv.hpp>
 
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/basic_file_sink.h"
+
 #include <klepsydra/core/service.h>
 #include <klepsydra/core/publisher.h>
 
@@ -49,7 +52,7 @@ public:
             fileNameList = new std::vector<std::string>();
             FileUtils::getSortedListOfFilesInDir(_imageDirname, fileNameList);
             sz = fileNameList->size();
-            std::cout << "Read a list of " << sz-2 << " images in folder: " << _imageDirname << std::endl;
+            spdlog::info("Read a list of {} images in folder: {}", sz-2, _imageDirname);
         }
     }
 
@@ -63,8 +66,8 @@ public:
         fullScaleImage = getImage();
         resize(fullScaleImage, imageEvent.img, cvSize(480, 320));
 
-        std::cout << "SimpleWriteService::execute. imageEvent.img.type() = " << imageEvent.img.type() << std::endl;
-        std::cout << "SimpleWriteService::execute. fullScaleImage.type() = " << fullScaleImage.type() << std::endl;
+        spdlog::info("SimpleWriteService::execute. imageEvent.img.type() = ", imageEvent.img.type());
+        spdlog::info("SimpleWriteService::execute. fullScaleImage.type() = ", fullScaleImage.type());
         _publisher->publish(imageEvent);
     }
 
@@ -85,7 +88,7 @@ private:
             image_path.append((*fileNameList)[index++]);
             _fileImage = cv::imread(image_path);
             if(!_fileImage.data) {
-                std::cout<<"Could not open or find the image in" << image_path << std::endl ;
+                spdlog::info("Could not open or find the image in{}", image_path);
             }
 
             return _fileImage;

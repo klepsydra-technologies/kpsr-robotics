@@ -21,11 +21,13 @@
 #ifndef SLOW_READ_SERVICE_H
 #define SLOW_READ_SERVICE_H
 
-#include <iostream>
 #include <thread>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
+
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/basic_file_sink.h"
 
 #include <klepsydra/core/service.h>
 #include <klepsydra/core/subscriber.h>
@@ -52,11 +54,15 @@ public:
     void execute() {}
 
     void onEventReceived(const kpsr::vision_ocv::ImageData & event) {
-        std::cout << "SlowReadService. event received. " << event.seq
-                  << ". image type: " << event.img.type()
-                  << ". image rows: " << event.img.rows
-                  << ". image cols: " << event.img.cols
-                  << std::endl;
+        spdlog::info("SlowReadService. event received. {}"
+                  ". image type: {}"
+                  ". image rows: {}"
+                  ". image cols: {}",
+                  event.seq,
+                  event.img.type(),
+                  event.img.rows,
+                  event.img.cols
+        );
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
         lastReadImg = event;
         receivedImage = true;

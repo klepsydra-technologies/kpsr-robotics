@@ -25,6 +25,9 @@
 
 #include "ros/ros.h"
 
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/basic_file_sink.h"
+
 #include <image_transport/image_transport.h>
 
 #include <cv_bridge/cv_bridge.h>
@@ -86,15 +89,15 @@ public:
         event.timestamp = ms.count();
 
         cv_bridge::CvImagePtr cvPtr;
-        //std::cout << "ImageFromROS received %i" << message.header.seq << std::endl;
+        //spdlog::info("ImageFromROS received %i{}", message.header.seq);
         try {
             cvPtr = cv_bridge::toCvCopy(message, message.encoding);
         }
         catch (cv_bridge::Exception& e) {
-            std::cerr << "ImageFromROS received. cv_bridge exception: %s" <<  e.what() << std::endl;
+            spdlog::error("ImageFromROS received. cv_bridge exception: %s", e.what());
         }
 
-        //std::cout << "ImageFromROS received. Converting encoding: " << message.encoding << std::endl;
+        //spdlog::info("ImageFromROS received. Converting encoding: {}", message.encoding);
         event.img = cvPtr->image;
     }
 };
