@@ -20,12 +20,12 @@ pipeline {
                         docker.image("${kpsrThirdPartiesECR}:ROS").pull()
                     }
                     docker.withRegistry("https://${kpsrCoreECR}", "ecr:us-east-2:AWS_ECR_CREDENTIALS") {
-                        docker.image("${kpsrCoreECR}:master_ROS").pull()
+                        docker.image("${kpsrCoreECR}:bugfix_docker-ci-include-files_ROS").pull()
                     }
                 }
 
                 sh "docker tag ${kpsrThirdPartiesECR}:ROS kpsr-thirdparties:ROS"
-                sh "docker tag ${kpsrCoreECR}:master_ROS kpsr-core:master_ROS"
+                sh "docker tag ${kpsrCoreECR}:bugfix_docker-ci-include-files_ROS kpsr-core:bugfix_docker-ci-include-files_ROS"
             }
         }
         stage('Build') {
@@ -37,9 +37,7 @@ pipeline {
                 sh 'container_id=$(docker create $(docker images -a -f "label=kpsr-robotics=builder" -f  "label=BUILD_ID=${BUILD_ID}" --format "{{.ID}}")) && \
                     docker cp $container_id:/opt/kpsr-robotics/build/copy_cppcheck.sh . && \
                     bash copy_cppcheck.sh $container_id && \
-                    docker cp $container_id:/opt/kpsr-robotics/build/coverage.xml . && \
-                    docker cp $container_id:/opt/kpsr-robotics/build/code_generator/kpsr_codegen/coverage.xml code_generator/kpsr_codegen && \
-                    sed -i -e "s@[./]opt[./]kpsr-robotics[./]@@g" code_generator/kpsr_codegen/coverage.xml'
+                    docker cp $container_id:/opt/kpsr-robotics/build/coverage.xml .'
 
                 // Run cppcheck
                 publishCppcheck(
