@@ -28,7 +28,7 @@ RUN cd kpsr-core \
     && cmake -DKPSR_WITH_DOXYGEN=true -DKPSR_WITH_DDS=false -DKPSR_WITH_ZMQ=false\
        -DKPSR_WITH_CODE_METRICS=true -DCMAKE_BUILD_TYPE=Debug ..\
     && make \
-    && bash ../kpsr-build/scripts/make_cppcheck.sh \
+    && bash ../kpsr-build/scripts/make_cppcheck.sh kpsr-robotics \
     && make test_coverage_cobertura ARGS="-V" \
     && make doc \
     && make install
@@ -44,7 +44,7 @@ RUN cd ../../ \
     && catkin_make install
 
 ARG BUILD_ID
-LABEL kpsr-core=builder
+LABEL kpsr-robotics=builder
 LABEL BUILD_ID=${BUILD_ID}
 
 FROM ubuntu:18.04

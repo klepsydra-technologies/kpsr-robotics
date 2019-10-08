@@ -52,6 +52,10 @@ TARGET_LINK_LIBRARIES(${PROJ_NAME}
     atomic 
     ${CMAKE_THREAD_LIBS_INIT})
 
+if (KPSR_WITH_CODE_METRICS)
+    add_cppcheck(${PROJ_NAME} UNUSED_FUNCTIONS STYLE POSSIBLE_ERROR)
+endif()
+
 # Install
 #---------------------------------------------------#
 INSTALL(TARGETS ${PROJ_NAME}
@@ -63,5 +67,6 @@ INSTALL(DIRECTORY "include/klepsydra"
 )
 
 add_core_export_target(${PROJ_NAME})
+
 #PRINTBASICINFO(${PROJ_NAME})
 

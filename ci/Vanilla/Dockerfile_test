@@ -1,0 +1,34 @@
+FROM kpsr-thirdparties:OCV as thirdparties
+FROM kpsr-core:master_Vanilla as core
+
+FROM kpsr-thirdparties:sys_dep_ubuntu_18.04
+
+ARG BUILD_ID
+LABEL kpsr-robotics=compile_docker
+LABEL BUILD_ID=${BUILD_ID}
+LABEL method=Vanilla
+
+# Internal dependencies
+COPY --from=thirdparties /usr/local/include/opencv/ /usr/local/include/opencv/
+COPY --from=thirdparties /usr/local/include/opencv2/ /usr/local/include/opencv2/
+COPY --from=thirdparties /usr/local/lib/libopencv* /usr/local/lib/
+COPY --from=thirdparties /usr/local/bin/opencv* /usr/local/bin/
+COPY --from=thirdparties /usr/local/share/OpenCV /usr/local/share/OpenCV
+
+COPY --from=core /usr/local/include/klepsydra/ /usr/local/include/klepsydra/
+COPY --from=core /usr/local/include/kpsr_3parties/ /usr/local/include/kpsr_3parties/
+COPY --from=core /usr/local/lib/cmake/klepsydra/ /usr/local/lib/cmake/klepsydra/
+COPY --from=core /usr/local/lib/libkpsr* /usr/local/lib/
+
+WORKDIR /opt
+
+# Klepsydra
+COPY . kpsr-robotics
+
+RUN cd kpsr-robotics \
+    && git submodule update --init \
+    && mkdir build \
+    && cd build \
+    && cmake -DKPSR_WITH_DOXYGEN=true -DKPSR_WITH_DDS=false -DKPSR_WITH_ZMQ=false\
+       -DKPSR_WITH_CODE_METRICS=true -DCMAKE_BUILD_TYPE=Debug ..\
+    && make
