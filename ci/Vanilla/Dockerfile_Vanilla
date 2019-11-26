@@ -1,5 +1,5 @@
 FROM kpsr-thirdparties:OCV as thirdparties
-FROM kpsr-core:bugfix_docker-ci-include-files_Vanilla as core
+FROM kpsr-core:master_Vanilla as core
 
 FROM ubuntu:18.04 AS builder
 

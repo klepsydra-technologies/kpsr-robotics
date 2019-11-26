@@ -20,24 +20,25 @@ pipeline {
                         docker.image("${kpsrThirdPartiesECR}:OCV").pull()
                     }
                     docker.withRegistry("https://${kpsrCoreECR}", "ecr:us-east-2:AWS_ECR_CREDENTIALS") {
-                        docker.image("${kpsrCoreECR}:bugfix_docker-ci-include-files_Vanilla").pull()
+                        docker.image("${kpsrCoreECR}:master_Vanilla").pull()
                     }
                 }
 
                 sh "docker tag ${kpsrThirdPartiesECR}:OCV kpsr-thirdparties:OCV"
-                sh "docker tag ${kpsrCoreECR}:bugfix_docker-ci-include-files_Vanilla kpsr-core:bugfix_docker-ci-include-files_Vanilla"
+                sh "docker tag ${kpsrCoreECR}:master_Vanilla kpsr-core:master_Vanilla"
             }
         }
         stage('Build') {
             steps {
-                
+
                 sh "docker build -f ./ci/Vanilla/Dockerfile_Vanilla . --rm --build-arg=BUILD_ID=${BUILD_ID} \
                 -t kpsr-robotics:${local_branch}_${BUILD_ID}_Vanilla"
 
-                sh 'container_id=$(docker create $(docker images -a -f "label=kpsr-robotics=builder" -f  "label=BUILD_ID=${BUILD_ID}" --format "{{.ID}}")) && \
-                    docker cp $container_id:/opt/kpsr-robotics/build/copy_cppcheck.sh . && \
-                    bash copy_cppcheck.sh $container_id && \
-                    docker cp $container_id:/opt/kpsr-robotics/build/coverage.xml .'
+                //sh 'container_id=$(docker create $(docker images -a -f "label=kpsr-robotics=builder" -f  "label=BUILD_ID=${BUILD_ID}" --format "{{.ID}}")) && \
+                //    docker cp $container_id:/opt/kpsr-robotics/build/copy_cppcheck.sh . && \
+                //    bash copy_cppcheck.sh $container_id && \
+                //    docker cp $container_id:/opt/kpsr-robotics/build/coverage.xml .'
+                sh 'docker cp ${name_container}:/opt/kpsr-core/build/ .'
 
                 // Run cppcheck
                 publishCppcheck(
