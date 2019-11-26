@@ -1,12 +1,13 @@
+# Compile docker
+FROM kpsr-core:sys_dep_ubuntu_18.04 as compile_docker
+
 FROM kpsr-thirdparties:OCV as thirdparties
 FROM kpsr-core:master_Vanilla as core
 
-FROM ubuntu:18.04 AS builder
-
-# System Dependencies.
-
-RUN apt update && apt-get install libssl-dev libcurl4-gnutls-dev build-essential git cmake python cppcheck doxygen python3-pip gcovr lcov curl -y --fix-missing
-RUN curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh && bash nodesource_setup.sh && apt install nodejs
+ARG BUILD_ID
+LABEL kpsr-robotics=compile_docker
+LABEL BUILD_ID=${BUILD_ID}
+LABEL method=Vanilla
 
 # Internal dependencies
 COPY --from=thirdparties /usr/local/include/opencv/ /usr/local/include/opencv/
@@ -20,35 +21,15 @@ COPY --from=core /usr/local/include/kpsr_3parties/ /usr/local/include/kpsr_3part
 COPY --from=core /usr/local/lib/cmake/klepsydra/ /usr/local/lib/cmake/klepsydra/
 COPY --from=core /usr/local/lib/libkpsr* /usr/local/lib/
 
-# Install pip packages (Optimizing cache building)
-RUN npm install -g moxygen
-
 WORKDIR /opt
 
 # Klepsydra
-COPY . kpsr-core
+COPY . kpsr-robotics
 
-RUN cd kpsr-core \
+RUN cd kpsr-robotics \
     && git submodule update --init \
     && mkdir build \
     && cd build \
     && cmake -DKPSR_WITH_DOXYGEN=true -DKPSR_WITH_DDS=false -DKPSR_WITH_ZMQ=false\
        -DKPSR_WITH_CODE_METRICS=true -DCMAKE_BUILD_TYPE=Debug ..\
-    && make \
-    && bash ../kpsr-build/scripts/make_cppcheck.sh kpsr-robotics \
-    && make test_coverage_cobertura ARGS="-V" \
-    && make doc \
-    && make install
-
-ARG BUILD_ID
-LABEL kpsr-robotics=builder
-LABEL BUILD_ID=${BUILD_ID}
-
-FROM ubuntu:18.04
-
-COPY --from=builder /usr/local/include/klepsydra/ /usr/local/include/klepsydra/
-COPY --from=builder /usr/local/lib/cmake/klepsydra/ /usr/local/lib/cmake/klepsydra/
-COPY --from=builder /usr/local/lib/libkpsr* /usr/local/lib/
-
-WORKDIR /opt/
-
+    && make
