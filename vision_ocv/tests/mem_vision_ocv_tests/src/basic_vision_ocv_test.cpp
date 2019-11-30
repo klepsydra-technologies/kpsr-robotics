@@ -24,6 +24,9 @@
 #include "simple_read_service.h"
 #include "slow_read_service.h"
 
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/basic_file_sink.h"
+
 #include "gtest/gtest.h"
 
 #include "config.h"
@@ -32,7 +35,7 @@ TEST(BasicVisionTest, BasicVisionTest) {
     kpsr::vision_ocv::mem::BasicVisionMiddlewareProvider provider(nullptr, 1080, 2040, 16, "body", "raw_image", 4, 6, false);
     provider.underlying->start();
 
-    //std::cout << "Creating services." << std::endl;
+    //spdlog::info("Creating services.");
     kpsr::Publisher<kpsr::vision_ocv::ImageData> * publisher = provider.underlying->getPublisher();
     SimpleWriteService writeService(nullptr, publisher, TEST_DATA, true);
 
@@ -43,14 +46,14 @@ TEST(BasicVisionTest, BasicVisionTest) {
     std::chrono::milliseconds ms1 = std::chrono::duration_cast< std::chrono::milliseconds >(std::chrono::system_clock::now().time_since_epoch());
     long before = ms1.count();
 
-    //std::cout << "Starting services." << std::endl;
+    //spdlog::info("Starting services.");
     writeService.start();
     simpleReadService.start();
     slowReadService.start();
 
     // Publish some integers.
     for (int i = 0; i < 50; i++) {
-        //std::cout << "Executing services." << std::endl;
+        //spdlog::info("Executing services.");
         writeService.execute();
         simpleReadService.execute();
         slowReadService.execute();

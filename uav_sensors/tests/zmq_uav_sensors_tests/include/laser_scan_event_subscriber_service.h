@@ -21,8 +21,10 @@
 #ifndef LASER_SCAN_EVENT_SUBSCRIBER_SERVICE_H
 #define LASER_SCAN_EVENT_SUBSCRIBER_SERVICE_H
 
-#include <iostream>
 #include <functional>
+
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/basic_file_sink.h"
 
 #include <klepsydra/core/service.h>
 #include <klepsydra/core/subscriber.h>
@@ -50,14 +52,23 @@ private:
 
     void onMessageReceived(const kpsr::sensors::LaserScanEvent & eventData) {
         sensor = eventData;
-        std::cout << "LaserScanEventSubscriberService.onMessageReceived. seq: " << eventData.seq
-                  << ". eventData.frameId: " << eventData.frameId
-                  << ". eventData.angle_min: " << eventData.angle_min
-                  << ". eventData.range_min: " << eventData.range_min
-                  << ". eventData.ranges.size(): " << eventData.ranges.size()
-                  << ". eventData.ranges[0]: " << eventData.ranges[0]
-                  << ". eventData.intensities.size(): " << eventData.intensities.size()
-                  << ". eventData.intensities[0]: " << eventData.intensities[0] << std::endl;
+        spdlog::info("LaserScanEventSubscriberService.onMessageReceived. seq: {}"
+                  ". eventData.frameId: {}"
+                  ". eventData.angle_min: {}"
+                  ". eventData.range_min: {}"
+                  ". eventData.ranges.size(): {}"
+                  ". eventData.ranges[0]: {}"
+                  ". eventData.intensities.size(): {}"
+                  ". eventData.intensities[0]: {}",
+                  eventData.seq,
+                  eventData.frameId,
+                  eventData.angle_min,
+                  eventData.range_min,
+                  eventData.ranges.size(),
+                  eventData.ranges[0],
+                  eventData.intensities.size(),
+                  eventData.intensities[0]
+        );
     }
 
     kpsr::Subscriber<kpsr::sensors::LaserScanEvent> * _laserScanEventSubscriber;

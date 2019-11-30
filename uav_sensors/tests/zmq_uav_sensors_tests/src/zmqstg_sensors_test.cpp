@@ -26,6 +26,9 @@
 #include <sstream>
 #include <fstream>
 
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/basic_file_sink.h"
+
 #include "gtest/gtest.h"
 
 #include <klepsydra/core/service.h>
@@ -60,7 +63,7 @@ TEST(ZmqSensorsTest, ZmqSensorsTest) {
     std::string clientUrl = "tcp://localhost:5556";
 
     //  Socket to talk to server
-    std::cout << "Collecting updates from telemetry server...\n" << std::endl;
+    spdlog::info("Collecting updates from telemetry server...\n");
     zmq::socket_t subscriber (context, ZMQ_SUB);
 
     subscriber.connect(clientUrl);

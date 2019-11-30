@@ -21,8 +21,10 @@
 #ifndef POSE_EVENT_DATA_SUBSCRIBER_SERVICE_H
 #define POSE_EVENT_DATA_SUBSCRIBER_SERVICE_H
 
-#include <iostream>
 #include <functional>
+
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/basic_file_sink.h"
 
 #include <klepsydra/core/service.h>
 #include <klepsydra/core/subscriber.h>
@@ -48,7 +50,7 @@ public:
 private:
 
     void onMessageReceived(const kpsr::geometry::PoseEventData & eventData) {
-        std::cout << "PoseEventDataSubscriberService.onMessageReceived." << std::endl;
+        spdlog::info("PoseEventDataSubscriberService.onMessageReceived.");
         sensor = eventData;
     }
 
