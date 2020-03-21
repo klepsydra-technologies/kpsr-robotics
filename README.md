@@ -15,7 +15,7 @@
 * gcc for C++11 5.4.0 or above.
 * Doxygen (optional)
 * Moxygen (https://github.com/sourcey/moxygen) (optional)
-* Open CV (Version 3.4.x)
+* Open CV (Version 3.4.x) (optional)
 * Ros Vision Package
 
 ## Klepsydra dependencies
@@ -49,6 +49,7 @@ This will install the klespydra robotics in
 	/opt/klepsydra	
 
 The cmake has the following options:
+* -DKPSR_WITH_OCV=true for building the Open CV vision module
 * -DKPSR_WITH_DDS=true for building the DDS binding
 * -DKPSR_WITH_ZMQ=true for building the ZMQ binding
 * -DKPSR_BUILD_PATH location of the ```kpsr-build``` repository
