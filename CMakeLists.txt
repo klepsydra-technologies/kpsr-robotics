@@ -146,7 +146,9 @@ find_package(Threads REQUIRED)
 ######################################################################################
 ADD_SUBDIRECTORY(geometry)
 ADD_SUBDIRECTORY(uav_sensors)
-ADD_SUBDIRECTORY(vision_ocv)
+if (KPSR_WITH_OCV)
+  ADD_SUBDIRECTORY(vision_ocv)
+endif()
 
 if (KPSR_RUNTIME)
 else()
@@ -176,42 +178,39 @@ ENDIF()
 set(DEF_INSTALL_CMAKE_DIR lib/cmake/klepsydrarobotics)
 set(INSTALL_CMAKE_DIR ${DEF_INSTALL_CMAKE_DIR} CACHE PATH "Installation directory for CMake files")
 
-# Make relative paths absolute (needed later on)
-foreach(p LIB BIN INCLUDE CMAKE)
-  set(var INSTALL_${p}_DIR)
-  if(NOT IS_ABSOLUTE "${${var}}")
-    set(${var} "${CMAKE_INSTALL_PREFIX}/${${var}}")
-  endif()
-endforeach()
+if (KPSR_WITH_OCV)
+  # Make relative paths absolute (needed later on)
+  foreach(p LIB BIN INCLUDE CMAKE)
+    set(var INSTALL_${p}_DIR)
+    if(NOT IS_ABSOLUTE "${${var}}")
+      set(${var} "${CMAKE_INSTALL_PREFIX}/${${var}}")
+    endif()
+  endforeach()
 
-list (APPEND EXPORT_INCLUDE_DIRS ${CMAKE_INSTALL_FULL_INCLUDEDIR})
-message ("CORE_EXPORT_TARGETS: " ${CORE_EXPORT_TARGETS})
-message ("DDS_EXPORT_TARGETS: " ${DDS_EXPORT_TARGETS})
-message ("ZMQ_EXPORT_TARGETS: " ${ZMQ_EXPORT_TARGETS})
-message ("EXPORT_INCLUDE_DIRS: " ${EXPORT_INCLUDE_DIRS})
-export(TARGETS ${CORE_EXPORT_TARGETS} ${DDS_EXPORT_TARGETS} ${ZMQ_EXPORT_TARGETS} FILE "${PROJECT_BINARY_DIR}/KlepsydraRoboticsTargets.cmake")
+  list (APPEND EXPORT_INCLUDE_DIRS ${CMAKE_INSTALL_FULL_INCLUDEDIR})
+  export(TARGETS ${CORE_EXPORT_TARGETS} ${DDS_EXPORT_TARGETS} ${ZMQ_EXPORT_TARGETS} FILE "${PROJECT_BINARY_DIR}/KlepsydraRoboticsTargets.cmake")
 
-# Export the package for use from the build-tree
-# (this registers the build-tree with a global CMake-registry)
-export(PACKAGE robotics)
+  # Export the package for use from the build-tree
+  # (this registers the build-tree with a global CMake-registry)
+  export(PACKAGE robotics)
 
-# Create the KlepsydraRoboticsConfig.cmake and KlepsydraRoboticsConfigVersion files
-configure_file(KlepsydraRoboticsConfig.cmake.in
-  "${PROJECT_BINARY_DIR}/KlepsydraRoboticsConfig.cmake" @ONLY)
+  # Create the KlepsydraRoboticsConfig.cmake and KlepsydraRoboticsConfigVersion files
+  configure_file(KlepsydraRoboticsConfig.cmake.in
+    "${PROJECT_BINARY_DIR}/KlepsydraRoboticsConfig.cmake" @ONLY)
 
-configure_file(KlepsydraRoboticsConfig.cmake.in
-  "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/KlepsydraRoboticsConfig.cmake" @ONLY)
-# ... for both
-configure_file(KlepsydraRoboticsConfigVersion.cmake.in
-  "${PROJECT_BINARY_DIR}/KlepsydraRoboticsConfigVersion.cmake" @ONLY)
+  configure_file(KlepsydraRoboticsConfig.cmake.in
+    "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/KlepsydraRoboticsConfig.cmake" @ONLY)
+  # ... for both
+  configure_file(KlepsydraRoboticsConfigVersion.cmake.in
+    "${PROJECT_BINARY_DIR}/KlepsydraRoboticsConfigVersion.cmake" @ONLY)
 
-# Install the KlepsydraRoboticsConfig.cmake and KlepsydraRoboticsConfigVersion.cmake
-install(FILES
-  "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/KlepsydraRoboticsConfig.cmake"
-  "${PROJECT_BINARY_DIR}/KlepsydraRoboticsConfigVersion.cmake"
-  DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT dev)
+  # Install the KlepsydraRoboticsConfig.cmake and KlepsydraRoboticsConfigVersion.cmake
+  install(FILES
+    "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/KlepsydraRoboticsConfig.cmake"
+    "${PROJECT_BINARY_DIR}/KlepsydraRoboticsConfigVersion.cmake"
+    DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT dev)
 
-# Install the export set for use with the install-tree
-install(EXPORT KlepsydraRoboticsTargets DESTINATION
-  "${INSTALL_CMAKE_DIR}" COMPONENT dev)
-
+  # Install the export set for use with the install-tree
+  install(EXPORT KlepsydraRoboticsTargets DESTINATION
+    "${INSTALL_CMAKE_DIR}" COMPONENT dev)
+endif()
