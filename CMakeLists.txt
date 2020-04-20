@@ -107,6 +107,9 @@ else()
 endif()
 
 add_definitions(-std=c++11)
+add_definitions(-faligned-new)
+add_definitions(-fno-strict-overflow)
+
 enable_testing()
 
 if (KPSR_WITH_CODE_METRICS)
