@@ -21,10 +21,10 @@
 #include "pose_builder.h"
 #include <tf/transform_datatypes.h>
 
-void kpsr::geometry::ros_mdlw::PoseBuilder::createPoseEvent(const char * frameId, double x, double y, double z,
-                                                          double qx, double qy, double qz, double qw,
-                                                          double * posCovariance, bool calculateEuler,
-                                                          kpsr::geometry::PoseEventData & poseEventData) {
+void kpsr::geometry::ros_mdlw::PoseBuilder::createPoseEvent(const std::string& frameId, double x, double y, double z,
+                                                            double qx, double qy, double qz, double qw,
+                                                            const double * posCovariance, bool calculateEuler,
+                                                            kpsr::geometry::PoseEventData & poseEventData) {
 
     poseEventData.frameId = frameId;
 
@@ -63,9 +63,9 @@ void kpsr::geometry::ros_mdlw::PoseBuilder::createPoseEvent(const char * frameId
     }
 }
 
-void kpsr::geometry::ros_mdlw::PoseBuilder::createPoseEvent(const char * frameId, float x, float y, float z,
+void kpsr::geometry::ros_mdlw::PoseBuilder::createPoseEvent(const std::string& frameId, float x, float y, float z,
                                                           float qx, float qy, float qz, float qw,
-                                                          float * posCovariance, bool calculateEuler,
+                                                          const float * posCovariance, bool calculateEuler,
                                                           kpsr::geometry::PoseEventData & poseEventData) {
     poseEventData.frameId = frameId;
 
@@ -104,3 +104,54 @@ void kpsr::geometry::ros_mdlw::PoseBuilder::createPoseEvent(const char * frameId
     }
 }
 
+void kpsr::geometry::ros_mdlw::PoseBuilder::createPose(float x, float y, float z,
+                                                       float qx, float qy, float qz, float qw,
+                                                       float roll, float pitch, float yaw,
+                                                       bool calculateQuaternion,
+                                                       geometry_msgs::Pose & poseData) {
+
+   
+    poseData.position.x = x;
+    poseData.position.y = y;
+    poseData.position.z = z;
+
+    if (calculateQuaternion) {
+        tf::Quaternion quaternion;
+        quaternion.setRPY(roll, pitch, yaw);
+        poseData.orientation.x = quaternion.x();
+        poseData.orientation.y = quaternion.y();
+        poseData.orientation.z = quaternion.z();
+        poseData.orientation.w = quaternion.w();
+    } else {
+        poseData.orientation.x = qx;
+        poseData.orientation.y = qy;
+        poseData.orientation.z = qz;
+        poseData.orientation.w = qw;
+    }
+}
+
+void kpsr::geometry::ros_mdlw::PoseBuilder::createPose(double x, double y, double z,
+                                                       double qx, double qy, double qz, double qw,
+                                                       double roll, double pitch, double yaw,
+                                                       bool calculateQuaternion,
+                                                       geometry_msgs::Pose & poseData) {
+
+   
+    poseData.position.x = x;
+    poseData.position.y = y;
+    poseData.position.z = z;
+
+    if (calculateQuaternion) {
+        tf::Quaternion quaternion;
+        quaternion.setRPY(roll, pitch, yaw);
+        poseData.orientation.x = quaternion.x();
+        poseData.orientation.y = quaternion.y();
+        poseData.orientation.z = quaternion.z();
+        poseData.orientation.w = quaternion.w();
+    } else {
+        poseData.orientation.x = qx;
+        poseData.orientation.y = qy;
+        poseData.orientation.z = qz;
+        poseData.orientation.w = qw;
+    }
+}
