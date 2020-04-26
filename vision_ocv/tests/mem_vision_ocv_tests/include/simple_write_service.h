@@ -100,6 +100,7 @@ private:
                 this->start();
                 return getImage();
             }
+            return cv::Mat();
         }
     }
 

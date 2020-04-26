@@ -42,9 +42,6 @@ TEST(HPVisionTest, HPVisionTest) {
     SimpleReadService simpleReadService(nullptr, subscriber);
     SlowReadService slowReadService(nullptr, subscriber);
 
-    std::chrono::milliseconds ms1 = std::chrono::duration_cast< std::chrono::milliseconds >(std::chrono::system_clock::now().time_since_epoch());
-    long before = ms1.count();
-
     //spdlog::info("Starting services.");
     writeService.start();
     simpleReadService.start();
