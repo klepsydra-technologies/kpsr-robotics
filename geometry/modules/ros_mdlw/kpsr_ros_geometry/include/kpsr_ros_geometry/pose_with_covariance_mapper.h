@@ -23,7 +23,6 @@
 #include <geometry_msgs/PoseWithCovariance.h>
 
 #include <klepsydra/serialization/mapper.h>
-#include <kpsr_ros_core/from_ros_channel.h>
 #include <kpsr_ros_geometry/pose_builder.h>
 
 namespace kpsr
@@ -50,7 +49,7 @@ public:
      */
     void fromMiddleware(const geometry_msgs::PoseWithCovariance & message, kpsr::geometry::PoseEventData & event) {
         kpsr::geometry::ros_mdlw::PoseBuilder::createPoseEvent(
-                    NULL,
+                    "",
                     message.pose.position.x,
                     message.pose.position.y,
                     message.pose.position.z,
@@ -60,7 +59,8 @@ public:
                     message.pose.orientation.w,
                     message.covariance.data(),
                     true, event);
-
+        std::chrono::milliseconds ms = std::chrono::duration_cast< std::chrono::milliseconds >(std::chrono::system_clock::now().time_since_epoch());
+        event.timestamp = ms.count();
     }
 
     /**
@@ -69,22 +69,22 @@ public:
      * @param message
      */
     void toMiddleware(const kpsr::geometry::PoseEventData & event, geometry_msgs::PoseWithCovariance & message) {
-        geometry_msgs::Point point;
-        point.x = event.x;
-        point.y = event.y;
-        point.z = event.z;
+        kpsr::geometry::ros_mdlw::PoseBuilder::createPose(
+            event.x,
+            event.y,
+            event.z,
+            event.qx,
+            event.qy,
+            event.qz,
+            event.qw,
+            event.roll,
+            event.pitch,
+            event.yaw,
+            true,
+            message.pose);
 
-        geometry_msgs::Quaternion quaternion;
-        quaternion.x = event.qx;
-        quaternion.y = event.qy;
-        quaternion.z = event.qz;
-        quaternion.w = event.qw;
-
-        message.pose.position = point;
-        message.pose.orientation = quaternion;
-
-        if (event.positionCovariance != NULL) {
-            std::copy(event.positionCovariance, event.positionCovariance + 36, message.covariance.begin());
+        if (event.positionCovariance.size() == 36) {
+            std::copy(event.positionCovariance.begin(), event.positionCovariance.end(), message.covariance.begin());
         }
     }
 
