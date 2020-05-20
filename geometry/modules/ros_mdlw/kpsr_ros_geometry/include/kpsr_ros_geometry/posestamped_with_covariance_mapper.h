@@ -92,10 +92,13 @@ public:
 
         message.header = header;
         if (event.positionCovariance.size() == 36) {
-            std::copy(event.positionCovariance.begin(), event.positionCovariance.end(), message.covariance.begin());
+            std::copy(event.positionCovariance.begin(), event.positionCovariance.end(), message.pose.covariance.begin());
         }
     }
 
 };
 }
 #endif
+
+
+

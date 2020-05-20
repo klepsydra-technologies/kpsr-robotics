@@ -101,6 +101,9 @@ private:
                 return getImage();
             }
         }
+
+        cv::Mat empty;
+        return empty;
     }
 
     kpsr::Publisher<kpsr::vision_ocv::ImageData> * _publisher;

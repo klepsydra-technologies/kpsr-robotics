@@ -23,7 +23,6 @@ project(kpsr_ros_geometry)
 add_definitions(-std=c++11)
 
 find_package(Klepsydra REQUIRED)
-find_package(KlepsydraRobotics REQUIRED)
 
 # Must use GNUInstallDirs to install libraries into correct
 # locations on all platforms.
