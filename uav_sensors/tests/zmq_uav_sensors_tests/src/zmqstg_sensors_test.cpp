@@ -57,7 +57,6 @@ TEST(ZmqSensorsTest, ZmqSensorsTest) {
     publisher.bind("ipc://sensors.ipc");
 
     kpsr::zmq_mdlw::ToZMQMiddlewareProvider toZMQMiddlewareProvider(nullptr, publisher);
-    kpsr::Publisher<kpsr::sensors::LaserScanEvent> * toZMQPublisher = toZMQMiddlewareProvider.getJsonToMiddlewareChannel<kpsr::sensors::LaserScanEvent>(topic, 0);
 
     std::string clientUrl = "tcp://localhost:5556";
 

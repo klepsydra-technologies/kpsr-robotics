@@ -25,11 +25,6 @@
 #include <sstream>
 #include <fstream>
 
-#include "spdlog/spdlog.h"
-#include "spdlog/sinks/basic_file_sink.h"
-
-#include "gtest/gtest.h"
-
 #include <klepsydra/core/service.h>
 #include <klepsydra/core/publisher.h>
 #include <klepsydra/core/subscriber.h>
@@ -46,6 +41,11 @@
 #include "pose_event_publisher_service.h"
 #include "pose_event_subscriber_service.h"
 
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/basic_file_sink.h"
+
+#include "gtest/gtest.h"
+
 TEST(ZmqGeometryTest, ZmqGeometryTest) {
     std::string serverUrl = "tcp://*:5556";
     std::string topic = "geometry";
@@ -57,7 +57,6 @@ TEST(ZmqGeometryTest, ZmqGeometryTest) {
     publisher.bind("ipc://geometry.ipc");
 
     kpsr::zmq_mdlw::ToZMQMiddlewareProvider toZMQMiddlewareProvider(nullptr, publisher);
-    kpsr::Publisher<kpsr::geometry::PoseEventData> * toZMQPublisher = toZMQMiddlewareProvider.getJsonToMiddlewareChannel<kpsr::geometry::PoseEventData>(topic, 0);
 
     std::string clientUrl = "tcp://localhost:5556";
 
