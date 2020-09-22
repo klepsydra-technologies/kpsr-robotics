@@ -2,6 +2,10 @@
   <img width="25%" height="25%"src="./images/klepsydra_logo.jpg">
 </p>
 
+Build | Status
+--- | ---
+master | [![Build Status](https://jenkins1.klepsydra.com/buildStatus/icon?job=kpsr-robotics%2Fmaster)](https://jenkins1.klepsydra.com/job/kpsr-robotics/job/master/)
+
 # Installation Instructions
 
 ## System dependencies
