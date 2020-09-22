@@ -2,9 +2,11 @@
   <img width="25%" height="25%"src="./images/klepsydra_logo.jpg">
 </p>
 
-Build | Status
+Setup | Status
 --- | ---
-master | [![Build Status](https://jenkins1.klepsydra.com/buildStatus/icon?job=kpsr-robotics%2Fmaster)](https://jenkins1.klepsydra.com/job/kpsr-robotics/job/master/)
+Minimal | [![Build Status](https://jenkins1.klepsydra.com/buildStatus/icon?job=kpsr-robotics%2Fmaster)](https://jenkins1.klepsydra.com/job/kpsr-robotics/job/master/)
+ZMQ | [![Build Status](https://jenkins1.klepsydra.com/buildStatus/icon?job=kpsr-zmq-core%2Fmaster)](https://jenkins1.klepsydra.com/view/Core/job/kpsr-zmq-core/job/master/)
+ROS | [![Build Status](https://jenkins1.klepsydra.com/buildStatus/icon?job=kpsr-zmq-robotics%2Fmaster)](https://jenkins1.klepsydra.com/job/kpsr-zmq-robotics/job/master/)
 
 # Installation Instructions
 
