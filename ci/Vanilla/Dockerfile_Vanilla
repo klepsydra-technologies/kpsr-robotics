@@ -43,4 +43,3 @@ COPY --from=builder /usr/local/lib/cmake/klepsydra/ /usr/local/lib/cmake/klepsyd
 COPY --from=builder /usr/local/lib/libkpsr* /usr/local/lib/
 
 WORKDIR /opt/
-
