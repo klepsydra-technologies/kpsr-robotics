@@ -1,8 +1,7 @@
-# Compile docker
-FROM kpsr-core:sys_dep_ubuntu_18.04 as compile_docker
-
 FROM kpsr-thirdparties:OCV as thirdparties
 FROM kpsr-core:master_Vanilla as core
+
+FROM kpsr-thirdparties:sys_dep_ubuntu_18.04
 
 ARG BUILD_ID
 LABEL kpsr-robotics=compile_docker
