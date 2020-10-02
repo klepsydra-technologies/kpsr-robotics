@@ -42,7 +42,6 @@ pipeline {
       steps {
         sh "docker build -f ./ci/${method}/Dockerfile_test . \
             --build-arg=BUILD_ID=${BUILD_ID} \
-                --target compile_docker \
                 -t ${test_image}"
       }
     }
@@ -58,41 +57,10 @@ pipeline {
         catchError {
           sh 'docker exec --workdir /opt/kpsr-robotics/build/ ${name_container} make doc;'
         }
-        catchError {
-          sh 'docker exec --workdir /opt/kpsr-robotics/build/ ${name_container} sed -i -e "s@[./]opt[./]kpsr-robotics[./]@@g" code_generator/kpsr_codegen/coverage.xml;'
-        }
 
         sh 'docker cp ${name_container}:/opt/kpsr-robotics/build/ . ;\
             docker commit ${name_container} ${building_image} ;\
             docker rm -f ${name_container};'
-
-        // Publish JUnit test results
-        junit(testResults: '**/gtestresults.xml', keepLongStdio: true)
-
-        // Run cppcheck
-        publishCppcheck(
-          pattern: '**/cppcheck-result.xml',
-          ignoreBlankFiles: false, threshold: '19',
-          allowNoReport: false,
-          newThreshold: '', failureThreshold: '',
-          newFailureThreshold: '', healthy: '', unHealthy: '',
-          severityError: true,
-          severityWarning: true,
-          severityStyle: true,
-          severityPerformance: true,
-          severityInformation: true,
-          severityNoCategory: true,
-          severityPortability: true,
-          XSize: 1000, YSize: 200,
-          numBuildsInGraph: 0,
-          displayAllErrors: true,
-          displayErrorSeverity: true,
-          displayNoCategorySeverity: true,
-          displayPerformanceSeverity: true,
-          displayPortabilitySeverity: true,
-          displayStyleSeverity: true,
-          displayWarningSeverity: true
-        )
 
         cobertura(coberturaReportFile: 'build/coverage.xml,build/code_generator/kpsr_codegen/coverage.xml', failUnhealthy: false, failUnstable: false, onlyStable: false)
         echo currentBuild.result
@@ -135,4 +103,3 @@ pipeline {
     }
   }
 }
-
