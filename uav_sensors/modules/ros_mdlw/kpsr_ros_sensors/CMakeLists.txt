@@ -152,9 +152,8 @@ include_directories(
 link_directories(${KPSR_LIBRARY_PATH})
 
 ## Declare a C++ library
-add_library(kpsr_ros_sensors
-)
-
+add_library(kpsr_ros_sensors INTERFACE)
+ 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
@@ -167,12 +166,12 @@ add_library(kpsr_ros_sensors
 ## same as for the library above
 # add_dependencies(kpsr_ros_sensors_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
-set_target_properties(kpsr_ros_sensors PROPERTIES LINKER_LANGUAGE CXX)
+#set_target_properties(kpsr_ros_sensors PROPERTIES LINKER_LANGUAGE CXX)
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(kpsr_ros_sensors
-  ${catkin_LIBRARIES}
-)
+#target_link_libraries(kpsr_ros_sensors
+#  ${catkin_LIBRARIES}
+#)
 
 #############
 ## Install ##
