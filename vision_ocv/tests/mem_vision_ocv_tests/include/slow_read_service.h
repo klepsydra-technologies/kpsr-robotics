@@ -62,7 +62,7 @@ public:
                   event.img.rows,
                   event.img.cols
         );
-        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        std::this_thread::sleep_for(std::chrono::milliseconds(40));
         lastReadImg = event;
         receivedImage = true;
         receivedEvents++;
