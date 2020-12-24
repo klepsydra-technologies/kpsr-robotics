@@ -41,7 +41,7 @@ FILE(GLOB_RECURSE ${PROJ_NAME}_HEADERS
 
 # Create Library
 #---------------------------------------------------#
-LINK_DIRECTORIES()
+LINK_DIRECTORIES(${KPSR_LIBRARY_PATH})
 
 # Link libraries with Project
 #---------------------------------------------------#
