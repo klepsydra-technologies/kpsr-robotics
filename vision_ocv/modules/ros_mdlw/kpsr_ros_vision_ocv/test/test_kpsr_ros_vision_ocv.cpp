@@ -11,7 +11,8 @@
 #include "image_from_ros_middleware_provider.h"
 #include <klepsydra/vision_ocv/image_data_factory.h>
 
-#include "simple_write_service.h"
+#include <klepsydra/vision_ocv/file_image_stream_service.h>
+
 #include "simple_read_service.h"
 
 #include "config.h"
@@ -49,7 +50,7 @@ TEST(KpsrRosCoreTest, nominalCaseNoPool) {
 
     kpsr::vision_ocv::ImageDataFactory factory(320, 480, 10, "body");
 
-    SimpleWriteService imageDataPublisherService(nullptr, kpsrPublisher, TEST_DATA, true);
+    kpsr::vision_ocv::FileImageStreamingService imageDataPublisherService(nullptr, kpsrPublisher, TEST_DATA, true);
 
     kpsr::mem::BasicMiddlewareProvider<kpsr::vision_ocv::ImageData> imageDataProvider(nullptr, "test", 8, 0, nullptr, nullptr, false);
     imageDataProvider.start();

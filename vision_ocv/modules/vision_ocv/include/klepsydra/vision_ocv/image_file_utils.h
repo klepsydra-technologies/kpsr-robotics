@@ -1,7 +1,7 @@
 /****************************************************************************
 *
 *                           Klepsydra Core Modules
-*              Copyright (C) 2019-2020  Klepsydra Technologies GmbH
+*              Copyright (C) 2020-2022  Klepsydra Technologies GmbH
 *                            All Rights Reserved.
 *
 *  This file is subject to the terms and conditions defined in
@@ -17,28 +17,29 @@
 *
 *****************************************************************************/
 
-#include <algorithm>
-#include <dirent.h>
-#include <sys/types.h>
+#ifndef IMAGE_FILE_UTILS_H
+#define IMAGE_FILE_UTILS_H
 
-#include "file_utils.h"
+#include <string>
+#include <vector>
 
-void FileUtils::getSortedListOfFilesInDir(std::string dirName, std::vector<std::string> * fileNameList) {
-   
-   dirent* de;
-   DIR* dp;
-   errno = 0;
-   dp = opendir( dirName.c_str() );
-   if (dp)
-   {
-      while (true)
-      {
-         errno = 0;
-         de = readdir( dp );
-         if (de == nullptr) break;
-         fileNameList->push_back( std::string( de->d_name ) );
-      }
-      closedir( dp );
-      std::sort( fileNameList->begin(), fileNameList->end() );
-   }
+namespace kpsr {
+namespace vision_ocv {
+/**
+ * @brief The ImageFileUtils class
+ *
+ * @details This class reads all images in a folder and provide names back in the passed reference vector.
+ */
+class ImageFileUtils {
+public:
+    /**
+       * @brief getSortedListOfFilesInDir
+       * @param dirName
+       * @param fileNameList
+       */
+    static void getSortedListOfFilesInDir(const std::string & dirName, std::vector<std::string> & fileNameList);
+};
 }
+}
+
+#endif

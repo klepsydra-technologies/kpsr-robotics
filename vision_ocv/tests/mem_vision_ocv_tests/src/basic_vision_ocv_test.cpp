@@ -19,7 +19,8 @@
 
 #include <klepsydra/mem_vision_ocv/basic_vision_ocv_provider.h>
 
-#include "simple_write_service.h"
+#include <klepsydra/vision_ocv/file_image_stream_service.h>
+
 #include "simple_read_service.h"
 #include "slow_read_service.h"
 
@@ -36,7 +37,7 @@ TEST(BasicVisionTest, BasicVisionTest) {
 
     //spdlog::info("Creating services.");
     kpsr::Publisher<kpsr::vision_ocv::ImageData> * publisher = provider.underlying->getPublisher();
-    SimpleWriteService writeService(nullptr, publisher, TEST_DATA, true);
+    kpsr::vision_ocv::FileImageStreamingService writeService(nullptr, publisher, TEST_DATA, true);
 
     kpsr::Subscriber<kpsr::vision_ocv::ImageData> * subscriber = provider.underlying->getSubscriber();
     SimpleReadService simpleReadService(nullptr, subscriber);

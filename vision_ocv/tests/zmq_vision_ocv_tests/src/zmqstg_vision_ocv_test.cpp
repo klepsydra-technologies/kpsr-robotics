@@ -36,7 +36,8 @@
 #include <klepsydra/zmq_vision_ocv/image_event_data_zmq_mapper.h>
 #include <klepsydra/vision_ocv/image_data_factory.h>
 
-#include "simple_write_service.h"
+#include <klepsydra/vision_ocv/file_image_stream_service.h>
+
 #include "simple_read_service.h"
 
 #include "config.h"
@@ -80,7 +81,7 @@ TEST(ZmqVisionTest, ZmqVisionTest) {
 
     kpsr::vision_ocv::ImageDataFactory factory(320, 480, 10, "body");
 
-    SimpleWriteService imageDataPublisherService(nullptr, toZMQPublisher, TEST_DATA, true);
+    kpsr::vision_ocv::FileImageStreamingService imageDataPublisherService(nullptr, toZMQPublisher, TEST_DATA, true);
 
 
     imageDataPublisherService.startup();
@@ -89,7 +90,7 @@ TEST(ZmqVisionTest, ZmqVisionTest) {
         kpsr::EventEmitterMiddlewareProvider<kpsr::vision_ocv::ImageData> imageDataProvider(nullptr, topic, 0, factory.initializerFunction, nullptr);
         _binaryFromZMQProvider->registerToTopic(topic, imageDataProvider.getPublisher());
 
-        SimpleReadService imageDataSubscriberService(nullptr, imageDataProvider.getSubscriber());
+        kpsr::vision_ocv::SimpleReadService imageDataSubscriberService(nullptr, imageDataProvider.getSubscriber());
         imageDataSubscriberService.startup();
         imageDataPublisherService.runOnce();
 
