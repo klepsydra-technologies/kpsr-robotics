@@ -44,7 +44,7 @@ FILE(GLOB ${PROJ_NAME}_HEADERS
 
 # Link libraries with Project
 #---------------------------------------------------#
-LINK_DIRECTORIES()
+LINK_DIRECTORIES(${KPSR_LIBRARY_PATH})
 ADD_EXECUTABLE(${PROJ_NAME} ${${PROJ_NAME}_HEADERS} ${${PROJ_NAME}_SRC} ) 
 
 #---------------------------------------------------#

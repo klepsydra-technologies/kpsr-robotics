@@ -54,6 +54,10 @@ else()
 endif()
 message(STATUS "kpsr-build path: " ${KPSR_BUILD_PATH})
 
+if(DEFINED CMAKE_PREFIX_PATH)
+   set(KPSR_LIBRARY_PATH ${CMAKE_PREFIX_PATH}/lib)
+endif()
+
 # Configure variables
 # ------------------------------------------------------------------------------------------------------
 
