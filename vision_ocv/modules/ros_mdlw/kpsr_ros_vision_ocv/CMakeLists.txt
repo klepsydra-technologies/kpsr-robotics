@@ -220,7 +220,7 @@ install(DIRECTORY include/${PROJECT_NAME}/
 #############
 
 ## Add gtest based cpp test target and link libraries
-catkin_add_gtest(${PROJECT_NAME}-test test/main.cpp test/test_kpsr_ros_vision_ocv.cpp test/file_utils.cpp)
+catkin_add_gtest(${PROJECT_NAME}-test test/main.cpp test/test_kpsr_ros_vision_ocv.cpp)
 
 if(TARGET ${PROJECT_NAME}-test)
   target_link_libraries(${PROJECT_NAME}-test 

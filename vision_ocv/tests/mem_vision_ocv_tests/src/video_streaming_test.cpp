@@ -16,52 +16,43 @@
 *  Klepsydra Technologies GmbH.
 *
 *****************************************************************************/
-#include <thread>
 
-#include <klepsydra/mem_vision_ocv/image_multiplexer_vision_ocv_provider.h>
+#include <klepsydra/core/event_emitter_middleware_provider.h>
 
 #include <klepsydra/vision_ocv/file_image_stream_service.h>
 
-#include "simple_read_service.h"
-#include "slow_read_service.h"
-
-#include "spdlog/spdlog.h"
-#include "spdlog/sinks/basic_file_sink.h"
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
 
 #include "gtest/gtest.h"
 
 #include "config.h"
 
-TEST(HPVisionTest, HPVisionTest) {
-    kpsr::vision_ocv::high_performance::ImageMultiplexerVisionMiddlewareProvider<128> provider(nullptr, "test", 1080, 2040, 16, "body");
+#include <klepsydra/vision_ocv/mpeg_writer.h>
 
-    //spdlog::info("Creating services.");
-    kpsr::Publisher<kpsr::vision_ocv::ImageData> * publisher = provider.underlying->getPublisher();
-    kpsr::vision_ocv::FileImageStreamingService writeService(nullptr, publisher, TEST_DATA, true);
+TEST(VideoStreamingTest, BasicStreamingTest) {
 
-    kpsr::Subscriber<kpsr::vision_ocv::ImageData> * subscriber = provider.underlying->getSubscriber();
-    SimpleReadService simpleReadService(nullptr, subscriber);
-    SlowReadService slowReadService(nullptr, subscriber);
+    kpsr::EventEmitterMiddlewareProvider<kpsr::vision_ocv::ImageData> imageEventEmitter(nullptr, "image_provider", 0, nullptr, nullptr);
+    kpsr::EventEmitterMiddlewareProvider<std::vector<uchar>> encodedImageEventEmitter(nullptr, "encoded_image_provider", 0, nullptr, nullptr);
 
-    //spdlog::info("Starting services.");
+    kpsr::vision_ocv::FileImageStreamingService writeService(nullptr, imageEventEmitter.getPublisher(), TEST_DATA, true);
+
+    kpsr::vision_ocv::MJPEGWriter streamingService(8080, 180000, 95,
+                                                   imageEventEmitter.getSubscriber(),
+                                                   encodedImageEventEmitter.getPublisher(),
+                                                   encodedImageEventEmitter.getSubscriber());
+
     writeService.start();
-    simpleReadService.start();
-    slowReadService.start();
+    streamingService.start();
 
     // Publish some integers.
     for (int i = 0; i < 50; i++) {
         //spdlog::info("Executing services.");
         writeService.execute();
-        simpleReadService.execute();
-        slowReadService.execute();
+        usleep(1000000);
     }
 
+    streamingService.stop();
     writeService.stop();
-    simpleReadService.stop();
-    slowReadService.stop();
-
-    ASSERT_EQ(writeService.publishedEvents, 50);
-    ASSERT_EQ(simpleReadService.receivedEvents, 50);
-    ASSERT_EQ(slowReadService.receivedEvents, 50);
 }
 
