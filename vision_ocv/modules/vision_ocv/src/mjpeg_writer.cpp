@@ -183,17 +183,17 @@ void kpsr::vision_ocv::MJPEGWriter::start()
         while (_isRunning)
         {
             rread = master;
-            struct timeval to = { 0, 1000000 };
+            struct timeval to = { 1, 0 };
             maxfd = _socket + 1;
-            spdlog::info("kpsr::vision_ocv::MJPEGWriter. started");
+            spdlog::debug("kpsr::vision_ocv::MJPEGWriter. started");
             int sel = select(maxfd, &rread, NULL, NULL, &to);
-            spdlog::info("kpsr::vision_ocv::MJPEGWriter. sel: {}", sel);
+            spdlog::debug("kpsr::vision_ocv::MJPEGWriter. sel: {}", sel);
             if (sel > 0) {
                 for (int s = 0; s < maxfd; s++)
                 {
                     if (FD_ISSET(s, &rread) && s == _socket)
                     {
-                        spdlog::info("kpsr::vision_ocv::MJPEGWriter. FD_ISSET");
+                        spdlog::debug("kpsr::vision_ocv::MJPEGWriter. FD_ISSET");
                         int         addrlen = sizeof(SOCKADDR);
                         SOCKADDR_IN address = { 0 };
                         SOCKET      client = accept(_socket, (SOCKADDR*)&address, (socklen_t*)&addrlen);
