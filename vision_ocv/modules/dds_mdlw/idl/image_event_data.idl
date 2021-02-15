@@ -8,7 +8,7 @@ module kpsr_dds_vision_ocv {
         unsigned long rows;
         unsigned long cols;
         unsigned long type;
-        sequence<octet> data;
+        sequence<octet, 500000> data;
     };
 
 #pragma keylist ImageData seq
