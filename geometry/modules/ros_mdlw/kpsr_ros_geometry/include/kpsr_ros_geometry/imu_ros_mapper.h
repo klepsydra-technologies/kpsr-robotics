@@ -50,6 +50,11 @@ class Mapper<kpsr::geometry::Imu, sensor_msgs::Imu> {
 public:
   void fromMiddleware(const sensor_msgs::Imu &message,
                       kpsr::geometry::Imu &event) {
+    event.frameId = message.header.frame_id;
+    event.seq = message.header.seq;
+    std::chrono::milliseconds ms = std::chrono::duration_cast< std::chrono::milliseconds >(std::chrono::system_clock::now().time_since_epoch());
+    event.timestamp = ms.count();
+
     QuaternionMapper.fromMiddleware( message.orientation,
                                     event.orientation);
     std::transform(message.orientation_covariance.begin(),
@@ -72,6 +77,13 @@ public:
 
   void toMiddleware(const kpsr::geometry::Imu &event,
                     sensor_msgs::Imu &message) {
+    std_msgs::Header header;
+    header.seq = event.seq;
+    header.stamp = ros::Time::now();
+    header.frame_id = event.frameId;
+
+    message.header = header;
+
     QuaternionMapper.toMiddleware( event.orientation,
                                                 message.orientation);
     std::transform(event.linear_acceleration_covariance.begin(),
@@ -89,9 +101,6 @@ public:
                    message.linear_acceleration_covariance.begin(),
                    [](double data) -> double { return data; });
   }
-
-  // Related mapper instance for kpsr::geometry::Header
-  Mapper<kpsr::geometry::Header, std_msgs::Header> HeaderMapper;
 
   // Related mapper instance for kpsr::geometry::Quaternion
   Mapper<kpsr::geometry::Quaternion, geometry_msgs::Quaternion>
