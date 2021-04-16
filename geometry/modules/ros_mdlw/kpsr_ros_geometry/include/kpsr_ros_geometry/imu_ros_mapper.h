@@ -86,14 +86,14 @@ public:
 
     QuaternionMapper.toMiddleware( event.orientation,
                                                 message.orientation);
-    std::transform(event.linear_acceleration_covariance.begin(),
-                   event.linear_acceleration_covariance.end(),
-                   message.linear_acceleration_covariance.begin(),
+    std::transform(event.orientation_covariance.begin(),
+                   event.orientation_covariance.end(),
+                   message.orientation_covariance.begin(),
                    [](double data) -> double { return data; });
     Vector3Mapper.toMiddleware( event.angular_velocity, message.angular_velocity);
-    std::transform(event.linear_acceleration_covariance.begin(),
-                   event.linear_acceleration_covariance.end(),
-                   message.linear_acceleration_covariance.begin(),
+    std::transform(event.angular_velocity_covariance.begin(),
+                   event.angular_velocity_covariance.end(),
+                   message.angular_velocity_covariance.begin(),
                    [](double data) -> double { return data; });
     Vector3Mapper.toMiddleware( event.linear_acceleration, message.linear_acceleration);
     std::transform(event.linear_acceleration_covariance.begin(),
