@@ -36,7 +36,7 @@ public:
    // Main constructor.
    Header(
       unsigned int seq,
-      std::string frame_id)
+      const std::string& frame_id)
       : seq(seq)
       , frame_id(frame_id)
    {}

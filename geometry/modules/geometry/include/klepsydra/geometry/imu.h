@@ -39,7 +39,7 @@ public:
 
    // Main constructor.
    Imu(
-      std::string frameId,
+      const std::string& frameId,
       int seq,
       long timestamp,
       Quaternion orientation,

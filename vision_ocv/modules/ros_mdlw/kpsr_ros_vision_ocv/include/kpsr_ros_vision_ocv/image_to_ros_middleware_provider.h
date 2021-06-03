@@ -87,7 +87,7 @@ public:
      * @param publisher
      * @return
      */
-    Publisher<kpsr::vision_ocv::ImageData> * getToMiddlewareChannel(std::string topic, int poolSize, std::function<void(sensor_msgs::Image &)> initializerFunction, image_transport::Publisher & publisher) {
+    Publisher<kpsr::vision_ocv::ImageData> * getToMiddlewareChannel(const std::string& topic, int poolSize, std::function<void(sensor_msgs::Image &)> initializerFunction, image_transport::Publisher & publisher) {
         auto search = _publisherMap.find(topic);
         if (search != _publisherMap.end()) {
             std::shared_ptr<void> internalPointer = search->second;

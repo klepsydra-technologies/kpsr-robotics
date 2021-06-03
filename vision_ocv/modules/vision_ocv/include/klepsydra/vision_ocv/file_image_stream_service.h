@@ -34,19 +34,21 @@ class FileImageStreamingService : public kpsr::Service
 public:
     FileImageStreamingService(kpsr::Environment * environment,
                               kpsr::Publisher<kpsr::vision_ocv::ImageData> * publisher,
-                              std::string imageDirname,
+                              const std::string& imageDirname,
                               bool restartIfNoMoreImages,
                               int width = 480,
                               int height = 320,
-                              std::string frameId = "body");
+                              const std::string& frameId = "body",
+                              const std::string& serviceName = "FileImageStreamingService");
 
     FileImageStreamingService(kpsr::Environment * environment,
                               kpsr::Publisher<kpsr::vision_ocv::ImageData> * publisher,
-                              std::string imageDirname,
+                              const std::string& imageDirname,
                               bool restartIfNoMoreImages,
                               cv::ImreadModes readMode,
                               std::function<void(const cv::Mat &, cv::Mat &)> postProcessing,
-                              std::string frameId = "body");
+                              const std::string& frameId = "body",
+                              const std::string& serviceName = "FileImageStreamingService");
 
     void start();
 

@@ -63,7 +63,7 @@ struct PoseEventData : public Sensor
      * @param positionCovariance
      */
     PoseEventData(
-            std::string frameId,
+            const std::string& frameId,
             int seq,
             bool eulerAvailable,
             bool posCovarianceAvailable,

@@ -58,7 +58,7 @@ public:
      * @param initializerFunction
      * @param rosPublisher
      */
-    ImageToRosChannel(Container * container, std::string name, int poolSize, std::function<void(sensor_msgs::Image &)> initializerFunction, image_transport::Publisher & rosPublisher)
+    ImageToRosChannel(Container * container, const std::string& name, int poolSize, std::function<void(sensor_msgs::Image &)> initializerFunction, image_transport::Publisher & rosPublisher)
         : ObjectPoolPublisher<sensor_msgs::Image>(container, name, "ROS", poolSize, initializerFunction, nullptr)
         , _rosPublisher(rosPublisher)
     {}
