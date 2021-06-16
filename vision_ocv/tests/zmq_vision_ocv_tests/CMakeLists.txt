@@ -20,19 +20,6 @@
 SET(PROJ_NAME kpsr_zmq_${PROJ_MAIN_NAME}_tests)
 PROJECT(${PROJ_NAME})
 
-#find cppzmq wrapper, installed by make of cppzmq
-find_package(cppzmq REQUIRED)
-
-# Include directories with headers
-#---------------------------------------------------#
-INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR}/include )
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/${PROJ_MAIN_NAME}/modules/${PROJ_MAIN_NAME}/include )
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/${PROJ_MAIN_NAME}/tests/common )
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/${PROJ_MAIN_NAME}/tests/common/include )
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/${PROJ_MAIN_NAME}/modules/zmq_mdlw/include )
-INCLUDE_DIRECTORIES( ${Connext_INCLUDE_DIRS} )
-INCLUDE_DIRECTORIES( ${KLEPSYDRA_INCLUDE_DIRS} )
-
 # Source
 #---------------------------------------------------#
 FILE(GLOB ${PROJ_NAME}_SRC
@@ -48,14 +35,16 @@ LINK_DIRECTORIES(${KPSR_LIBRARY_PATH})
 ADD_EXECUTABLE(${PROJ_NAME} ${${PROJ_NAME}_HEADERS} ${${PROJ_NAME}_SRC} ) 
 
 #---------------------------------------------------#
-TARGET_LINK_LIBRARIES(${PROJ_NAME} 
-    ${KLEPSYDRA_CORE_LIBRARIES}
-    yaml-cpp 
-    atomic 
-    gtest_main 
-    ${OpenCV_LIBS}
-    kpsr_vision_ocv 
-    libzmq 
-    kpsr_common_${PROJ_MAIN_NAME}_tests)
+TARGET_LINK_LIBRARIES(${PROJ_NAME}
+  kpsr_zmq_${PROJ_MAIN_NAME}
+  kpsr_common_${PROJ_MAIN_NAME}_tests
+  zmq
+  gtest_main 
+)
+TARGET_INCLUDE_DIRECTORIES(${PROJ_NAME}
+  PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  )
 
 add_test(NAME ${PROJ_NAME} COMMAND ${PROJ_NAME})

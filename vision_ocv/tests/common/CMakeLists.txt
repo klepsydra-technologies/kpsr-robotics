@@ -20,10 +20,6 @@
 SET(PROJ_NAME kpsr_common_${PROJ_MAIN_NAME}_tests)
 PROJECT(${PROJ_NAME})
 
-INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR}/include )
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/${PROJ_MAIN_NAME}/modules/${PROJ_MAIN_NAME}/include )
-INCLUDE_DIRECTORIES( ${KLEPSYDRA_INCLUDE_DIRS} )
-
 # Source
 #---------------------------------------------------#
 FILE(GLOB ${PROJ_NAME}_SRC
@@ -35,9 +31,14 @@ FILE(GLOB ${PROJ_NAME}_HEADERS
 
 # Link libraries with Project
 #---------------------------------------------------#
-LINK_DIRECTORIES(${KPSR_LIBRARY_PATH})
 ADD_LIBRARY(${PROJ_NAME} ${${PROJ_MAIN_NAME}_LIB_TYPE} ${${PROJ_NAME}_HEADERS} ${${PROJ_NAME}_SRC} ) 
+TARGET_INCLUDE_DIRECTORIES(${PROJ_NAME}
+  PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  )
+
 
 # Link libraries with Project
 #---------------------------------------------------#
-TARGET_LINK_LIBRARIES(${PROJ_NAME} ${OpenCV_LIBS})
+TARGET_LINK_LIBRARIES(${PROJ_NAME} ${OpenCV_LIBS} kpsr_${PROJ_MAIN_NAME})

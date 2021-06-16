@@ -20,11 +20,6 @@
 SET(PROJ_NAME kpsr_${PROJ_MAIN_NAME})
 PROJECT(${PROJ_NAME})
 
-# Include directories with headers
-#---------------------------------------------------#
-INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR}/include )
-INCLUDE_DIRECTORIES( ${KLEPSYDRA_INCLUDE_DIRS} )
-
 # Source
 #---------------------------------------------------#
 FILE(GLOB ${PROJ_NAME}_SRC
@@ -37,20 +32,31 @@ FILE(GLOB_RECURSE ${PROJ_NAME}_HEADERS
 
 # Create Library
 #---------------------------------------------------#
-# LINK_DIRECTORIES(${KPSR_LIBRARY_PATH})
-
-# ADD_LIBRARY(${PROJ_NAME} ${${PROJ_MAIN_NAME}_LIB_TYPE} ${${PROJ_NAME}_HEADERS} ${${PROJ_NAME}_SRC} ) 
+ADD_LIBRARY(${PROJ_NAME} INTERFACE) 
 
 # Link libraries with Project
 #---------------------------------------------------#
 # TARGET_LINK_LIBRARIES(${PROJ_NAME})
+TARGET_INCLUDE_DIRECTORIES(${PROJ_NAME}
+  INTERFACE
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
 
 # Install
 #---------------------------------------------------#
-INSTALL(DIRECTORY "include/klepsydra"
-    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
-)
+INSTALL(TARGETS ${PROJ_NAME}
+  EXPORT KlepsydraRoboticsTargets
+  PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  RUNTIME DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  )
 
+INSTALL(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/klepsydra"
+  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+  )
 
+add_core_export_target(${PROJ_NAME})
+add_include_dirs("${CMAKE_INSTALL_FULL_INCLUDEDIR}/klepsydra/${PROJ_MAIN_NAME}")
 #PRINTBASICINFO(${PROJ_NAME})
 
