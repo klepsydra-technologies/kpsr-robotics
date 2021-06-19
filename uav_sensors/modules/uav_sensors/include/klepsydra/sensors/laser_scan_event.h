@@ -60,7 +60,7 @@ public:
      * @param intensities
      */
     LaserScanEvent(
-            std::string frameId,
+            const std::string& frameId,
             int seq,
             long timestamp,
             float angle_min,

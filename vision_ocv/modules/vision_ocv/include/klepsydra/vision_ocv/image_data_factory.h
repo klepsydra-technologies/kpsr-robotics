@@ -41,7 +41,7 @@ public:
      * @param type
      * @param frameId
      */
-    ImageDataFactory(int rows, int cols, int type, std::string frameId);
+    ImageDataFactory(int rows, int cols, int type, const std::string& frameId);
 
 private:
     int _rows, _cols, _type;

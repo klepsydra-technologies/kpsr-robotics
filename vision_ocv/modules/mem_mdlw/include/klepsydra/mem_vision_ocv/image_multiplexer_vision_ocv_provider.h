@@ -55,7 +55,7 @@ public:
      * @param type
      * @param frameId
      */
-    ImageMultiplexerVisionMiddlewareProvider(Container * container, std::string name, int rows, int cols, int type, std::string frameId)
+    ImageMultiplexerVisionMiddlewareProvider(Container * container, const std::string& name, int rows, int cols, int type, const std::string& frameId)
         : imageDataFactory(rows, cols, type, frameId)
         , underlying(new kpsr::high_performance::DataMultiplexerMiddlewareProvider<kpsr::vision_ocv::ImageData, BufferSize>
           (container, name, imageDataFactory.initializerFunction, imageDataFactory.eventClonerFunction))

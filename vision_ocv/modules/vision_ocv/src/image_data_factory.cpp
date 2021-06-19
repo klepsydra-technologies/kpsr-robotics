@@ -1,6 +1,6 @@
 #include <klepsydra/vision_ocv/image_data_factory.h>
 
-kpsr::vision_ocv::ImageDataFactory::ImageDataFactory(int rows, int cols, int type, std::string frameId)
+kpsr::vision_ocv::ImageDataFactory::ImageDataFactory(int rows, int cols, int type, const std::string& frameId)
     : _rows(rows)
     , _cols(cols)
     , _type(type)

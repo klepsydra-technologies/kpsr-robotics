@@ -6,12 +6,13 @@
 
 kpsr::vision_ocv::FileImageStreamingService::FileImageStreamingService(kpsr::Environment * environment,
                                                                        kpsr::Publisher<kpsr::vision_ocv::ImageData> * publisher,
-                                                                       std::string imageDirname,
+                                                                       const std::string& imageDirname,
                                                                        bool restartIfNoMoreImages,
                                                                        int width,
                                                                        int height,
-                                                                       std::string frameId)
-    : kpsr::Service(environment, "FileImageStreamingService")
+                                                                       const std::string& frameId,
+                                                                       const std::string& serviceName)
+    : kpsr::Service(environment, serviceName)
     , _publisher(publisher)
     , _imageDirname(imageDirname)
     , _restartIfNoMoreImages(restartIfNoMoreImages)
@@ -25,12 +26,13 @@ kpsr::vision_ocv::FileImageStreamingService::FileImageStreamingService(kpsr::Env
 
 kpsr::vision_ocv::FileImageStreamingService::FileImageStreamingService(kpsr::Environment * environment,
                                                                        kpsr::Publisher<kpsr::vision_ocv::ImageData> * publisher,
-                                                                       std::string imageDirname,
+                                                                       const std::string& imageDirname,
                                                                        bool restartIfNoMoreImages,
                                                                        cv::ImreadModes readMode,
                                                                        std::function<void(const cv::Mat &, cv::Mat &)> postProcessing,
-                                                                       std::string frameId)
-    : kpsr::Service(environment, "FileImageStreamingService")
+                                                                       const std::string& frameId,
+                                                                       const std::string& serviceName)
+    : kpsr::Service(environment, serviceName)
     , _publisher(publisher)
     , _imageDirname(imageDirname)
     , _restartIfNoMoreImages(restartIfNoMoreImages)

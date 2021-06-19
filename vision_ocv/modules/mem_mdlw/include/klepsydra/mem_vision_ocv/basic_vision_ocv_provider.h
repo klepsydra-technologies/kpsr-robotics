@@ -66,8 +66,8 @@ public:
      * @param poolSize
      * @param discardItemsWhenFull
      */
-    BasicVisionMiddlewareProvider(Container * container, int rows, int cols, int type, std::string frameId,
-                                  std::string eventName,
+    BasicVisionMiddlewareProvider(Container * container, int rows, int cols, int type, const std::string& frameId,
+                                  const std::string& eventName,
                                   int queueSize,
                                   int poolSize,
                                   bool discardItemsWhenFull);

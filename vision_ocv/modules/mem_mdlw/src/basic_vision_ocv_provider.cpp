@@ -23,8 +23,8 @@ kpsr::vision_ocv::mem::BasicVisionMiddlewareProvider::BasicVisionMiddlewareProvi
                                                                                     int rows,
                                                                                     int cols,
                                                                                     int type,
-                                                                                    std::string frameId,
-                                                                                    std::string eventName,
+                                                                                    const std::string& frameId,
+                                                                                    const std::string& eventName,
                                                                                     int queueSize,
                                                                                     int poolSize,
                                                                                     bool discardItemsWhenFull)

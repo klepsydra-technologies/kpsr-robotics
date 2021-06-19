@@ -49,7 +49,7 @@ public:
      * @param img
      */
     ImageData(
-      std::string frameId, 
+      const std::string& frameId, 
       int seq,
       cv::Mat img)
       : Sensor(frameId, seq)
