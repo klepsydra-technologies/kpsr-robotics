@@ -20,17 +20,6 @@
 SET(PROJ_NAME kpsr_zmq_${PROJ_MAIN_NAME})
 PROJECT(${PROJ_NAME})
 
-#find cppzmq wrapper, installed by make of cppzmq
-find_package(cppzmq REQUIRED)
-
-# Include directories with headers
-#---------------------------------------------------#
-INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR}/include )
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/${PROJ_MAIN_NAME}/gen/poco/include )
-INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/${PROJ_MAIN_NAME}/modules/${PROJ_MAIN_NAME}/include )
-INCLUDE_DIRECTORIES( ${cppzmq_INCLUDE_DIR})
-INCLUDE_DIRECTORIES( ${KLEPSYDRA_INCLUDE_DIRS} )
-
 # Source
 #---------------------------------------------------#
 FILE(GLOB ${PROJ_NAME}_SRC
@@ -42,17 +31,31 @@ FILE(GLOB_RECURSE ${PROJ_NAME}_HEADERS
 
 # Create Library
 #---------------------------------------------------#
-LINK_DIRECTORIES(${KPSR_LIBRARY_PATH})
+ADD_LIBRARY(${PROJ_NAME} INTERFACE ${${PROJ_NAME}_HEADERS}) 
 
 # Link libraries with Project
 #---------------------------------------------------#
-
+TARGET_LINK_LIBRARIES(${PROJ_NAME} INTERFACE kpsr_${PROJ_MAIN_NAME})
+TARGET_INCLUDE_DIRECTORIES(${PROJ_NAME}
+  INTERFACE
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
 
 # Install
 #---------------------------------------------------#
-INSTALL(DIRECTORY "include/klepsydra"
-    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
-)
+INSTALL(TARGETS ${PROJ_NAME}
+  EXPORT KlepsydraRoboticsTargets
+  PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  RUNTIME DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  )
+
+INSTALL(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/klepsydra"
+  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+  )
+
+add_zmq_export_target(${PROJ_NAME})
 
 #PRINTBASICINFO(${PROJ_NAME})
 
