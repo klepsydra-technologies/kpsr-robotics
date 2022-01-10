@@ -20,7 +20,7 @@ kpsr::vision_ocv::FileImageStreamingService::FileImageStreamingService(kpsr::Env
     , _frameId(frameId)
 {
     _postProcessing = [width, height](const cv::Mat & src, cv::Mat & dest) {
-        resize(src, dest, cvSize(width, height));
+	    cv::resize(src, dest, cv::Size(width, height));
     };
 }
 
