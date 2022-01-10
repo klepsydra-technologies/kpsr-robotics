@@ -161,7 +161,7 @@ void kpsr::vision_ocv::MJPEGWriter::onImageReceived(const kpsr::vision_ocv::Imag
     spdlog::info("kpsr::vision_ocv::MJPEGWriter::onImageReceived. frame.seq {}.", frame.seq);
     std::vector<uchar> outbuf;
     std::vector<int> params;
-    params.push_back(CV_IMWRITE_JPEG_QUALITY);
+    params.push_back(cv::IMWRITE_JPEG_QUALITY);
     params.push_back(quality);
     imencode(".jpg", frame.img, outbuf, params);
 
