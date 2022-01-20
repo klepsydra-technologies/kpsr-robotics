@@ -20,12 +20,12 @@
 #ifndef POSE_EVENT_DATA_PUBLISHER_SERVICE_H
 #define POSE_EVENT_DATA_PUBLISHER_SERVICE_H
 
-#include <klepsydra/core/service.h>
 #include <klepsydra/core/publisher.h>
+#include <klepsydra/core/service.h>
 #include <klepsydra/geometry/pose_event_data.h>
 
-#include "spdlog/spdlog.h"
 #include "spdlog/sinks/basic_file_sink.h"
+#include "spdlog/spdlog.h"
 
 #include <random>
 
@@ -34,11 +34,14 @@ const float angle_max = 3.14;
 const float range = 0.01;
 const float intensity = 0.02;
 
-class PoseEventDataPublisherService : public kpsr::Service {
+class PoseEventDataPublisherService : public kpsr::Service
+{
 public:
-    PoseEventDataPublisherService(kpsr::Environment * environment, kpsr::Publisher<kpsr::geometry::PoseEventData> * publisher) :
-        kpsr::Service(environment, "poseEventData_service"), _publisher(publisher) {
-
+    PoseEventDataPublisherService(kpsr::Environment *environment,
+                                  kpsr::Publisher<kpsr::geometry::PoseEventData> *publisher)
+        : kpsr::Service(environment, "poseEventData_service")
+        , _publisher(publisher)
+    {
         // Initialize random number generation with a seed
         std::random_device rd;
         mt = new std::mt19937(rd());
@@ -48,7 +51,8 @@ public:
     void start() {}
     void stop() {}
 
-    void execute() {
+    void execute()
+    {
         spdlog::info("PoseEventDataPublisherService.runOnce");
         sensor.seq = _seq++;
         sensor.frameId = "BODY_FRAME";
@@ -63,9 +67,9 @@ public:
 
         sensor.posCovarianceAvailable = true;
         sensor.positionCovariance.resize(3);
-        sensor.positionCovariance[0] = (((*dist)(*mt)*range));
-        sensor.positionCovariance[1] = (((*dist)(*mt)*range));
-        sensor.positionCovariance[2] = (((*dist)(*mt)*range));
+        sensor.positionCovariance[0] = (((*dist)(*mt) * range));
+        sensor.positionCovariance[1] = (((*dist)(*mt) * range));
+        sensor.positionCovariance[2] = (((*dist)(*mt) * range));
         _publisher->publish(sensor);
     }
 
@@ -74,10 +78,10 @@ public:
 private:
     int _seq = 0;
 
-    std::mt19937 * mt;
-    std::uniform_real_distribution<double> * dist;
+    std::mt19937 *mt;
+    std::uniform_real_distribution<double> *dist;
 
-    kpsr::Publisher<kpsr::geometry::PoseEventData> * _publisher;
+    kpsr::Publisher<kpsr::geometry::PoseEventData> *_publisher;
 };
 
 #endif // POSE_EVENT_DATA_PUBLISHER_SERVICE_H

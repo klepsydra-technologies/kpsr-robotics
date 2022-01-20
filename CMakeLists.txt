@@ -120,21 +120,35 @@ add_definitions(-Wno-comment)
 enable_testing()
 
 if (KPSR_WITH_CODE_METRICS)
-   # Code Coverage
-   IF (CMAKE_BUILD_TYPE MATCHES Debug)
-       add_definitions(--coverage)
-       SET(CMAKE_CXX_FLAGS "-g -O0 -fprofile-arcs -ftest-coverage")
-       SET(CMAKE_C_FLAGS "-g -O0 -fprofile-arcs -ftest-coverage")
-       include(FindPythonInterp)
-       include(CodeCoverage)
-       setup_target_for_all_tests_coverage()
-       setup_target_for_all_tests_coverage_cobertura(coverage)
-   ENDIF()
-
+  include(CodeCoverage)
+  set(CODE_COVERAGE_VERBOSE ON)
+  APPEND_COVERAGE_COMPILER_FLAGS()
    # Code style check
    include(CppcheckTargets)
    include(Findcppcheck)
 ENDIF()
+
+# Code format check
+include(CodeFormat)
+# CCACHE support
+include(FindCcache)
+
+# Code Coverage
+if (KPSR_WITH_CODE_METRICS AND CMAKE_BUILD_TYPE MATCHES Debug AND CMAKE_COMPILER_IS_GNUCXX)
+  STRING(REPLACE ${CMAKE_SOURCE_DIR}/ "" THIRDPARTIES_PATH_COVERAGE ${THIRDPARTIES_PATH})
+  LIST(APPEND COVERAGE_EXCLUDES
+    ${THIRDPARTIES_PATH_COVERAGE}
+    ${CMAKE_PREFIX_PATH}
+    geometry/tests
+    uav_sensors/tests
+    vision_ocv/tests
+    )
+  setup_target_for_coverage_gcovr_xml(
+    NAME coverage
+    EXECUTABLE make test
+    )
+ENDIF()
+
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)

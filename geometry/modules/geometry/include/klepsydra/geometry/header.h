@@ -20,43 +20,41 @@
 #ifndef KPSR_GEOMETRY_HEADER_H_
 #define KPSR_GEOMETRY_HEADER_H_
 
-
 // Include section.
 #include <string>
-
 
 namespace kpsr {
 namespace geometry {
 // Klepsydra generated event class.
-class Header {
+class Header
+{
 public:
-   // Default constructor.
-   Header() {}
+    // Default constructor.
+    Header() {}
 
-   // Main constructor.
-   Header(
-      unsigned int seq,
-      const std::string& frame_id)
-      : seq(seq)
-      , frame_id(frame_id)
-   {}
+    // Main constructor.
+    Header(unsigned int seq, const std::string &frame_id)
+        : seq(seq)
+        , frame_id(frame_id)
+    {}
 
-   // Clone constructor. Needed by klepsydra core APIs.
-   Header(const Header * that)
-      : seq(that->seq)
-      , frame_id(that->frame_id)
-   {}
+    // Clone constructor. Needed by klepsydra core APIs.
+    Header(const Header *that)
+        : seq(that->seq)
+        , frame_id(that->frame_id)
+    {}
 
-   // Clone method. Needed by klepsydra core APIs.
-   void clone(const Header * that) {
-      this->seq = that->seq;
-      this->frame_id = that->frame_id;
-   }
+    // Clone method. Needed by klepsydra core APIs.
+    void clone(const Header *that)
+    {
+        this->seq = that->seq;
+        this->frame_id = that->frame_id;
+    }
 
-   // List of fields.
-   unsigned int seq;
-   std::string frame_id;
+    // List of fields.
+    unsigned int seq;
+    std::string frame_id;
 };
-}
-}
+} // namespace geometry
+} // namespace kpsr
 #endif

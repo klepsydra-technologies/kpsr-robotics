@@ -24,8 +24,8 @@
 
 #include <klepsydra/serialization/mapper.h>
 
-#include <klepsydra/vision_ocv/image_event_data.h>
 #include <image_event_data.hpp>
+#include <klepsydra/vision_ocv/image_event_data.h>
 
 namespace kpsr {
 template<>
@@ -42,13 +42,14 @@ template<>
 class Mapper<kpsr::vision_ocv::ImageData, kpsr_dds_vision_ocv::ImageData>
 {
 public:
-
     /**
     * @brief fromMiddleware
     * @param message
     * @param event
     */
-    void fromMiddleware(const kpsr_dds_vision_ocv::ImageData & message, kpsr::vision_ocv::ImageData& event) {
+    void fromMiddleware(const kpsr_dds_vision_ocv::ImageData &message,
+                        kpsr::vision_ocv::ImageData &event)
+    {
         event.frameId = message.frameId();
         event.seq = message.seq();
         event.timestamp = message.timestamp();
@@ -62,7 +63,9 @@ public:
     * @param event
     * @param message
     */
-    void toMiddleware(const kpsr::vision_ocv::ImageData & event, kpsr_dds_vision_ocv::ImageData& message) {
+    void toMiddleware(const kpsr::vision_ocv::ImageData &event,
+                      kpsr_dds_vision_ocv::ImageData &message)
+    {
         message.seq(event.seq);
         message.timestamp(event.timestamp);
         message.frameId(event.frameId);
@@ -70,9 +73,11 @@ public:
         message.type(event.img.type());
         message.rows(event.img.rows);
         message.cols(event.img.cols);
-        std::vector<unsigned char> data((unsigned char*)(event.img.data), (unsigned char*)event.img.data + event.img.elemSize() * event.img.total());
+        std::vector<unsigned char> data((unsigned char *) (event.img.data),
+                                        (unsigned char *) event.img.data +
+                                            event.img.elemSize() * event.img.total());
         message.data(data);
     }
 };
-}
+} // namespace kpsr
 #endif // IMAGE_DATA_DDS_MAPPER_H

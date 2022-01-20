@@ -17,15 +17,23 @@
 *
 *****************************************************************************/
 
-#include <algorithm>
 #include "pose_builder.h"
+#include <algorithm>
 #include <tf/transform_datatypes.h>
 
-void kpsr::geometry::ros_mdlw::PoseBuilder::createPoseEvent(const std::string& frameId, double x, double y, double z,
-                                                            double qx, double qy, double qz, double qw,
-                                                            const double * posCovariance, bool calculateEuler,
-                                                            kpsr::geometry::PoseEventData & poseEventData) {
-
+void kpsr::geometry::ros_mdlw::PoseBuilder::createPoseEvent(
+    const std::string &frameId,
+    double x,
+    double y,
+    double z,
+    double qx,
+    double qy,
+    double qz,
+    double qw,
+    const double *posCovariance,
+    bool calculateEuler,
+    kpsr::geometry::PoseEventData &poseEventData)
+{
     poseEventData.frameId = frameId;
 
     poseEventData.qx = qx;
@@ -44,8 +52,7 @@ void kpsr::geometry::ros_mdlw::PoseBuilder::createPoseEvent(const std::string& f
         poseEventData.yaw = yaw;
 
         poseEventData.eulerAvailable = true;
-    }
-    else {
+    } else {
         poseEventData.eulerAvailable = false;
     }
 
@@ -55,18 +62,26 @@ void kpsr::geometry::ros_mdlw::PoseBuilder::createPoseEvent(const std::string& f
 
     if (posCovariance != NULL) {
         poseEventData.positionCovariance.resize(36);
-        memcpy(&poseEventData.positionCovariance[0], posCovariance, 36*sizeof(double));
+        memcpy(&poseEventData.positionCovariance[0], posCovariance, 36 * sizeof(double));
         poseEventData.posCovarianceAvailable = true;
-    }
-    else {
+    } else {
         poseEventData.posCovarianceAvailable = false;
     }
 }
 
-void kpsr::geometry::ros_mdlw::PoseBuilder::createPoseEvent(const std::string& frameId, float x, float y, float z,
-                                                          float qx, float qy, float qz, float qw,
-                                                          const float * posCovariance, bool calculateEuler,
-                                                          kpsr::geometry::PoseEventData & poseEventData) {
+void kpsr::geometry::ros_mdlw::PoseBuilder::createPoseEvent(
+    const std::string &frameId,
+    float x,
+    float y,
+    float z,
+    float qx,
+    float qy,
+    float qz,
+    float qw,
+    const float *posCovariance,
+    bool calculateEuler,
+    kpsr::geometry::PoseEventData &poseEventData)
+{
     poseEventData.frameId = frameId;
 
     poseEventData.qx = qx;
@@ -85,8 +100,7 @@ void kpsr::geometry::ros_mdlw::PoseBuilder::createPoseEvent(const std::string& f
         poseEventData.yaw = yaw;
 
         poseEventData.eulerAvailable = true;
-    }
-    else {
+    } else {
         poseEventData.eulerAvailable = false;
     }
 
@@ -96,21 +110,26 @@ void kpsr::geometry::ros_mdlw::PoseBuilder::createPoseEvent(const std::string& f
 
     if (posCovariance != NULL) {
         poseEventData.positionCovariance.resize(36);
-        memcpy(&poseEventData.positionCovariance[0], posCovariance, 36*sizeof(double));
+        memcpy(&poseEventData.positionCovariance[0], posCovariance, 36 * sizeof(double));
         poseEventData.posCovarianceAvailable = true;
-    }
-    else {
+    } else {
         poseEventData.posCovarianceAvailable = false;
     }
 }
 
-void kpsr::geometry::ros_mdlw::PoseBuilder::createPose(float x, float y, float z,
-                                                       float qx, float qy, float qz, float qw,
-                                                       float roll, float pitch, float yaw,
+void kpsr::geometry::ros_mdlw::PoseBuilder::createPose(float x,
+                                                       float y,
+                                                       float z,
+                                                       float qx,
+                                                       float qy,
+                                                       float qz,
+                                                       float qw,
+                                                       float roll,
+                                                       float pitch,
+                                                       float yaw,
                                                        bool calculateQuaternion,
-                                                       geometry_msgs::Pose & poseData) {
-
-   
+                                                       geometry_msgs::Pose &poseData)
+{
     poseData.position.x = x;
     poseData.position.y = y;
     poseData.position.z = z;
@@ -130,13 +149,19 @@ void kpsr::geometry::ros_mdlw::PoseBuilder::createPose(float x, float y, float z
     }
 }
 
-void kpsr::geometry::ros_mdlw::PoseBuilder::createPose(double x, double y, double z,
-                                                       double qx, double qy, double qz, double qw,
-                                                       double roll, double pitch, double yaw,
+void kpsr::geometry::ros_mdlw::PoseBuilder::createPose(double x,
+                                                       double y,
+                                                       double z,
+                                                       double qx,
+                                                       double qy,
+                                                       double qz,
+                                                       double qw,
+                                                       double roll,
+                                                       double pitch,
+                                                       double yaw,
                                                        bool calculateQuaternion,
-                                                       geometry_msgs::Pose & poseData) {
-
-   
+                                                       geometry_msgs::Pose &poseData)
+{
     poseData.position.x = x;
     poseData.position.y = y;
     poseData.position.z = z;

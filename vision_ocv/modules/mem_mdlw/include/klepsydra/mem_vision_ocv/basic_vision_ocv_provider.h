@@ -22,8 +22,8 @@
 
 #include <klepsydra/mem_core/basic_middleware_provider.h>
 
-#include <klepsydra/vision_ocv/image_event_data.h>
 #include <klepsydra/vision_ocv/image_data_factory.h>
+#include <klepsydra/vision_ocv/image_event_data.h>
 
 namespace kpsr {
 namespace vision_ocv {
@@ -52,7 +52,8 @@ namespace mem {
 @endcode
  *
  */
-class BasicVisionMiddlewareProvider {
+class BasicVisionMiddlewareProvider
+{
 public:
     /**
      * @brief BasicVisionMiddlewareProvider
@@ -66,8 +67,12 @@ public:
      * @param poolSize
      * @param discardItemsWhenFull
      */
-    BasicVisionMiddlewareProvider(Container * container, int rows, int cols, int type, const std::string& frameId,
-                                  const std::string& eventName,
+    BasicVisionMiddlewareProvider(Container *container,
+                                  int rows,
+                                  int cols,
+                                  int type,
+                                  const std::string &frameId,
+                                  const std::string &eventName,
                                   int queueSize,
                                   int poolSize,
                                   bool discardItemsWhenFull);
@@ -75,16 +80,15 @@ public:
     /**
      * @brief _imageDataFactory
      */
-    kpsr::vision_ocv::ImageDataFactory * _imageDataFactory;
+    kpsr::vision_ocv::ImageDataFactory *_imageDataFactory;
 
     /**
      * @brief underlying
      */
-    kpsr::mem::BasicMiddlewareProvider<kpsr::vision_ocv::ImageData> * underlying;
-
+    kpsr::mem::BasicMiddlewareProvider<kpsr::vision_ocv::ImageData> *underlying;
 };
-}
-}
-}
+} // namespace mem
+} // namespace vision_ocv
+} // namespace kpsr
 
 #endif // VISION_BASIC_MIDDLEWARE_PROVIDER_H

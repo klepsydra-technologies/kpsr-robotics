@@ -35,16 +35,16 @@ template<class Archive>
  * @param archive
  * @param event
  */
-void serialize(Archive & archive, kpsr::vision_ocv::ImageData & event)
+void serialize(Archive &archive, kpsr::vision_ocv::ImageData &event)
 {
-    archive( CEREAL_NVP(event.frameId),
-             CEREAL_NVP(event.seq),
-             CEREAL_NVP(event.timestamp),
-             CEREAL_NVP(event.img) );
+    archive(CEREAL_NVP(event.frameId),
+            CEREAL_NVP(event.seq),
+            CEREAL_NVP(event.timestamp),
+            CEREAL_NVP(event.img));
 }
 
 template<class Archive>
-void save(Archive& ar, const cv::Mat& mat)
+void save(Archive &ar, const cv::Mat &mat)
 {
     int rows, cols, type;
     bool continuous;
@@ -54,44 +54,42 @@ void save(Archive& ar, const cv::Mat& mat)
     type = mat.type();
     continuous = mat.isContinuous();
 
-    ar & rows & cols & type & continuous;
+    ar &rows &cols &type &continuous;
 
     if (continuous) {
         const int data_size = rows * cols * static_cast<int>(mat.elemSize());
         auto mat_data = cereal::binary_data(mat.ptr(), data_size);
-        ar & mat_data;
-    }
-    else {
+        ar &mat_data;
+    } else {
         const int row_size = cols * static_cast<int>(mat.elemSize());
         for (int i = 0; i < rows; i++) {
             auto row_data = cereal::binary_data(mat.ptr(i), row_size);
-            ar & row_data;
+            ar &row_data;
         }
     }
 }
 
 template<class Archive>
-void load(Archive& ar, cv::Mat& mat)
+void load(Archive &ar, cv::Mat &mat)
 {
     int rows, cols, type;
     bool continuous;
 
-    ar & rows & cols & type & continuous;
+    ar &rows &cols &type &continuous;
 
     if (continuous) {
         mat.create(rows, cols, type);
         const int data_size = rows * cols * static_cast<int>(mat.elemSize());
         auto mat_data = cereal::binary_data(mat.ptr(), data_size);
-        ar & mat_data;
-    }
-    else {
+        ar &mat_data;
+    } else {
         mat.create(rows, cols, type);
         const int row_size = cols * static_cast<int>(mat.elemSize());
         for (int i = 0; i < rows; i++) {
             auto row_data = cereal::binary_data(mat.ptr(i), row_size);
-            ar & row_data;
+            ar &row_data;
         }
     }
 }
-}
+} // namespace cereal
 #endif // IMAGE_DATA_ZMQ_MAPPER_H

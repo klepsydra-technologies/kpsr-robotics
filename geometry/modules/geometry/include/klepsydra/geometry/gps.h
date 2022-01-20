@@ -26,32 +26,39 @@
 namespace kpsr {
 namespace geometry {
 // Klepsydra generated event class.
-class Gps {
+class Gps
+{
 public:
-  // Default constructor.
-  Gps() {}
+    // Default constructor.
+    Gps() {}
 
-  // Main constructor.
-  Gps(double latitude, double longitude, double altitude)
-      : latitude(latitude), longitude(longitude), altitude(altitude) {}
+    // Main constructor.
+    Gps(double latitude, double longitude, double altitude)
+        : latitude(latitude)
+        , longitude(longitude)
+        , altitude(altitude)
+    {}
 
-  // Clone constructor. Needed by klepsydra core APIs.
-  Gps(const Gps *that)
-      : latitude(that->latitude), longitude(that->longitude),
-        altitude(that->altitude) {}
+    // Clone constructor. Needed by klepsydra core APIs.
+    Gps(const Gps *that)
+        : latitude(that->latitude)
+        , longitude(that->longitude)
+        , altitude(that->altitude)
+    {}
 
-  // Clone method. Needed by klepsydra core APIs.
-  void clone(const Gps *that) {
-    this->latitude = that->latitude;
-    this->longitude = that->longitude;
-    this->altitude = that->altitude;
-  }
+    // Clone method. Needed by klepsydra core APIs.
+    void clone(const Gps *that)
+    {
+        this->latitude = that->latitude;
+        this->longitude = that->longitude;
+        this->altitude = that->altitude;
+    }
 
-  // List of fields.
-  double latitude;
-  double longitude;
-  double altitude;
+    // List of fields.
+    double latitude;
+    double longitude;
+    double altitude;
 };
-}
-}
+} // namespace geometry
+} // namespace kpsr
 #endif

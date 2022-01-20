@@ -22,8 +22,8 @@
 
 #include <opencv2/opencv.hpp>
 
-#include <klepsydra/core/service.h>
 #include <klepsydra/core/publisher.h>
+#include <klepsydra/core/service.h>
 
 #include <klepsydra/vision_ocv/image_event_data.h>
 
@@ -32,23 +32,23 @@ namespace vision_ocv {
 class FileImageStreamingService : public kpsr::Service
 {
 public:
-    FileImageStreamingService(kpsr::Environment * environment,
-                              kpsr::Publisher<kpsr::vision_ocv::ImageData> * publisher,
-                              const std::string& imageDirname,
+    FileImageStreamingService(kpsr::Environment *environment,
+                              kpsr::Publisher<kpsr::vision_ocv::ImageData> *publisher,
+                              const std::string &imageDirname,
                               bool restartIfNoMoreImages,
                               int width = 480,
                               int height = 320,
-                              const std::string& frameId = "body",
-                              const std::string& serviceName = "FileImageStreamingService");
+                              const std::string &frameId = "body",
+                              const std::string &serviceName = "FileImageStreamingService");
 
-    FileImageStreamingService(kpsr::Environment * environment,
-                              kpsr::Publisher<kpsr::vision_ocv::ImageData> * publisher,
-                              const std::string& imageDirname,
+    FileImageStreamingService(kpsr::Environment *environment,
+                              kpsr::Publisher<kpsr::vision_ocv::ImageData> *publisher,
+                              const std::string &imageDirname,
                               bool restartIfNoMoreImages,
                               cv::ImreadModes readMode,
                               std::function<void(const cv::Mat &, cv::Mat &)> postProcessing,
-                              const std::string& frameId = "body",
-                              const std::string& serviceName = "FileImageStreamingService");
+                              const std::string &frameId = "body",
+                              const std::string &serviceName = "FileImageStreamingService");
 
     void start();
 
@@ -62,9 +62,9 @@ public:
 
 private:
     bool hasMoreImages();
-    bool getImage(cv::Mat & image);
+    bool getImage(cv::Mat &image);
 
-    kpsr::Publisher<kpsr::vision_ocv::ImageData> * _publisher;
+    kpsr::Publisher<kpsr::vision_ocv::ImageData> *_publisher;
     std::string _imageDirname;
     bool _restartIfNoMoreImages;
 
@@ -78,7 +78,7 @@ private:
     int _height;
     std::string _frameId;
 };
-}
-}
+} // namespace vision_ocv
+} // namespace kpsr
 
 #endif // FILE_IMG_STREAM__SERVICE_H

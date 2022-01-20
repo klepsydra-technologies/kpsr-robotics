@@ -25,8 +25,7 @@
 #include <klepsydra/serialization/mapper.h>
 #include <kpsr_ros_geometry/pose_builder.h>
 
-namespace kpsr
-{
+namespace kpsr {
 template<>
 /**
  * @brief The Mapper<kpsr::geometry::PoseEventData, geometry_msgs::Pose> class
@@ -47,18 +46,21 @@ public:
      * @param message
      * @param event
      */
-    void fromMiddleware(const geometry_msgs::Pose & message, kpsr::geometry::PoseEventData & event) {
-        kpsr::geometry::ros_mdlw::PoseBuilder::createPoseEvent(
-                    "",
-                    message.position.x,
-                    message.position.y,
-                    message.position.z,
-                    message.orientation.x,
-                    message.orientation.y,
-                    message.orientation.z,
-                    message.orientation.w,
-                    NULL, true, event);
-        std::chrono::milliseconds ms = std::chrono::duration_cast< std::chrono::milliseconds >(std::chrono::system_clock::now().time_since_epoch());
+    void fromMiddleware(const geometry_msgs::Pose &message, kpsr::geometry::PoseEventData &event)
+    {
+        kpsr::geometry::ros_mdlw::PoseBuilder::createPoseEvent("",
+                                                               message.position.x,
+                                                               message.position.y,
+                                                               message.position.z,
+                                                               message.orientation.x,
+                                                               message.orientation.y,
+                                                               message.orientation.z,
+                                                               message.orientation.w,
+                                                               NULL,
+                                                               true,
+                                                               event);
+        std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+            std::chrono::system_clock::now().time_since_epoch());
         event.timestamp = ms.count();
     }
 
@@ -67,22 +69,21 @@ public:
      * @param event
      * @param message
      */
-    void toMiddleware(const kpsr::geometry::PoseEventData & event, geometry_msgs::Pose & message) {
-        kpsr::geometry::ros_mdlw::PoseBuilder::createPose(
-            event.x,
-            event.y,
-            event.z,
-            event.qx,
-            event.qy,
-            event.qz,
-            event.qw,
-            event.roll,
-            event.pitch,
-            event.yaw,
-            true,
-            message);
-
+    void toMiddleware(const kpsr::geometry::PoseEventData &event, geometry_msgs::Pose &message)
+    {
+        kpsr::geometry::ros_mdlw::PoseBuilder::createPose(event.x,
+                                                          event.y,
+                                                          event.z,
+                                                          event.qx,
+                                                          event.qy,
+                                                          event.qz,
+                                                          event.qw,
+                                                          event.roll,
+                                                          event.pitch,
+                                                          event.yaw,
+                                                          true,
+                                                          message);
     }
 };
-}
+} // namespace kpsr
 #endif

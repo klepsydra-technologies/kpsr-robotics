@@ -30,16 +30,18 @@ namespace vision_ocv {
  *
  * @details This class reads all images in a folder and provide names back in the passed reference vector.
  */
-class ImageFileUtils {
+class ImageFileUtils
+{
 public:
     /**
        * @brief getSortedListOfFilesInDir
        * @param dirName
        * @param fileNameList
        */
-    static void getSortedListOfFilesInDir(const std::string & dirName, std::vector<std::string> & fileNameList);
+    static void getSortedListOfFilesInDir(const std::string &dirName,
+                                          std::vector<std::string> &fileNameList);
 };
-}
-}
+} // namespace vision_ocv
+} // namespace kpsr
 
 #endif

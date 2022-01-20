@@ -28,7 +28,7 @@
 
 namespace cereal {
 template<class Archive>
-void serialize(Archive & archive, kpsr::geometry::PoseEventData & event)
+void serialize(Archive &archive, kpsr::geometry::PoseEventData &event)
 {
     archive(CEREAL_NVP(event.frameId),
             CEREAL_NVP(event.seq),
@@ -47,5 +47,5 @@ void serialize(Archive & archive, kpsr::geometry::PoseEventData & event)
             CEREAL_NVP(event.qz),
             CEREAL_NVP(event.qw));
 }
-}
+} // namespace cereal
 #endif // POSE_EVENT_DATA_ZMQ_SERIALIZER_H

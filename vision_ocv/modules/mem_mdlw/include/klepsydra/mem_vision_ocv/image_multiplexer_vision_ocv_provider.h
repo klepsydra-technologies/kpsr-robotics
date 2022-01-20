@@ -25,13 +25,13 @@
 
 #include <klepsydra/high_performance/data_multiplexer_middleware_provider.h>
 
-#include <klepsydra/vision_ocv/image_event_data.h>
 #include <klepsydra/vision_ocv/image_data_factory.h>
+#include <klepsydra/vision_ocv/image_event_data.h>
 
 namespace kpsr {
 namespace vision_ocv {
 namespace high_performance {
-template <std::size_t BufferSize>
+template<std::size_t BufferSize>
 /**
  * @brief The ImageMultiplexerVisionMiddlewareProvider class
  *
@@ -44,7 +44,8 @@ template <std::size_t BufferSize>
  * @details A syntactic sugar provider for mixing the high_performance provider with the image factory class.
  *
  */
-class ImageMultiplexerVisionMiddlewareProvider {
+class ImageMultiplexerVisionMiddlewareProvider
+{
 public:
     /**
      * @brief ImageMultiplexerVisionMiddlewareProvider
@@ -55,10 +56,19 @@ public:
      * @param type
      * @param frameId
      */
-    ImageMultiplexerVisionMiddlewareProvider(Container * container, const std::string& name, int rows, int cols, int type, const std::string& frameId)
+    ImageMultiplexerVisionMiddlewareProvider(Container *container,
+                                             const std::string &name,
+                                             int rows,
+                                             int cols,
+                                             int type,
+                                             const std::string &frameId)
         : imageDataFactory(rows, cols, type, frameId)
-        , underlying(new kpsr::high_performance::DataMultiplexerMiddlewareProvider<kpsr::vision_ocv::ImageData, BufferSize>
-          (container, name, imageDataFactory.initializerFunction, imageDataFactory.eventClonerFunction))
+        , underlying(new kpsr::high_performance::DataMultiplexerMiddlewareProvider<
+                     kpsr::vision_ocv::ImageData,
+                     BufferSize>(container,
+                                 name,
+                                 imageDataFactory.initializerFunction,
+                                 imageDataFactory.eventClonerFunction))
     {}
 
     /**
@@ -69,10 +79,11 @@ public:
     /**
      * @brief _high_performanceProvider
      */
-    kpsr::high_performance::DataMultiplexerMiddlewareProvider<kpsr::vision_ocv::ImageData, BufferSize> * underlying;
+    kpsr::high_performance::DataMultiplexerMiddlewareProvider<kpsr::vision_ocv::ImageData,
+                                                              BufferSize> *underlying;
 };
-}
-}
-}
+} // namespace high_performance
+} // namespace vision_ocv
+} // namespace kpsr
 
 #endif // VISION_HIGH_PERFORMANCE_PROVIDER_H

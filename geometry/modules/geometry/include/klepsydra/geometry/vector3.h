@@ -23,40 +23,39 @@
 namespace kpsr {
 namespace geometry {
 // Klepsydra generated event class.
-class Vector3 {
+class Vector3
+{
 public:
-   // Default constructor.
-   Vector3() {}
+    // Default constructor.
+    Vector3() {}
 
-   // Main constructor.
-   Vector3(
-      double x,
-      double y,
-      double z)
-      : x(x)
-      , y(y)
-      , z(z)
-   {}
+    // Main constructor.
+    Vector3(double x, double y, double z)
+        : x(x)
+        , y(y)
+        , z(z)
+    {}
 
-   // Clone constructor. Needed by klepsydra core APIs.
-   Vector3(const Vector3 * that)
-      : x(that->x)
-      , y(that->y)
-      , z(that->z)
-   {}
+    // Clone constructor. Needed by klepsydra core APIs.
+    Vector3(const Vector3 *that)
+        : x(that->x)
+        , y(that->y)
+        , z(that->z)
+    {}
 
-   // Clone method. Needed by klepsydra core APIs.
-   void clone(const Vector3 * that) {
-      this->x = that->x;
-      this->y = that->y;
-      this->z = that->z;
-   }
+    // Clone method. Needed by klepsydra core APIs.
+    void clone(const Vector3 *that)
+    {
+        this->x = that->x;
+        this->y = that->y;
+        this->z = that->z;
+    }
 
-   // List of fields.
-   double x;
-   double y;
-   double z;
+    // List of fields.
+    double x;
+    double y;
+    double z;
 };
-}
-}
+} // namespace geometry
+} // namespace kpsr
 #endif

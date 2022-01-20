@@ -20,21 +20,22 @@
 #ifndef MPEG_WRITER_H
 #define MPEG_WRITER_H
 
-#define SOCKET    int
+#define SOCKET int
 
-#include <klepsydra/vision_ocv/image_event_data.h>
-#include <klepsydra/core/subscriber.h>
 #include <klepsydra/core/publisher.h>
+#include <klepsydra/core/subscriber.h>
+#include <klepsydra/vision_ocv/image_event_data.h>
 
 namespace kpsr {
 namespace vision_ocv {
 
-class SocketClient {
+class SocketClient
+{
 public:
-    SocketClient(SOCKET client, kpsr::Subscriber<std::vector<uchar>> * encodedImageSubscriber);
+    SocketClient(SOCKET client, kpsr::Subscriber<std::vector<uchar>> *encodedImageSubscriber);
     ~SocketClient();
 
-    void onImageReceived(const std::vector<uchar> & encodedImage);
+    void onImageReceived(const std::vector<uchar> &encodedImage);
 
     bool isValid();
 
@@ -43,18 +44,18 @@ private:
 
     bool _isValid;
     SOCKET _client;
-    kpsr::Subscriber<std::vector<uchar>> * _encodedImageSubscriber;
+    kpsr::Subscriber<std::vector<uchar>> *_encodedImageSubscriber;
 };
 
-class MJPEGWriter{
+class MJPEGWriter
+{
 public:
-
     MJPEGWriter(int port,
                 int timeout,
                 int quality,
-                kpsr::Subscriber<kpsr::vision_ocv::ImageData> * imageSubscriber,
-                kpsr::Publisher<std::vector<uchar>> * encodedImagePublisher,
-                kpsr::Subscriber<std::vector<uchar>> * encodedImageSubscriber);
+                kpsr::Subscriber<kpsr::vision_ocv::ImageData> *imageSubscriber,
+                kpsr::Publisher<std::vector<uchar>> *encodedImagePublisher,
+                kpsr::Subscriber<std::vector<uchar>> *encodedImageSubscriber);
 
     ~MJPEGWriter();
 
@@ -62,19 +63,19 @@ public:
     void stop();
 
 private:
-    void onImageReceived(const kpsr::vision_ocv::ImageData & frame);
+    void onImageReceived(const kpsr::vision_ocv::ImageData &frame);
     bool release();
     bool open();
-    int read(int socket, char* buffer);
+    int read(int socket, char *buffer);
 
     SOCKET _socket;
     int timeout;
     int quality;
     int port;
 
-    kpsr::Subscriber<kpsr::vision_ocv::ImageData> * _imageSubscriber;
-    kpsr::Publisher<std::vector<uchar>> * _encodedImagePublisher;
-    kpsr::Subscriber<std::vector<uchar>> * _encodedImageSubscriber;
+    kpsr::Subscriber<kpsr::vision_ocv::ImageData> *_imageSubscriber;
+    kpsr::Publisher<std::vector<uchar>> *_encodedImagePublisher;
+    kpsr::Subscriber<std::vector<uchar>> *_encodedImageSubscriber;
 
     fd_set master;
     std::vector<std::shared_ptr<SocketClient>> clients;
@@ -82,7 +83,7 @@ private:
     bool _isValid;
     std::atomic_bool _isRunning;
 };
-}
-}
+} // namespace vision_ocv
+} // namespace kpsr
 
 #endif //MPEG_WRITER_H

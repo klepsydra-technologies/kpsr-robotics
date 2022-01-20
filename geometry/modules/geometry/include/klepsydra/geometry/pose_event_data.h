@@ -24,10 +24,8 @@
 
 #include <klepsydra/core/sensor.h>
 
-namespace kpsr
-{
-namespace geometry
-{
+namespace kpsr {
+namespace geometry {
 /**
  * @brief The PoseEventData struct
  *
@@ -41,8 +39,7 @@ namespace geometry
  */
 struct PoseEventData : public Sensor
 {
-    PoseEventData()
-    {}
+    PoseEventData() {}
 
     /**
      * @brief PoseEventData
@@ -62,22 +59,21 @@ struct PoseEventData : public Sensor
      * @param qw
      * @param positionCovariance
      */
-    PoseEventData(
-            const std::string& frameId,
-            int seq,
-            bool eulerAvailable,
-            bool posCovarianceAvailable,
-            double x,
-            double y,
-            double z,
-            double roll,
-            double pitch,
-            double yaw,
-            double qx,
-            double qy,
-            double qz,
-            double qw,
-            std::vector<double> positionCovariance)
+    PoseEventData(const std::string &frameId,
+                  int seq,
+                  bool eulerAvailable,
+                  bool posCovarianceAvailable,
+                  double x,
+                  double y,
+                  double z,
+                  double roll,
+                  double pitch,
+                  double yaw,
+                  double qx,
+                  double qy,
+                  double qz,
+                  double qw,
+                  std::vector<double> positionCovariance)
         : Sensor(frameId, seq)
         , eulerAvailable(eulerAvailable)
         , posCovarianceAvailable(posCovarianceAvailable)
@@ -98,7 +94,7 @@ struct PoseEventData : public Sensor
      * @brief PoseEventData
      * @param that
      */
-    PoseEventData(const PoseEventData & that)
+    PoseEventData(const PoseEventData &that)
         : Sensor(that)
         , eulerAvailable(that.eulerAvailable)
         , posCovarianceAvailable(that.posCovarianceAvailable)
@@ -119,7 +115,8 @@ struct PoseEventData : public Sensor
      * @brief clone
      * @param that
      */
-    void clone(const PoseEventData & that) {
+    void clone(const PoseEventData &that)
+    {
         Sensor::clone(that);
 
         eulerAvailable = that.eulerAvailable;
@@ -197,6 +194,6 @@ struct PoseEventData : public Sensor
      */
     std::vector<double> positionCovariance;
 };
-}
-}
+} // namespace geometry
+} // namespace kpsr
 #endif

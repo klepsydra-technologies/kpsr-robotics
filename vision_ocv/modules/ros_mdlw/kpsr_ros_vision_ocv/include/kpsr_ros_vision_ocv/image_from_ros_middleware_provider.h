@@ -30,12 +30,9 @@
 
 #include <kpsr_ros_core/from_ros_middleware_provider.h>
 
-namespace kpsr
-{
-namespace vision_ocv
-{
-namespace ros_mdlw
-{
+namespace kpsr {
+namespace vision_ocv {
+namespace ros_mdlw {
 /**
  * @brief The ImageRosSubscriptionData struct
  *
@@ -46,7 +43,8 @@ namespace ros_mdlw
  * @ingroup kpsr-ros_mdlw-vision-internal
  *
  */
-struct ImageRosSubscriptionData {
+struct ImageRosSubscriptionData
+{
 public:
     /**
     * @brief ImageRosSubscriptionData
@@ -55,14 +53,21 @@ public:
     * @param queueSize
     * @param internalPublisher
     */
-    ImageRosSubscriptionData(image_transport::ImageTransport imageTransport, const char * topicName, int queueSize, Publisher<kpsr::vision_ocv::ImageData> * internalPublisher)
-        : _fromMiddlewareChannel(internalPublisher) {
-        _rosSubscriber = imageTransport.subscribe(topicName, queueSize,
-                                                  &ImageRosSubscriptionData::imageCallback, this);
+    ImageRosSubscriptionData(image_transport::ImageTransport imageTransport,
+                             const char *topicName,
+                             int queueSize,
+                             Publisher<kpsr::vision_ocv::ImageData> *internalPublisher)
+        : _fromMiddlewareChannel(internalPublisher)
+    {
+        _rosSubscriber = imageTransport.subscribe(topicName,
+                                                  queueSize,
+                                                  &ImageRosSubscriptionData::imageCallback,
+                                                  this);
     }
 
 private:
-    void imageCallback(const sensor_msgs::ImageConstPtr& msg) {
+    void imageCallback(const sensor_msgs::ImageConstPtr &msg)
+    {
         _fromMiddlewareChannel.onMiddlewareMessage(*msg.get());
     }
 
@@ -102,13 +107,14 @@ private:
 @endcode
  *
  */
-class ImageFromRosMiddlewareProvider {
+class ImageFromRosMiddlewareProvider
+{
 public:
     /**
      * @brief ImageFromRosMiddlewareProvider
      * @param imageTransport
      */
-    ImageFromRosMiddlewareProvider(image_transport::ImageTransport & imageTransport)
+    ImageFromRosMiddlewareProvider(image_transport::ImageTransport &imageTransport)
         : _imageTransport(imageTransport)
     {}
 
@@ -118,20 +124,29 @@ public:
      * @param queueSize
      * @param internalPublisher
      */
-    void registerToTopic(const char * topicName, int queueSize, Publisher<kpsr::vision_ocv::ImageData> * internalPublisher) {
+    void registerToTopic(const char *topicName,
+                         int queueSize,
+                         Publisher<kpsr::vision_ocv::ImageData> *internalPublisher)
+    {
         auto search = _subscriberMap.find(topicName);
         if (search == _subscriberMap.end()) {
-            std::shared_ptr<ImageRosSubscriptionData> rosSubscriptionData = std::shared_ptr<ImageRosSubscriptionData>(new ImageRosSubscriptionData(_imageTransport, topicName, queueSize, internalPublisher));
-            std::shared_ptr<void> internalPointer = std::static_pointer_cast<void>(rosSubscriptionData);
+            std::shared_ptr<ImageRosSubscriptionData> rosSubscriptionData =
+                std::shared_ptr<ImageRosSubscriptionData>(
+                    new ImageRosSubscriptionData(_imageTransport,
+                                                 topicName,
+                                                 queueSize,
+                                                 internalPublisher));
+            std::shared_ptr<void> internalPointer = std::static_pointer_cast<void>(
+                rosSubscriptionData);
             _subscriberMap[topicName] = internalPointer;
         }
     }
 
 private:
-    image_transport::ImageTransport & _imageTransport;
+    image_transport::ImageTransport &_imageTransport;
     std::map<std::string, std::shared_ptr<void>> _subscriberMap;
 };
-}
-}
-}
+} // namespace ros_mdlw
+} // namespace vision_ocv
+} // namespace kpsr
 #endif

@@ -1,0 +1,112 @@
+name: Code style check
+
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  format-check:
+    name: Code style
+    if: github.ref != 'refs/heads/main'
+    runs-on: ubuntu-latest
+    container:
+      image: 337955887028.dkr.ecr.eu-central-1.amazonaws.com/general:kpe-build-1.1.0
+      options: --user root
+      credentials:
+        username: AWS
+        password: ${{ secrets.ECR_PASSWORD }}
+    steps:
+      - name: Clone kpsr-core
+        uses: actions/checkout@v2
+        with:
+          repository: klepsydra-technologies/kpsr-core
+          submodules: recursive
+          ref: main
+          path: kpsr-core
+
+      - name: Install kpsr-core
+        run: |
+          mkdir build && cd build 
+          cmake -DKPSR_WITH_DOXYGEN=true -DKPSR_WITH_DDS=false -DKPSR_WITH_ZMQ=false -DKPSR_TEST_PERFORMANCE=false -DKPSR_WITH_SOCKET=true -DKPSR_WITH_YAML=false -DKPSR_WITH_CODE_METRICS=true -DCMAKE_BUILD_TYPE=Debug ../
+          make -j$(nproc)
+          sudo make -j$(nproc) install
+        working-directory: kpsr-core
+
+      - name: Remove kpsr-core sources
+        run: |
+          sudo rm -rf ${GITHUB_WORKSPACE}/kpsr-core
+
+      - name: Clone kpsr-robotics
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Code format check
+        run: |
+          mkdir build && cd build
+          cmake ../
+          make formatcheck
+
+      - name: Workspace cleanup
+        if: always()
+        run: |
+          sudo rm -rf ${GITHUB_WORKSPACE}/build
+
+  codecoverage:
+    name: Code coverage      
+    runs-on: ubuntu-latest
+    container:
+      image: 337955887028.dkr.ecr.eu-central-1.amazonaws.com/general:kpe-build-1.1.0
+      options: --user root
+      credentials:
+        username: AWS
+        password: ${{ secrets.ECR_PASSWORD }}
+
+    steps:
+      - name: Clone kpsr-core
+        uses: actions/checkout@v2
+        with:
+          repository: klepsydra-technologies/kpsr-core
+          submodules: recursive
+          ref: main
+          path: kpsr-core
+
+      - name: Install kpsr-core
+        run: |
+          mkdir build && cd build 
+          cmake -DKPSR_WITH_DOXYGEN=true -DKPSR_WITH_SOCKET=true -DKPSR_WITH_CODE_METRICS=true -DCMAKE_BUILD_TYPE=Debug ../
+          make -j$(nproc)
+          sudo make -j$(nproc) install
+        working-directory: kpsr-core
+
+      - name: Remove kpsr-core sources
+        run: |
+          sudo rm -rf ${GITHUB_WORKSPACE}/kpsr-core
+
+      - name: Clone kpsr-robotics
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Build
+        run: |
+          mkdir build && cd build 
+          cmake -DKPSR_WITH_DOXYGEN=false -DKPSR_WITH_CODE_METRICS=true -DCMAKE_BUILD_TYPE=Debug -DKPSR_WITH_OCV=true ../
+          make -j$(nproc)
+          make -j$(nproc) coverage
+
+      - uses: codecov/codecov-action@v2
+        with:
+          files: build/coverage.xml
+      
+      - name: Workspace cleanup
+        if: always()
+        run: |
+          sudo rm -rf ${GITHUB_WORKSPACE}/build
