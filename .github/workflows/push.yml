@@ -1,0 +1,222 @@
+name: Check build
+
+on:
+  push:
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  builddebug:
+    name: Vanilla Debug
+    runs-on: ubuntu-latest
+    container:
+      image: 337955887028.dkr.ecr.eu-central-1.amazonaws.com/general:kpe-build-1.0.0
+      options: --user root
+      credentials:
+        username: AWS
+        password: ${{ secrets.ECR_PASSWORD }}
+    steps:
+      - name: Clone kpsr-core
+        uses: actions/checkout@v2
+        with:
+          repository: klepsydra-technologies/kpsr-core
+          submodules: recursive
+          ref: main
+          path: kpsr-core
+
+      - name: Install kpsr-core
+        run: |
+          mkdir build && cd build 
+          cmake -DKPSR_WITH_DOXYGEN=true -DKPSR_WITH_DDS=false -DKPSR_WITH_ZMQ=false -DKPSR_TEST_PERFORMANCE=false -DKPSR_WITH_SOCKET=true -DKPSR_WITH_YAML=false -DKPSR_WITH_CODE_METRICS=true -DCMAKE_BUILD_TYPE=Debug ../
+          make -j$(nproc)
+          make test
+          sudo make -j$(nproc) install
+        working-directory: kpsr-core
+
+      - name: Upload kpsr_codegen
+        uses: actions/upload-artifact@v2
+        with:
+          name: kpsr_codegen
+          path: |
+            kpsr-core/build/kpsr_codegen-1.0-py3-none-any.whl
+
+      - name: Remove kpsr-core sources
+        run: |
+          sudo rm -rf ${GITHUB_WORKSPACE}/kpsr-core
+
+      - name: Clone kpe-admin
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Build
+        run: |
+          mkdir build && cd build 
+          cmake -DKPSR_WITH_DOXYGEN=true -DKPSR_WITH_SOCKET=true -DKPSR_WITH_YAML=false -DCMAKE_BUILD_TYPE=Debug  -DKPSR_NO_LICENSE=true ../
+          make -j$(nproc)
+
+      - name: Unit tests
+        run: cd build && make test ARGS="--gtest_shuffle"
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: builddebug-logs
+          path: |
+            build/CMakeFiles/CMakeOutput.log
+            build/CMakeFiles/CMakeError.log
+            build/Testing/Temporary
+            build/code_generator/kpsr_codegen/build_cpptesting/Testing/Temporary
+
+      - name: Workspace cleanup
+        if: always()
+        run: |
+          sudo rm -rf ${GITHUB_WORKSPACE}/build
+
+  buildrelease:
+    needs: builddebug
+    strategy:
+      matrix:
+        include:
+          - name: Vanilla
+            zmq: 'false'
+            dds: 'false'
+
+          - name: ZMQ
+            zmq: 'true'
+            dds: 'false'
+
+    name: ${{ matrix.name }} Release
+    runs-on: ubuntu-latest
+    container:
+      image: 337955887028.dkr.ecr.eu-central-1.amazonaws.com/general:kpe-build-1.0.0
+      options: --user root
+      credentials:
+        username: AWS
+        password: ${{ secrets.ECR_PASSWORD }}
+    steps:
+      - name: Clone kpsr-core
+        uses: actions/checkout@v2
+        with:
+          repository: klepsydra-technologies/kpsr-core
+          submodules: recursive
+          ref: main
+          path: kpsr-core
+
+      - name: Install kpsr-core
+        run: |
+          mkdir build && cd build 
+          cmake -DKPSR_WITH_DOXYGEN=false -DKPSR_WITH_DDS=${{ matrix.dds }} -DKPSR_WITH_ZMQ=${{ matrix.zmq }} -DKPSR_TEST_PERFORMANCE=false -DKPSR_WITH_SOCKET=true -DKPSR_WITH_YAML=false -DKPSR_WITH_CODE_METRICS=true -DCMAKE_BUILD_TYPE=Release ../
+          make -j$(nproc)
+          sudo make -j$(nproc) install
+        working-directory: kpsr-core
+
+      - name: Remove kpsr-core sources
+        run: |
+          sudo rm -rf ${GITHUB_WORKSPACE}/kpsr-core
+
+      - name: Clone kpe-admin
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+          
+      - name: Build
+        run: |
+          mkdir build && cd build 
+          cmake -DKPSR_WITH_DOXYGEN=false -DKPSR_WITH_SOCKET=true -DKPSR_WITH_CODE_METRICS=true -DCMAKE_BUILD_TYPE=Release  -DKPSR_NO_LICENSE=true ../
+          make -j$(nproc)
+
+      - name: Unit tests
+        run: cd build && make test ARGS="--gtest_shuffle"
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: builddebug-logs
+          path: |
+            build/CMakeFiles/CMakeOutput.log
+            build/CMakeFiles/CMakeError.log
+            build/Testing/Temporary
+            build/code_generator/kpsr_codegen/build_cpptesting/Testing/Temporary
+
+      - name: Workspace cleanup
+        if: always()
+        run: |
+          sudo rm -rf ${GITHUB_WORKSPACE}/build
+
+  rtems5:
+    needs: builddebug
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rtemstarget: ["zedboard", "zynqa9qemu"]
+    name: RTEMS5 ${{ matrix.rtemstarget }}
+    container:
+      image: "337955887028.dkr.ecr.eu-central-1.amazonaws.com/rtems5:${{ matrix.rtemstarget }}-1.0.0"
+      options: --user root
+      credentials:
+        username: AWS
+        password: ${{ secrets.ECR_PASSWORD }}
+    steps:
+      - name: Clone kpsr-core
+        uses: actions/checkout@v2
+        with:
+          repository: klepsydra-technologies/kpsr-core
+          submodules: recursive
+          ref: main
+          path: kpsr-core
+
+      - name: Install kpsr-core
+        run: |
+          mkdir build && cd build 
+          cmake -DCMAKE_BUILD_TYPE=Release -DKPSR_RTEMS5_ZYNQ_ZC706=On ../
+          make -j$(nproc)
+          sudo make -j$(nproc) install
+        working-directory: kpsr-core
+
+      - name: Clone kpe-admin
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Download kpsr_codegen
+        uses: actions/download-artifact@v2
+        with:
+          name: kpsr_codegen
+      
+      - name: Run admin codegen
+        run: |
+          pip3 install $(find -name "kpsr_codegen*.whl")
+          python3 -m kpsr_codegen -i ${GITHUB_WORKSPACE}/kidl -o ${GITHUB_WORKSPACE}/gen -p klepsydra/admin -r True -z False -d True
+
+      - name: Remove kpsr-core sources
+        run: |
+          sudo rm -rf ${GITHUB_WORKSPACE}/kpsr-core
+
+      - name: Build
+        run: |
+          mkdir -p ${GITHUB_WORKSPACE}/build
+          cd ${GITHUB_WORKSPACE}/build
+          cmake -DCMAKE_BUILD_TYPE=Release -DKPSR_RTEMS5_ZYNQ_ZC706=On -DKPSR_NO_LICENSE=true ../
+          make -j$(nproc)
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: rtems5-{{ matrix.rtemstarget }}
+          path: |
+            build/Testing/Temporary
+            build/code_generator/kpsr_codegen/build_cpptesting/Testing/Temporary
+            ${GITHUB_WORKSPACE}/kpsr-ros/src/build/Testing/Temporary
+            ${GITHUB_WORKSPACE}/kpsr-ros/src/build/test_results
+      - name: Workspace cleanup
+        if: always()
+        run: |
+          sudo rm -rf ${GITHUB_WORKSPACE}/build
+
+
