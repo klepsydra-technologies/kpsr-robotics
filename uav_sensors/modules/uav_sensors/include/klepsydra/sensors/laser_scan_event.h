@@ -20,7 +20,6 @@
 #ifndef KPSR_SENSORS_LASER_SCAN_EVENT_H_
 #define KPSR_SENSORS_LASER_SCAN_EVENT_H_
 
-
 // Include section.
 #include <vector>
 
@@ -38,7 +37,8 @@ namespace sensors {
  * @ingroup kpsr-sensors-application
  *
  */
-class LaserScanEvent : public Sensor {
+class LaserScanEvent : public Sensor
+{
 public:
     /**
     * @brief LaserScanEvent
@@ -59,19 +59,18 @@ public:
      * @param ranges
      * @param intensities
      */
-    LaserScanEvent(
-            const std::string& frameId,
-            int seq,
-            long timestamp,
-            float angle_min,
-            float angle_max,
-            float angle_increment,
-            float time_increment,
-            float scan_time,
-            float range_min,
-            float range_max,
-            std::vector<float> ranges,
-            std::vector<float> intensities)
+    LaserScanEvent(const std::string &frameId,
+                   int seq,
+                   long timestamp,
+                   float angle_min,
+                   float angle_max,
+                   float angle_increment,
+                   float time_increment,
+                   float scan_time,
+                   float range_min,
+                   float range_max,
+                   std::vector<float> ranges,
+                   std::vector<float> intensities)
         : Sensor(frameId, seq, timestamp)
         , angle_min(angle_min)
         , angle_max(angle_max)
@@ -88,7 +87,7 @@ public:
      * @brief LaserScanEvent
      * @param that
      */
-    LaserScanEvent(const LaserScanEvent & that)
+    LaserScanEvent(const LaserScanEvent &that)
         : Sensor(that.frameId, that.seq, that.timestamp)
         , angle_min(that.angle_min)
         , angle_max(that.angle_max)
@@ -105,7 +104,8 @@ public:
      * @brief clone
      * @param that
      */
-    void clone(const LaserScanEvent & that) {
+    void clone(const LaserScanEvent &that)
+    {
         Sensor::clone(that);
         this->angle_min = that.angle_min;
         this->angle_max = that.angle_max;
@@ -155,6 +155,6 @@ public:
      */
     std::vector<float> intensities;
 };
-}
-}
+} // namespace sensors
+} // namespace kpsr
 #endif

@@ -20,52 +20,48 @@
 #ifndef KPSR_GEOMETRY_QUATERNION_H_
 #define KPSR_GEOMETRY_QUATERNION_H_
 
-
 // Include section.
-
 
 namespace kpsr {
 namespace geometry {
 // Klepsydra generated event class.
-class Quaternion {
+class Quaternion
+{
 public:
-   // Default constructor.
-   Quaternion() {}
+    // Default constructor.
+    Quaternion() {}
 
-   // Main constructor.
-   Quaternion(
-      double x,
-      double y,
-      double z,
-      double w)
-      : x(x)
-      , y(y)
-      , z(z)
-      , w(w)
-   {}
+    // Main constructor.
+    Quaternion(double x, double y, double z, double w)
+        : x(x)
+        , y(y)
+        , z(z)
+        , w(w)
+    {}
 
-   // Clone constructor. Needed by klepsydra core APIs.
-   Quaternion(const Quaternion * that)
-      : x(that->x)
-      , y(that->y)
-      , z(that->z)
-      , w(that->w)
-   {}
+    // Clone constructor. Needed by klepsydra core APIs.
+    Quaternion(const Quaternion *that)
+        : x(that->x)
+        , y(that->y)
+        , z(that->z)
+        , w(that->w)
+    {}
 
-   // Clone method. Needed by klepsydra core APIs.
-   void clone(const Quaternion * that) {
-      this->x = that->x;
-      this->y = that->y;
-      this->z = that->z;
-      this->w = that->w;
-   }
+    // Clone method. Needed by klepsydra core APIs.
+    void clone(const Quaternion *that)
+    {
+        this->x = that->x;
+        this->y = that->y;
+        this->z = that->z;
+        this->w = that->w;
+    }
 
-   // List of fields.
-   double x;
-   double y;
-   double z;
-   double w;
+    // List of fields.
+    double x;
+    double y;
+    double z;
+    double w;
 };
-}
-}
+} // namespace geometry
+} // namespace kpsr
 #endif

@@ -25,8 +25,8 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-#include "spdlog/spdlog.h"
 #include "spdlog/sinks/basic_file_sink.h"
+#include "spdlog/spdlog.h"
 
 #include <klepsydra/core/service.h>
 #include <klepsydra/core/subscriber.h>
@@ -36,32 +36,33 @@
 class SlowReadService : public kpsr::Service
 {
 public:
-    SlowReadService(kpsr::Environment * environment, kpsr::Subscriber<kpsr::vision_ocv::ImageData> * subscriber)
+    SlowReadService(kpsr::Environment *environment,
+                    kpsr::Subscriber<kpsr::vision_ocv::ImageData> *subscriber)
         : kpsr::Service(environment, "SlowReadService")
         , _subscriber(subscriber)
     {}
 
-    void start() {
-        std::function<void(kpsr::vision_ocv::ImageData)> simpleListener = std::bind(&SlowReadService::onEventReceived, this, std::placeholders::_1);
+    void start()
+    {
+        std::function<void(kpsr::vision_ocv::ImageData)> simpleListener =
+            std::bind(&SlowReadService::onEventReceived, this, std::placeholders::_1);
         this->_subscriber->registerListener("SlowReadService", simpleListener);
     }
 
-    void stop() {
-        this->_subscriber->removeListener("SlowReadService");
-    }
+    void stop() { this->_subscriber->removeListener("SlowReadService"); }
 
     void execute() {}
 
-    void onEventReceived(const kpsr::vision_ocv::ImageData & event) {
+    void onEventReceived(const kpsr::vision_ocv::ImageData &event)
+    {
         spdlog::info("SlowReadService. event received. {}"
-                  ". image type: {}"
-                  ". image rows: {}"
-                  ". image cols: {}",
-                  event.seq,
-                  event.img.type(),
-                  event.img.rows,
-                  event.img.cols
-        );
+                     ". image type: {}"
+                     ". image rows: {}"
+                     ". image cols: {}",
+                     event.seq,
+                     event.img.type(),
+                     event.img.rows,
+                     event.img.cols);
         std::this_thread::sleep_for(std::chrono::milliseconds(40));
         lastReadImg = event;
         receivedImage = true;
@@ -73,9 +74,8 @@ public:
     int receivedEvents = 0;
 
 private:
-    kpsr::Subscriber<kpsr::vision_ocv::ImageData> * _subscriber;
+    kpsr::Subscriber<kpsr::vision_ocv::ImageData> *_subscriber;
     long _startTimestamp;
 };
-
 
 #endif // SLOW_READ_SERVICE_H

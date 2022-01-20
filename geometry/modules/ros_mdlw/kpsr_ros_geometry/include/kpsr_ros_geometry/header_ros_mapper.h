@@ -22,8 +22,8 @@
 
 #include "std_msgs/Header.h"
 
-#include <klepsydra/serialization/mapper.h>
 #include <klepsydra/geometry/header.h>
+#include <klepsydra/serialization/mapper.h>
 
 namespace kpsr {
 template<>
@@ -41,16 +41,17 @@ template<>
 class Mapper<kpsr::geometry::Header, std_msgs::Header>
 {
 public:
+    void fromMiddleware(const std_msgs::Header &message, kpsr::geometry::Header &event)
+    {
+        event.seq = message.seq;
+        event.frame_id = message.frame_id;
+    }
 
-   void fromMiddleware(const std_msgs::Header & message, kpsr::geometry::Header & event) {
-      event.seq = message.seq;
-      event.frame_id = message.frame_id;
-   }
-
-   void toMiddleware(const kpsr::geometry::Header & event, std_msgs::Header & message) {
-      message.seq = event.seq;
-      message.frame_id = event.frame_id;
-   }
+    void toMiddleware(const kpsr::geometry::Header &event, std_msgs::Header &message)
+    {
+        message.seq = event.seq;
+        message.frame_id = event.frame_id;
+    }
 };
-}
+} // namespace kpsr
 #endif

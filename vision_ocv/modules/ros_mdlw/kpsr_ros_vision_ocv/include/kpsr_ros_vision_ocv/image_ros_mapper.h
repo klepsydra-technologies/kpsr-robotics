@@ -24,8 +24,8 @@
 
 #include "ros/ros.h"
 
-#include "spdlog/spdlog.h"
 #include "spdlog/sinks/basic_file_sink.h"
+#include "spdlog/spdlog.h"
 
 #include <image_transport/image_transport.h>
 
@@ -37,8 +37,7 @@
 
 #include "image_encoding_helper.h"
 
-namespace kpsr
-{
+namespace kpsr {
 template<>
 /**
  * @brief The Mapper<kpsr::vision_ocv::ImageData, sensor_msgs::Image> class
@@ -58,14 +57,16 @@ public:
      * @param event
      * @param message
      */
-    void toMiddleware(const kpsr::vision_ocv::ImageData & event, sensor_msgs::Image & message) {
+    void toMiddleware(const kpsr::vision_ocv::ImageData &event, sensor_msgs::Image &message)
+    {
         std_msgs::Header header;
         header.seq = event.seq;
         header.stamp = ros::Time::now();
         header.frame_id = event.frameId;
 
         char encoding[20];
-        kpsr::vision_ocv::ros_mdlw::ImageEncodingHelper::cvTypeToRosImageEncoding(event.img.type(), encoding);
+        kpsr::vision_ocv::ros_mdlw::ImageEncodingHelper::cvTypeToRosImageEncoding(event.img.type(),
+                                                                                  encoding);
 
         cv_bridge::CvImage cvImage;
         cvImage.header = header;
@@ -79,20 +80,20 @@ public:
      * @param message
      * @param event
      */
-    void fromMiddleware(const sensor_msgs::Image & message, kpsr::vision_ocv::ImageData & event) {
-
+    void fromMiddleware(const sensor_msgs::Image &message, kpsr::vision_ocv::ImageData &event)
+    {
         event.frameId = message.header.frame_id;
         event.seq = message.header.seq;
 
-        std::chrono::milliseconds ms = std::chrono::duration_cast< std::chrono::milliseconds >(std::chrono::system_clock::now().time_since_epoch());
+        std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+            std::chrono::system_clock::now().time_since_epoch());
         event.timestamp = ms.count();
 
         cv_bridge::CvImagePtr cvPtr;
         //spdlog::info("ImageFromROS received %i{}", message.header.seq);
         try {
             cvPtr = cv_bridge::toCvCopy(message, message.encoding);
-        }
-        catch (cv_bridge::Exception& e) {
+        } catch (cv_bridge::Exception &e) {
             spdlog::error("ImageFromROS received. cv_bridge exception: %s", e.what());
         }
 
@@ -100,5 +101,5 @@ public:
         event.img = cvPtr->image;
     }
 };
-}
+} // namespace kpsr
 #endif

@@ -22,8 +22,8 @@
 
 #include "sensor_msgs/LaserScan.h"
 
-#include <klepsydra/serialization/mapper.h>
 #include <klepsydra/sensors/laser_scan_event.h>
+#include <klepsydra/serialization/mapper.h>
 
 namespace kpsr {
 template<>
@@ -40,11 +40,12 @@ template<>
 class Mapper<kpsr::sensors::LaserScanEvent, sensor_msgs::LaserScan>
 {
 public:
-
-    void fromMiddleware(const sensor_msgs::LaserScan & message, kpsr::sensors::LaserScanEvent & event) {
+    void fromMiddleware(const sensor_msgs::LaserScan &message, kpsr::sensors::LaserScanEvent &event)
+    {
         event.frameId = message.header.frame_id;
         event.seq = message.header.seq;
-        std::chrono::milliseconds ms = std::chrono::duration_cast< std::chrono::milliseconds >(std::chrono::system_clock::now().time_since_epoch());
+        std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+            std::chrono::system_clock::now().time_since_epoch());
         event.timestamp = ms.count();
 
         event.angle_min = message.angle_min;
@@ -58,7 +59,8 @@ public:
         event.intensities = message.intensities;
     }
 
-    void toMiddleware(const kpsr::sensors::LaserScanEvent & event, sensor_msgs::LaserScan & message) {
+    void toMiddleware(const kpsr::sensors::LaserScanEvent &event, sensor_msgs::LaserScan &message)
+    {
         std_msgs::Header header;
         header.seq = event.seq;
         header.stamp = ros::Time::now();
@@ -77,5 +79,5 @@ public:
         message.intensities = event.intensities;
     }
 };
-}
+} // namespace kpsr
 #endif

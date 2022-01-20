@@ -24,7 +24,7 @@
 #include <klepsydra/geometry/gps.h>
 
 namespace kpsr {
-template <>
+template<>
 /**
  * @brief The Mapper<kpsr::geometry::Gps, sensor_msgs::NavSatFix> class
  *
@@ -36,21 +36,22 @@ template <>
  *
  * @details Geometry object mapper for ROS middleware.
  */
-class Mapper<kpsr::geometry::Gps, sensor_msgs::NavSatFix> {
+class Mapper<kpsr::geometry::Gps, sensor_msgs::NavSatFix>
+{
 public:
-  void fromMiddleware(const sensor_msgs::NavSatFix &message,
-                      kpsr::geometry::Gps &event) {
-    event.latitude = message.latitude;
-    event.longitude = message.longitude;
-    event.altitude = message.altitude;
-  }
+    void fromMiddleware(const sensor_msgs::NavSatFix &message, kpsr::geometry::Gps &event)
+    {
+        event.latitude = message.latitude;
+        event.longitude = message.longitude;
+        event.altitude = message.altitude;
+    }
 
-  void toMiddleware(const kpsr::geometry::Gps &event,
-                    sensor_msgs::NavSatFix &message) {
-    message.latitude = event.latitude;
-    message.longitude = event.longitude;
-    message.altitude = event.altitude;
-  }
+    void toMiddleware(const kpsr::geometry::Gps &event, sensor_msgs::NavSatFix &message)
+    {
+        message.latitude = event.latitude;
+        message.longitude = event.longitude;
+        message.altitude = event.altitude;
+    }
 };
-}
+} // namespace kpsr
 #endif

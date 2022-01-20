@@ -22,8 +22,8 @@
 
 #include "geometry_msgs/Quaternion.h"
 
-#include <klepsydra/serialization/mapper.h>
 #include <klepsydra/geometry/quaternion.h>
+#include <klepsydra/serialization/mapper.h>
 
 namespace kpsr {
 template<>
@@ -41,20 +41,21 @@ template<>
 class Mapper<kpsr::geometry::Quaternion, geometry_msgs::Quaternion>
 {
 public:
+    void fromMiddleware(const geometry_msgs::Quaternion &message, kpsr::geometry::Quaternion &event)
+    {
+        event.x = message.x;
+        event.y = message.y;
+        event.z = message.z;
+        event.w = message.w;
+    }
 
-   void fromMiddleware(const geometry_msgs::Quaternion & message, kpsr::geometry::Quaternion & event) {
-      event.x = message.x;
-      event.y = message.y;
-      event.z = message.z;
-      event.w = message.w;
-   }
-
-   void toMiddleware(const kpsr::geometry::Quaternion & event, geometry_msgs::Quaternion & message) {
-      message.x = event.x;
-      message.y = event.y;
-      message.z = event.z;
-      message.w = event.w;
-   }
+    void toMiddleware(const kpsr::geometry::Quaternion &event, geometry_msgs::Quaternion &message)
+    {
+        message.x = event.x;
+        message.y = event.y;
+        message.z = event.z;
+        message.w = event.w;
+    }
 };
-}
+} // namespace kpsr
 #endif

@@ -42,13 +42,14 @@ template<>
 class Mapper<kpsr::geometry::PoseEventData, kpsr_dds_geometry::PoseEventData>
 {
 public:
-
     /**
      * @brief fromMiddleware
      * @param message
      * @param event
      */
-    void fromMiddleware(const kpsr_dds_geometry::PoseEventData & message, kpsr::geometry::PoseEventData& event) {
+    void fromMiddleware(const kpsr_dds_geometry::PoseEventData &message,
+                        kpsr::geometry::PoseEventData &event)
+    {
         event.frameId = message.frameId();
         event.seq = message.seq();
         event.timestamp = message.timestamp();
@@ -70,10 +71,10 @@ public:
         event.qw = message.qw();
 
         event.positionCovariance.resize(message.positionCovariance().size());
-        std::transform(message.positionCovariance().begin(), message.positionCovariance().end(), event.positionCovariance.begin(),
-                       [](const double eventItem) {
-            return eventItem;
-        });
+        std::transform(message.positionCovariance().begin(),
+                       message.positionCovariance().end(),
+                       event.positionCovariance.begin(),
+                       [](const double eventItem) { return eventItem; });
     }
 
     /**
@@ -81,7 +82,9 @@ public:
      * @param event
      * @param message
      */
-    void toMiddleware(const kpsr::geometry::PoseEventData & event, kpsr_dds_geometry::PoseEventData& message) {
+    void toMiddleware(const kpsr::geometry::PoseEventData &event,
+                      kpsr_dds_geometry::PoseEventData &message)
+    {
         message.seq(event.seq);
         message.timestamp(event.timestamp);
         message.frameId(event.frameId);
@@ -103,11 +106,11 @@ public:
         message.qw(event.qw);
 
         message.positionCovariance().resize(event.positionCovariance.size());
-        std::transform(event.positionCovariance.begin(), event.positionCovariance.end(), message.positionCovariance().begin(),
-                       [&](double eventData) {
-            return eventData;
-        });
+        std::transform(event.positionCovariance.begin(),
+                       event.positionCovariance.end(),
+                       message.positionCovariance().begin(),
+                       [&](double eventData) { return eventData; });
     }
 };
-}
+} // namespace kpsr
 #endif // POSE_EVENT_DATA_DDS_MAPPER_H

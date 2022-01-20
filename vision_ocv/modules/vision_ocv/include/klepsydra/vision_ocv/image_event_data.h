@@ -19,10 +19,8 @@
 
 #include <klepsydra/core/sensor.h>
 
-namespace kpsr
-{
-namespace vision_ocv
-{
+namespace kpsr {
+namespace vision_ocv {
 /**
  * @brief The ImageData struct
  *
@@ -48,28 +46,26 @@ public:
      * @param seq
      * @param img
      */
-    ImageData(
-      const std::string& frameId, 
-      int seq,
-      cv::Mat img)
-      : Sensor(frameId, seq)
-      , img(img)
+    ImageData(const std::string &frameId, int seq, cv::Mat img)
+        : Sensor(frameId, seq)
+        , img(img)
     {}
 
     /**
      * @brief ImageData
      * @param that
      */
-    ImageData(const ImageData & that)
-    : Sensor(that)
-    , img(that.img)
+    ImageData(const ImageData &that)
+        : Sensor(that)
+        , img(that.img)
     {}
 
     /**
      * @brief clone
      * @param that
      */
-    void clone(const ImageData & that) {
+    void clone(const ImageData &that)
+    {
         Sensor::clone(that);
         img = that.img;
     }
@@ -79,6 +75,6 @@ public:
      */
     cv::Mat img;
 };
-}
-}
+} // namespace vision_ocv
+} // namespace kpsr
 #endif

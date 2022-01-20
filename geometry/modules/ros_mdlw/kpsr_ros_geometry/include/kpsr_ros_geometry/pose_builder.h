@@ -25,12 +25,9 @@
 
 #include <geometry_msgs/Pose.h>
 
-namespace kpsr
-{
-namespace geometry
-{
-namespace ros_mdlw
-{
+namespace kpsr {
+namespace geometry {
+namespace ros_mdlw {
 /**
  * @brief The PoseBuilder class
  *
@@ -59,10 +56,17 @@ public:
      * @param calculateEuler
      * @param poseEventData
      */
-    static void createPoseEvent(const std::string& frameId, double x, double y, double z,
-                                double qx, double qy, double qz, double qw,
-                                const double * covariance, bool calculateEuler,
-                                PoseEventData & poseEventData);
+    static void createPoseEvent(const std::string &frameId,
+                                double x,
+                                double y,
+                                double z,
+                                double qx,
+                                double qy,
+                                double qz,
+                                double qw,
+                                const double *covariance,
+                                bool calculateEuler,
+                                PoseEventData &poseEventData);
 
     /**
      * @brief createPoseEvent
@@ -78,10 +82,17 @@ public:
      * @param calculateEuler
      * @param poseEventData
      */
-    static void createPoseEvent(const std::string& frameId, float x, float y, float z,
-                                float qx, float qy, float qz, float qw,
-                                const float * covariance, bool calculateEuler,
-                                PoseEventData & poseEventData);
+    static void createPoseEvent(const std::string &frameId,
+                                float x,
+                                float y,
+                                float z,
+                                float qx,
+                                float qy,
+                                float qz,
+                                float qw,
+                                const float *covariance,
+                                bool calculateEuler,
+                                PoseEventData &poseEventData);
 
     /**
      * @brief createPose
@@ -98,11 +109,18 @@ public:
      * @param calculateQuaternion
      * @param poseEventData
      */
-    static void createPose(double x, double y, double z,
-                           double qx, double qy, double qz, double qw,
-                           double roll, double pitch, double yaw,
+    static void createPose(double x,
+                           double y,
+                           double z,
+                           double qx,
+                           double qy,
+                           double qz,
+                           double qw,
+                           double roll,
+                           double pitch,
+                           double yaw,
                            bool calculateQuaternion,
-                           geometry_msgs::Pose & poseData);
+                           geometry_msgs::Pose &poseData);
 
     /**
      * @brief createPose
@@ -119,13 +137,20 @@ public:
      * @param calculateQuaternion
      * @param poseEventData
      */
-    static void createPose(float x, float y, float z,
-                           float qx, float qy, float qz, float qw,
-                           float roll, float pitch, float yaw,
+    static void createPose(float x,
+                           float y,
+                           float z,
+                           float qx,
+                           float qy,
+                           float qz,
+                           float qw,
+                           float roll,
+                           float pitch,
+                           float yaw,
                            bool calculateQuaternion,
-                           geometry_msgs::Pose & poseData);
+                           geometry_msgs::Pose &poseData);
 };
-}
-}
-}
+} // namespace ros_mdlw
+} // namespace geometry
+} // namespace kpsr
 #endif

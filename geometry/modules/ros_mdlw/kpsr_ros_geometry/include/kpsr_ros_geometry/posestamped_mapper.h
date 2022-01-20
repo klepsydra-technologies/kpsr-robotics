@@ -25,8 +25,7 @@
 #include <klepsydra/serialization/mapper.h>
 #include <kpsr_ros_geometry/pose_builder.h>
 
-namespace kpsr
-{
+namespace kpsr {
 template<>
 /**
  * @brief The Mapper<kpsr::geometry::PoseEventData, geometry_msgs::PoseStamped> class
@@ -42,19 +41,23 @@ template<>
 class Mapper<kpsr::geometry::PoseEventData, geometry_msgs::PoseStamped>
 {
 public:
-    void fromMiddleware(const geometry_msgs::PoseStamped & message, kpsr::geometry::PoseEventData & event) {
-        kpsr::geometry::ros_mdlw::PoseBuilder::createPoseEvent(
-                    message.header.frame_id,
-                    message.pose.position.x,
-                    message.pose.position.y,
-                    message.pose.position.z,
-                    message.pose.orientation.x,
-                    message.pose.orientation.y,
-                    message.pose.orientation.z,
-                    message.pose.orientation.w,
-                    NULL, true, event);
+    void fromMiddleware(const geometry_msgs::PoseStamped &message,
+                        kpsr::geometry::PoseEventData &event)
+    {
+        kpsr::geometry::ros_mdlw::PoseBuilder::createPoseEvent(message.header.frame_id,
+                                                               message.pose.position.x,
+                                                               message.pose.position.y,
+                                                               message.pose.position.z,
+                                                               message.pose.orientation.x,
+                                                               message.pose.orientation.y,
+                                                               message.pose.orientation.z,
+                                                               message.pose.orientation.w,
+                                                               NULL,
+                                                               true,
+                                                               event);
         event.seq = message.header.seq;
-        std::chrono::milliseconds ms = std::chrono::duration_cast< std::chrono::milliseconds >(std::chrono::system_clock::now().time_since_epoch());
+        std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+            std::chrono::system_clock::now().time_since_epoch());
         event.timestamp = ms.count();
     }
 
@@ -64,27 +67,27 @@ public:
      * @param event
      * @param message
      */
-    void toMiddleware(const kpsr::geometry::PoseEventData & event, geometry_msgs::PoseStamped & message) {
-        kpsr::geometry::ros_mdlw::PoseBuilder::createPose(
-            event.x,
-            event.y,
-            event.z,
-            event.qx,
-            event.qy,
-            event.qz,
-            event.qw,
-            event.roll,
-            event.pitch,
-            event.yaw,
-            true,
-            message.pose);
+    void toMiddleware(const kpsr::geometry::PoseEventData &event,
+                      geometry_msgs::PoseStamped &message)
+    {
+        kpsr::geometry::ros_mdlw::PoseBuilder::createPose(event.x,
+                                                          event.y,
+                                                          event.z,
+                                                          event.qx,
+                                                          event.qy,
+                                                          event.qz,
+                                                          event.qw,
+                                                          event.roll,
+                                                          event.pitch,
+                                                          event.yaw,
+                                                          true,
+                                                          message.pose);
         std_msgs::Header header;
         header.seq = event.seq;
         header.stamp = ros::Time::now();
         header.frame_id = event.frameId;
         message.header = header;
     }
-
 };
-}
+} // namespace kpsr
 #endif
