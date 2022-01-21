@@ -83,17 +83,17 @@ jobs:
       matrix:
         include:
           - name: Vanilla
-            zmq: 'false'
-            dds: 'false'
+            zmq: "false"
+            dds: "false"
 
           - name: ZMQ
-            zmq: 'true'
-            dds: 'false'
+            zmq: "true"
+            dds: "false"
 
     name: ${{ matrix.name }} Release
     runs-on: ubuntu-latest
     container:
-      image: 337955887028.dkr.ecr.eu-central-1.amazonaws.com/general:kpe-build-1.0.0
+      image: 337955887028.dkr.ecr.eu-central-1.amazonaws.com/general:kpe-build-1.1.0
       options: --user root
       credentials:
         username: AWS
@@ -123,7 +123,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: recursive
-          
+
       - name: Build
         run: |
           mkdir build && cd build 
@@ -143,6 +143,125 @@ jobs:
             build/CMakeFiles/CMakeError.log
             build/Testing/Temporary
             build/code_generator/kpsr_codegen/build_cpptesting/Testing/Temporary
+
+      - name: Workspace cleanup
+        if: always()
+        run: |
+          sudo rm -rf ${GITHUB_WORKSPACE}/build
+
+  ros:
+    needs: builddebug
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rosrelease: ["melodic", "noetic"]
+    name: ROS ${{ matrix.rosrelease }}
+    env:
+      ROS_DISTRO: ${{ matrix.rosrelease }}
+    container:
+      image: "337955887028.dkr.ecr.eu-central-1.amazonaws.com/ros:${{ matrix.rosrelease }}-1.1.0"
+      options: --user root
+      credentials:
+        username: AWS
+        password: ${{ secrets.ECR_PASSWORD }}
+    steps:
+      - name: Clone kpsr-core
+        uses: actions/checkout@v2
+        with:
+          repository: klepsydra-technologies/kpsr-core
+          submodules: recursive
+          ref: main
+          path: kpsr-core
+
+      - name: Install kpsr-core
+        run: |
+          mkdir build && cd build 
+          cmake -DKPSR_WITH_DOXYGEN=false -DKPSR_WITH_DDS=false -DKPSR_WITH_ZMQ=false -DKPSR_TEST_PERFORMANCE=false -DKPSR_WITH_SOCKET=true -DKPSR_WITH_YAML=true -DKPSR_WITH_CODE_METRICS=false -DCMAKE_BUILD_TYPE=Release ../
+          make -j$(nproc)
+          make test
+          sudo make install
+        working-directory: kpsr-core
+
+      - name: Create ROS environment for kpsr-core
+        run: |
+          source /opt/ros/$ROS_DISTRO/setup.bash
+          mkdir -p ${GITHUB_WORKSPACE}/kpsr-ros/src/build
+          cd ${GITHUB_WORKSPACE}/kpsr-ros/src
+          catkin_init_workspace
+          ln -s ${GITHUB_WORKSPACE}/kpsr-core/core/modules/ros_mdlw/kpsr_ros_core . 
+          ln -s ${GITHUB_WORKSPACE}/kpsr-core/serialization/modules/ros_mdlw/kpsr_ros_serialization .
+          ln -s ${GITHUB_WORKSPACE}/kpsr-core/code_generator/cpp_testing/tests/kpsr_ros_codegen .
+
+      - name: Build ROS kpsr-core
+        run: |
+          source /opt/ros/$ROS_DISTRO/setup.bash
+          cd ${GITHUB_WORKSPACE}/kpsr-ros/src/build
+          cmake -DCATKIN_DEVEL_PREFIX=../devel -DCMAKE_INSTALL_PREFIX=/usr/local ../
+          make -j$(nproc)
+          sudo make install
+
+      - name: Remove kpsr-core sources
+        run: |
+          sudo rm -rf ${GITHUB_WORKSPACE}/kpsr-core
+          sudo rm -rf ${GITHUB_WORKSPACE}/kpsr-ros
+
+      - name: Clone kpsr-robotics
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Build
+        run: |
+          mkdir -p ${GITHUB_WORKSPACE}/build
+          cd ${GITHUB_WORKSPACE}/build
+          cmake -DKPSR_WITH_DOXYGEN=true -DKPSR_WITH_DDS=false -DKPSR_WITH_ZMQ=false -DKPSR_WITH_CODE_METRICS=true -DKPSR_WITH_OCV=true -DCMAKE_BUILD_TYPE=Release ../
+          make -j$(nproc)
+
+      - name: Test
+        run: |
+          cd ${GITHUB_WORKSPACE}/build
+          make test ARGS="--gtest_shuffle"
+
+      - name: Install
+        run: |
+          cd ${GITHUB_WORKSPACE}/build
+          sudo make install
+
+      - name: Create ROS environment
+        run: |
+          source /opt/ros/$ROS_DISTRO/setup.bash
+          mkdir -p ${GITHUB_WORKSPACE}/kpsr-ros/src/build
+          cd ${GITHUB_WORKSPACE}/kpsr-ros/src
+          catkin_init_workspace
+          ln -s ${GITHUB_WORKSPACE}/geometry/modules/ors_mdlw/kpsr_ros_geometry .
+          ln -s ${GITHUB_WORKSPACE}/uav_sensors/modules/ros_mdlw/kpsr_ros_sensors . 
+          ln -s ${GITHUB_WORKSPACE}/vision_ocv/modules/ros_mdlw/kpsr_ros_vision_ocv .
+
+      - name: Build ROS
+        run: |
+          source /opt/ros/$ROS_DISTRO/setup.bash
+          cd ${GITHUB_WORKSPACE}/kpsr-ros/src/build
+          cmake ../ -DCMAKE_INSTALL_PREFIX=../install -DCATKIN_DEVEL_PREFIX=../devel
+          make -j$(nproc)
+
+      - name: Test ROS
+        run: |
+          source /opt/ros/$ROS_DISTRO/setup.bash
+          cd ${GITHUB_WORKSPACE}/kpsr-ros/src/build
+          make tests
+          roscore &
+          make test
+
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: ros-${{ matrix.rosrelease }}
+          path: |
+            build/Testing/Temporary
+            build/code_generator/kpsr_codegen/build_cpptesting/Testing/Temporary
+            ${GITHUB_WORKSPACE}/kpsr-ros/src/build/Testing/Temporary
+            ${GITHUB_WORKSPACE}/kpsr-ros/src/build/test_results
 
       - name: Workspace cleanup
         if: always()
@@ -188,7 +307,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: kpsr_codegen
-      
+
       - name: Run admin codegen
         run: |
           pip3 install $(find -name "kpsr_codegen*.whl")
@@ -218,5 +337,3 @@ jobs:
         if: always()
         run: |
           sudo rm -rf ${GITHUB_WORKSPACE}/build
-
-
