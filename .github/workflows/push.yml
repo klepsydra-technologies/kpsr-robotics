@@ -13,7 +13,7 @@ jobs:
     name: Vanilla Debug
     runs-on: ubuntu-latest
     container:
-      image: 337955887028.dkr.ecr.eu-central-1.amazonaws.com/general:kpe-build-1.0.0
+      image: 337955887028.dkr.ecr.eu-central-1.amazonaws.com/general:kpe-build-1.1.0
       options: --user root
       credentials:
         username: AWS
@@ -55,7 +55,7 @@ jobs:
       - name: Build
         run: |
           mkdir build && cd build 
-          cmake -DKPSR_WITH_DOXYGEN=true -DKPSR_WITH_SOCKET=true -DKPSR_WITH_YAML=false -DCMAKE_BUILD_TYPE=Debug  -DKPSR_NO_LICENSE=true ../
+          cmake -DKPSR_WITH_DOXYGEN=true -DKPSR_WITH_SOCKET=true -DKPSR_WITH_YAML=false -DCMAKE_BUILD_TYPE=Debug -DKPSR_WITH_OCV=true ../
           make -j$(nproc)
 
       - name: Unit tests
@@ -127,7 +127,7 @@ jobs:
       - name: Build
         run: |
           mkdir build && cd build 
-          cmake -DKPSR_WITH_DOXYGEN=false -DKPSR_WITH_SOCKET=true -DKPSR_WITH_CODE_METRICS=true -DCMAKE_BUILD_TYPE=Release  -DKPSR_NO_LICENSE=true ../
+          cmake -DKPSR_WITH_DOXYGEN=false -DKPSR_WITH_SOCKET=true -DKPSR_WITH_CODE_METRICS=true -DCMAKE_BUILD_TYPE=Release -DKPSR_WITH_OCV=true ../
           make -j$(nproc)
 
       - name: Unit tests
