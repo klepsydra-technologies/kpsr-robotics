@@ -47,7 +47,7 @@ jobs:
         run: |
           sudo rm -rf ${GITHUB_WORKSPACE}/kpsr-core
 
-      - name: Clone kpe-admin
+      - name: Clone kpsr-robotics
         uses: actions/checkout@v2
         with:
           submodules: recursive
@@ -119,7 +119,7 @@ jobs:
         run: |
           sudo rm -rf ${GITHUB_WORKSPACE}/kpsr-core
 
-      - name: Clone kpe-admin
+      - name: Clone kpsr-robotics
         uses: actions/checkout@v2
         with:
           submodules: recursive
@@ -179,7 +179,7 @@ jobs:
           sudo make -j$(nproc) install
         working-directory: kpsr-core
 
-      - name: Clone kpe-admin
+      - name: Clone kpsr-robotics
         uses: actions/checkout@v2
         with:
           submodules: recursive
