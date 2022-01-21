@@ -139,12 +139,9 @@ if (KPSR_WITH_CODE_METRICS AND CMAKE_BUILD_TYPE MATCHES Debug AND CMAKE_COMPILER
   LIST(APPEND COVERAGE_EXCLUDES
     ${THIRDPARTIES_PATH_COVERAGE}
     ${CMAKE_PREFIX_PATH}
-    core/tests
-    core/examples
-    high_performance/tests
-    serialization/tests
-    /usr/
-    /opt
+    geometry/tests
+    uav_sensors/tests
+    vision_ocv/tests
     )
   setup_target_for_coverage_gcovr_xml(
     NAME coverage

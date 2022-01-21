@@ -22,8 +22,8 @@
 
 #include "geometry_msgs/Vector3.h"
 
-#include <klepsydra/serialization/mapper.h>
 #include <klepsydra/geometry/vector3.h>
+#include <klepsydra/serialization/mapper.h>
 
 namespace kpsr {
 template<>
@@ -41,18 +41,19 @@ template<>
 class Mapper<kpsr::geometry::Vector3, geometry_msgs::Vector3>
 {
 public:
+    void fromMiddleware(const geometry_msgs::Vector3 &message, kpsr::geometry::Vector3 &event)
+    {
+        event.x = message.x;
+        event.y = message.y;
+        event.z = message.z;
+    }
 
-   void fromMiddleware(const geometry_msgs::Vector3 & message, kpsr::geometry::Vector3 & event) {
-      event.x = message.x;
-      event.y = message.y;
-      event.z = message.z;
-   }
-
-   void toMiddleware(const kpsr::geometry::Vector3 & event, geometry_msgs::Vector3 & message) {
-      message.x = event.x;
-      message.y = event.y;
-      message.z = event.z;
-   }
+    void toMiddleware(const kpsr::geometry::Vector3 &event, geometry_msgs::Vector3 &message)
+    {
+        message.x = event.x;
+        message.y = event.y;
+        message.z = event.z;
+    }
 };
-}
+} // namespace kpsr
 #endif

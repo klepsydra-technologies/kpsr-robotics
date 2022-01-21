@@ -202,7 +202,7 @@ jobs:
         run: |
           mkdir -p ${GITHUB_WORKSPACE}/build
           cd ${GITHUB_WORKSPACE}/build
-          cmake -DCMAKE_BUILD_TYPE=Release -DKPSR_RTEMS5_ZYNQ_ZC706=On -DKPSR_NO_LICENSE=true ../
+          cmake -DCMAKE_BUILD_TYPE=Release -DKPSR_RTEMS5_ZYNQ_ZC706=On ../
           make -j$(nproc)
       - name: Upload logs on failure
         if: failure()

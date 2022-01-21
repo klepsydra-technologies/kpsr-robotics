@@ -28,7 +28,7 @@
 
 namespace cereal {
 template<class Archive>
-void serialize(Archive & archive, kpsr::sensors::LaserScanEvent & event)
+void serialize(Archive &archive, kpsr::sensors::LaserScanEvent &event)
 {
     archive(CEREAL_NVP(event.frameId),
             CEREAL_NVP(event.seq),
@@ -43,5 +43,5 @@ void serialize(Archive & archive, kpsr::sensors::LaserScanEvent & event)
             CEREAL_NVP(event.ranges),
             CEREAL_NVP(event.intensities));
 }
-}
+} // namespace cereal
 #endif // LASER_SCAN_EVENT_ZMQ_SERIALIZER_H

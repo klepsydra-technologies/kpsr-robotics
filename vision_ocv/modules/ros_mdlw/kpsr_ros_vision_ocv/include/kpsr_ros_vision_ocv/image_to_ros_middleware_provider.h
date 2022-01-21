@@ -23,8 +23,8 @@
 #include <map>
 #include <memory>
 
-#include <ros/ros.h>
 #include <image_transport/image_transport.h>
+#include <ros/ros.h>
 
 #include <klepsydra/vision_ocv/image_event_data.h>
 
@@ -33,12 +33,9 @@
 #include "image_ros_mapper.h"
 #include "image_to_ros_channel.h"
 
-namespace kpsr
-{
-namespace vision_ocv
-{
-namespace ros_mdlw
-{
+namespace kpsr {
+namespace vision_ocv {
+namespace ros_mdlw {
 /**
  * @brief The ImageToRosMiddlewareProvider class
  *
@@ -68,14 +65,14 @@ namespace ros_mdlw
 @endcode
  *
  */
-class ImageToRosMiddlewareProvider {
+class ImageToRosMiddlewareProvider
+{
 public:
-
     /**
      * @brief ImageToRosMiddlewareProvider
      * @param container
      */
-    ImageToRosMiddlewareProvider(Container * container)
+    ImageToRosMiddlewareProvider(Container *container)
         : _container(container)
     {}
 
@@ -87,16 +84,27 @@ public:
      * @param publisher
      * @return
      */
-    Publisher<kpsr::vision_ocv::ImageData> * getToMiddlewareChannel(const std::string& topic, int poolSize, std::function<void(sensor_msgs::Image &)> initializerFunction, image_transport::Publisher & publisher) {
+    Publisher<kpsr::vision_ocv::ImageData> *getToMiddlewareChannel(
+        const std::string &topic,
+        int poolSize,
+        std::function<void(sensor_msgs::Image &)> initializerFunction,
+        image_transport::Publisher &publisher)
+    {
         auto search = _publisherMap.find(topic);
         if (search != _publisherMap.end()) {
             std::shared_ptr<void> internalPointer = search->second;
-            std::shared_ptr<Publisher<kpsr::vision_ocv::ImageData>> publisher = std::static_pointer_cast<Publisher<kpsr::vision_ocv::ImageData>>(internalPointer);
+            std::shared_ptr<Publisher<kpsr::vision_ocv::ImageData>> publisher =
+                std::static_pointer_cast<Publisher<kpsr::vision_ocv::ImageData>>(internalPointer);
             return publisher.get();
-        }
-        else {
-            ImageToRosChannel * toRosChannel = new ImageToRosChannel(_container, topic, poolSize, initializerFunction, publisher);
-            std::shared_ptr<Publisher<kpsr::vision_ocv::ImageData>> publisher(new ToMiddlewareChannel<kpsr::vision_ocv::ImageData, sensor_msgs::Image>(_container, "vision_ocv" + topic, toRosChannel));
+        } else {
+            ImageToRosChannel *toRosChannel = new ImageToRosChannel(_container,
+                                                                    topic,
+                                                                    poolSize,
+                                                                    initializerFunction,
+                                                                    publisher);
+            std::shared_ptr<Publisher<kpsr::vision_ocv::ImageData>> publisher(
+                new ToMiddlewareChannel<kpsr::vision_ocv::ImageData, sensor_msgs::Image>(
+                    _container, "vision_ocv" + topic, toRosChannel));
             std::shared_ptr<void> internalPointer = std::static_pointer_cast<void>(publisher);
             _publisherMap[topic] = internalPointer;
             return publisher.get();
@@ -104,11 +112,11 @@ public:
     }
 
 private:
-    Container * _container;
+    Container *_container;
     std::map<std::string, std::shared_ptr<void>> _publisherMap;
 };
-}
-}
-}
+} // namespace ros_mdlw
+} // namespace vision_ocv
+} // namespace kpsr
 
 #endif // IMAGE_TO_ROS_MIDDLEWARE_PROVIDER_H

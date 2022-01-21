@@ -13,8 +13,8 @@
 #ifndef IMAGE_DATA_FACTORY_H
 #define IMAGE_DATA_FACTORY_H
 
-#include <memory>
 #include <functional>
+#include <memory>
 
 #include <klepsydra/vision_ocv/image_event_data.h>
 
@@ -32,7 +32,8 @@ namespace vision_ocv {
  * @details This is a vision performance facility class that has several functions that can be used in conjuntion
  * with the disruptor and object pool classes. It handles the allocation of images, copy and resizing.
  */
-class ImageDataFactory {
+class ImageDataFactory
+{
 public:
     /**
      * @brief ImageDataFactory
@@ -41,14 +42,13 @@ public:
      * @param type
      * @param frameId
      */
-    ImageDataFactory(int rows, int cols, int type, const std::string& frameId);
+    ImageDataFactory(int rows, int cols, int type, const std::string &frameId);
 
 private:
     int _rows, _cols, _type;
     std::string _frameId;
 
 public:
-
     /**
      * @brief creatorFunction
      * Function that creates new images based on the rows, cols and type members.
@@ -65,16 +65,16 @@ public:
      * @brief eventClonerFunction
      * Cloner function that does not perform any resizing.
      */
-    std::function<void(const kpsr::vision_ocv::ImageData &, kpsr::vision_ocv::ImageData &)> eventClonerFunction;
+    std::function<void(const kpsr::vision_ocv::ImageData &, kpsr::vision_ocv::ImageData &)>
+        eventClonerFunction;
 
 protected:
     std::unique_ptr<kpsr::vision_ocv::ImageData> creator();
 
-    void initializer(kpsr::vision_ocv::ImageData & imageEvent);
+    void initializer(kpsr::vision_ocv::ImageData &imageEvent);
 
-    void eventCloner(const kpsr::vision_ocv::ImageData & source, kpsr::vision_ocv::ImageData & target);
-
+    void eventCloner(const kpsr::vision_ocv::ImageData &source, kpsr::vision_ocv::ImageData &target);
 };
-}
-}
+} // namespace vision_ocv
+} // namespace kpsr
 #endif // IMAGE_DATA_FACTORY_H

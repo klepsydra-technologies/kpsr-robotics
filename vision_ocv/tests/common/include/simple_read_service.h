@@ -34,7 +34,8 @@ namespace vision_ocv {
 class SimpleReadService : public kpsr::Service
 {
 public:
-    SimpleReadService(kpsr::Environment * environment, kpsr::Subscriber<kpsr::vision_ocv::ImageData> * subscriber);
+    SimpleReadService(kpsr::Environment *environment,
+                      kpsr::Subscriber<kpsr::vision_ocv::ImageData> *subscriber);
 
     void start();
 
@@ -42,16 +43,16 @@ public:
 
     void execute() {}
 
-    void onEventReceived(const kpsr::vision_ocv::ImageData & event);
+    void onEventReceived(const kpsr::vision_ocv::ImageData &event);
 
     bool receivedImage = false;
     kpsr::vision_ocv::ImageData lastReadImg;
 
 private:
-    kpsr::Subscriber<kpsr::vision_ocv::ImageData> * _subscriber;
+    kpsr::Subscriber<kpsr::vision_ocv::ImageData> *_subscriber;
     long _startTimestamp;
 };
-}
-}
+} // namespace vision_ocv
+} // namespace kpsr
 
 #endif // SIMPLE_READ_SERVICE_H

@@ -27,15 +27,12 @@
 
 #include <klepsydra/vision_ocv/image_event_data.h>
 
-#include <ros/ros.h>
 #include <image_transport/image_transport.h>
+#include <ros/ros.h>
 
-namespace kpsr
-{
-namespace vision_ocv
-{
-namespace ros_mdlw
-{
+namespace kpsr {
+namespace vision_ocv {
+namespace ros_mdlw {
 /**
  * @brief The ImageToRosChannel class
  *
@@ -49,7 +46,6 @@ namespace ros_mdlw
 class ImageToRosChannel : public ObjectPoolPublisher<sensor_msgs::Image>
 {
 public:
-
     /**
      * @brief ImageToRosChannel
      * @param container
@@ -58,23 +54,32 @@ public:
      * @param initializerFunction
      * @param rosPublisher
      */
-    ImageToRosChannel(Container * container, const std::string& name, int poolSize, std::function<void(sensor_msgs::Image &)> initializerFunction, image_transport::Publisher & rosPublisher)
-        : ObjectPoolPublisher<sensor_msgs::Image>(container, name, "ROS", poolSize, initializerFunction, nullptr)
+    ImageToRosChannel(Container *container,
+                      const std::string &name,
+                      int poolSize,
+                      std::function<void(sensor_msgs::Image &)> initializerFunction,
+                      image_transport::Publisher &rosPublisher)
+        : ObjectPoolPublisher<sensor_msgs::Image>(container,
+                                                  name,
+                                                  "ROS",
+                                                  poolSize,
+                                                  initializerFunction,
+                                                  nullptr)
         , _rosPublisher(rosPublisher)
     {}
 
 protected:
-    void internalPublish(const sensor_msgs::Image & message) {
-        _rosPublisher.publish(message);
+    void internalPublish(const sensor_msgs::Image &message) { _rosPublisher.publish(message); }
+
+    void internalPublish(std::shared_ptr<const sensor_msgs::Image> message)
+    {
+        _rosPublisher.publish(*message.get());
     }
 
-    void internalPublish(std::shared_ptr<const sensor_msgs::Image> message) {
-        _rosPublisher.publish(* message.get());
-    }
 private:
     image_transport::Publisher _rosPublisher;
 };
-}
-}
-}
+} // namespace ros_mdlw
+} // namespace vision_ocv
+} // namespace kpsr
 #endif

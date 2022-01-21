@@ -3,6 +3,8 @@ name: Code style check
 on:
   pull_request:
   push:
+    branches:
+      - main
 
 defaults:
   run:
@@ -48,7 +50,7 @@ jobs:
       - name: Code format check
         run: |
           mkdir build && cd build
-          cmake -DKPSR_NO_LICENSE=true ../
+          cmake ../
           make formatcheck
 
       - name: Workspace cleanup
@@ -95,7 +97,7 @@ jobs:
       - name: Build
         run: |
           mkdir build && cd build 
-          cmake -DKPSR_WITH_DOXYGEN=false -DKPSR_WITH_SOCKET=true -DKPSR_WITH_CODE_METRICS=true -DCMAKE_BUILD_TYPE=Debug -DKPSR_NO_LICENSE=true ../
+          cmake -DKPSR_WITH_DOXYGEN=false -DKPSR_WITH_SOCKET=true -DKPSR_WITH_CODE_METRICS=true -DCMAKE_BUILD_TYPE=Debug ../
           make -j$(nproc)
           make -j$(nproc) coverage
 

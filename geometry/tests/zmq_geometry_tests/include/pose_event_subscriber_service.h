@@ -22,23 +22,31 @@
 
 #include <functional>
 
-#include "spdlog/spdlog.h"
 #include "spdlog/sinks/basic_file_sink.h"
+#include "spdlog/spdlog.h"
 
 #include <klepsydra/core/service.h>
 #include <klepsydra/core/subscriber.h>
 #include <klepsydra/geometry/pose_event_data.h>
 
-class PoseEventDataSubscriberService : public kpsr::Service {
+class PoseEventDataSubscriberService : public kpsr::Service
+{
 public:
-    PoseEventDataSubscriberService(kpsr::Environment * environment,
-                                 kpsr::Subscriber<kpsr::geometry::PoseEventData> * poseEventDataSubscriber)
-        : Service(environment, "poseEventData_subs_service"), _poseEventDataSubscriber(poseEventDataSubscriber) {
-    }
+    PoseEventDataSubscriberService(
+        kpsr::Environment *environment,
+        kpsr::Subscriber<kpsr::geometry::PoseEventData> *poseEventDataSubscriber)
+        : Service(environment, "poseEventData_subs_service")
+        , _poseEventDataSubscriber(poseEventDataSubscriber)
+    {}
 
-    void start() {
-        std::function<void(kpsr::geometry::PoseEventData)> listenerFunction = std::bind(&PoseEventDataSubscriberService::onMessageReceived, this, std::placeholders::_1);
-        this->_poseEventDataSubscriber->registerListener("poseEventData_subs_service", listenerFunction);
+    void start()
+    {
+        std::function<void(kpsr::geometry::PoseEventData)> listenerFunction =
+            std::bind(&PoseEventDataSubscriberService::onMessageReceived,
+                      this,
+                      std::placeholders::_1);
+        this->_poseEventDataSubscriber->registerListener("poseEventData_subs_service",
+                                                         listenerFunction);
     }
 
     void stop() {}
@@ -47,13 +55,13 @@ public:
     kpsr::geometry::PoseEventData sensor;
 
 private:
-
-    void onMessageReceived(const kpsr::geometry::PoseEventData & eventData) {
+    void onMessageReceived(const kpsr::geometry::PoseEventData &eventData)
+    {
         spdlog::info("PoseEventDataSubscriberService.onMessageReceived.");
         sensor = eventData;
     }
 
-    kpsr::Subscriber<kpsr::geometry::PoseEventData> * _poseEventDataSubscriber;
+    kpsr::Subscriber<kpsr::geometry::PoseEventData> *_poseEventDataSubscriber;
 };
 
 #endif // POSE_EVENT_DATA_SUBSCRIBER_SERVICE_H

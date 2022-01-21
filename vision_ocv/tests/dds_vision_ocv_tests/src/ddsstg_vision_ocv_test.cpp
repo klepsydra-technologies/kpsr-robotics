@@ -19,10 +19,10 @@
 
 #include <gtest/gtest.h>
 
-#include <klepsydra/core/service.h>
-#include <klepsydra/core/publisher.h>
-#include <klepsydra/core/subscriber.h>
 #include <klepsydra/core/event_emitter_middleware_provider.h>
+#include <klepsydra/core/publisher.h>
+#include <klepsydra/core/service.h>
+#include <klepsydra/core/subscriber.h>
 
 #include <klepsydra/dds_core/from_dds_middleware_provider.h>
 #include <klepsydra/dds_core/to_dds_middleware_provider.h>
@@ -36,7 +36,8 @@
 
 #include "config.h"
 
-bool matIsEqual(const cv::Mat mat1, const cv::Mat mat2){
+bool matIsEqual(const cv::Mat mat1, const cv::Mat mat2)
+{
     // treat two empty mat as identical as well
     if (mat1.empty() && mat2.empty()) {
         return true;
@@ -46,10 +47,12 @@ bool matIsEqual(const cv::Mat mat1, const cv::Mat mat2){
         return false;
     }
     cv::Mat diff = mat1 != mat2;
-    return (cv::sum(diff) == cv::Scalar(0,0,0,0));;
+    return (cv::sum(diff) == cv::Scalar(0, 0, 0, 0));
+    ;
 }
 
-TEST(DdsVisionTest, DdsVisionTest) {
+TEST(DdsVisionTest, DdsVisionTest)
+{
     dds::domain::DomainParticipant dp(0);
     dds::topic::Topic<kpsr_dds_vision_ocv::ImageData> topic(dp, "image_data");
     dds::pub::Publisher pub(dp);
@@ -62,19 +65,26 @@ TEST(DdsVisionTest, DdsVisionTest) {
 
     kpsr::dds_mdlw::FromDDSMiddlewareProvider ddsFromProvider;
 
-    kpsr::Publisher<kpsr::vision_ocv::ImageData> * imageDataToDDSChannel =
-            ddsToProvider.getToMiddlewareChannel<kpsr::vision_ocv::ImageData, kpsr_dds_vision_ocv::ImageData>(
-                "image_data", 0, nullptr, &dw
-                );
+    kpsr::Publisher<kpsr::vision_ocv::ImageData> *imageDataToDDSChannel =
+        ddsToProvider.getToMiddlewareChannel<kpsr::vision_ocv::ImageData,
+                                             kpsr_dds_vision_ocv::ImageData>("image_data",
+                                                                             0,
+                                                                             nullptr,
+                                                                             &dw);
 
     kpsr::vision_ocv::ImageDataFactory factory(320, 480, 10, "body");
 
-    kpsr::vision_ocv::FileImageStreamingService imageDataPublisherService(nullptr, imageDataToDDSChannel, TEST_DATA, true);
+    kpsr::vision_ocv::FileImageStreamingService imageDataPublisherService(nullptr,
+                                                                          imageDataToDDSChannel,
+                                                                          TEST_DATA,
+                                                                          true);
 
-    kpsr::EventEmitterMiddlewareProvider<kpsr::vision_ocv::ImageData> imageDataProvider(nullptr, "image_data", 0, factory.initializerFunction, nullptr);
+    kpsr::EventEmitterMiddlewareProvider<kpsr::vision_ocv::ImageData>
+        imageDataProvider(nullptr, "image_data", 0, factory.initializerFunction, nullptr);
     ddsFromProvider.registerToTopic("image_data", &dr, true, imageDataProvider.getPublisher());
 
-    kpsr::vision_ocv::SimpleReadService imageDataSubscriberService(nullptr, imageDataProvider.getSubscriber());
+    kpsr::vision_ocv::SimpleReadService imageDataSubscriberService(nullptr,
+                                                                   imageDataProvider.getSubscriber());
 
     imageDataPublisherService.startup();
     imageDataSubscriberService.startup();
@@ -85,7 +95,8 @@ TEST(DdsVisionTest, DdsVisionTest) {
             std::this_thread::sleep_for(std::chrono::milliseconds(1));
         }
         imageDataSubscriberService.receivedImage = false;
-        ASSERT_TRUE(matIsEqual(imageDataPublisherService.imageEvent.img, imageDataSubscriberService.lastReadImg.img));
+        ASSERT_TRUE(matIsEqual(imageDataPublisherService.imageEvent.img,
+                               imageDataSubscriberService.lastReadImg.img));
     }
 
     ddsFromProvider.unregisterFromTopic("image_data", &dr);

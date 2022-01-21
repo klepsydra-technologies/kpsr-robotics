@@ -22,11 +22,11 @@
 
 #include <random>
 
-#include "spdlog/spdlog.h"
 #include "spdlog/sinks/basic_file_sink.h"
+#include "spdlog/spdlog.h"
 
-#include <klepsydra/core/service.h>
 #include <klepsydra/core/publisher.h>
+#include <klepsydra/core/service.h>
 
 #include <klepsydra/sensors/laser_scan_event.h>
 
@@ -35,11 +35,14 @@ const float angle_max = 3.14f;
 const float range = 0.01f;
 const float intensity = 0.02f;
 
-class LaserScanEventPublisherService : public kpsr::Service {
+class LaserScanEventPublisherService : public kpsr::Service
+{
 public:
-    LaserScanEventPublisherService(kpsr::Environment * environment, kpsr::Publisher<kpsr::sensors::LaserScanEvent> * publisher) :
-        kpsr::Service(environment, "laserScanEvent_service"), _publisher(publisher) {
-
+    LaserScanEventPublisherService(kpsr::Environment *environment,
+                                   kpsr::Publisher<kpsr::sensors::LaserScanEvent> *publisher)
+        : kpsr::Service(environment, "laserScanEvent_service")
+        , _publisher(publisher)
+    {
         // Initialize random number generation with a seed
         std::random_device rd;
         mt = new std::mt19937(rd());
@@ -49,7 +52,8 @@ public:
     void start() {}
     void stop() {}
 
-    void execute() {
+    void execute()
+    {
         spdlog::info("LaserScanEventPublisherService.runOnce");
         sensor.seq = _seq++;
         sensor.frameId = "BODY_FRAME";
@@ -61,31 +65,30 @@ public:
         sensor.scan_time = 1.0;
 
         sensor.ranges.resize(3);
-        sensor.ranges[0] = (((*dist)(*mt)*range));
-        sensor.ranges[1] = (((*dist)(*mt)*range));
-        sensor.ranges[2] = (((*dist)(*mt)*range));
+        sensor.ranges[0] = (((*dist)(*mt) * range));
+        sensor.ranges[1] = (((*dist)(*mt) * range));
+        sensor.ranges[2] = (((*dist)(*mt) * range));
         sensor.intensities.resize(3);
-        sensor.intensities[0] = (((*dist)(*mt)*intensity));
-        sensor.intensities[1] = (((*dist)(*mt)*intensity));
-        sensor.intensities[2] = (((*dist)(*mt)*intensity));
+        sensor.intensities[0] = (((*dist)(*mt) * intensity));
+        sensor.intensities[1] = (((*dist)(*mt) * intensity));
+        sensor.intensities[2] = (((*dist)(*mt) * intensity));
 
         spdlog::info("LaserScanEventPublisherService.runOnce. seq: {}"
-                  ". sensor.frameId: {}"
-                  ". sensor.angle_min: {}"
-                  ". sensor.range_min: {}"
-                  ". sensor.ranges.size(): {}"
-                  ". sensor.ranges[0]: {}"
-                  ". sensor.intensities.size(): {}"
-                  ". sensor.intensities[0]: {}",
-                  sensor.seq,
-                  sensor.frameId,
-                  sensor.angle_min,
-                  sensor.range_min,
-                  sensor.ranges.size(),
-                  sensor.ranges[0],
-                  sensor.intensities.size(),
-                  sensor.intensities[0]
-        );
+                     ". sensor.frameId: {}"
+                     ". sensor.angle_min: {}"
+                     ". sensor.range_min: {}"
+                     ". sensor.ranges.size(): {}"
+                     ". sensor.ranges[0]: {}"
+                     ". sensor.intensities.size(): {}"
+                     ". sensor.intensities[0]: {}",
+                     sensor.seq,
+                     sensor.frameId,
+                     sensor.angle_min,
+                     sensor.range_min,
+                     sensor.ranges.size(),
+                     sensor.ranges[0],
+                     sensor.intensities.size(),
+                     sensor.intensities[0]);
         _publisher->publish(sensor);
     }
 
@@ -94,10 +97,10 @@ public:
 private:
     int _seq = 0;
 
-    std::mt19937 * mt;
-    std::uniform_real_distribution<double> * dist;
+    std::mt19937 *mt;
+    std::uniform_real_distribution<double> *dist;
 
-    kpsr::Publisher<kpsr::sensors::LaserScanEvent> * _publisher;
+    kpsr::Publisher<kpsr::sensors::LaserScanEvent> *_publisher;
 };
 
 #endif // LASER_SCAN_EVENT_PUBLISHER_SERVICE_H

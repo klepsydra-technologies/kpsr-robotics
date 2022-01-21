@@ -21,8 +21,8 @@
 
 #include <klepsydra/vision_ocv/file_image_stream_service.h>
 
-#include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/spdlog.h>
 
 #include "gtest/gtest.h"
 
@@ -30,14 +30,21 @@
 
 #include <klepsydra/vision_ocv/mpeg_writer.h>
 
-TEST(VideoStreamingTest, BasicStreamingTest) {
+TEST(VideoStreamingTest, BasicStreamingTest)
+{
+    kpsr::EventEmitterMiddlewareProvider<kpsr::vision_ocv::ImageData>
+        imageEventEmitter(nullptr, "image_provider", 0, nullptr, nullptr);
+    kpsr::EventEmitterMiddlewareProvider<std::vector<uchar>>
+        encodedImageEventEmitter(nullptr, "encoded_image_provider", 0, nullptr, nullptr);
 
-    kpsr::EventEmitterMiddlewareProvider<kpsr::vision_ocv::ImageData> imageEventEmitter(nullptr, "image_provider", 0, nullptr, nullptr);
-    kpsr::EventEmitterMiddlewareProvider<std::vector<uchar>> encodedImageEventEmitter(nullptr, "encoded_image_provider", 0, nullptr, nullptr);
+    kpsr::vision_ocv::FileImageStreamingService writeService(nullptr,
+                                                             imageEventEmitter.getPublisher(),
+                                                             TEST_DATA,
+                                                             true);
 
-    kpsr::vision_ocv::FileImageStreamingService writeService(nullptr, imageEventEmitter.getPublisher(), TEST_DATA, true);
-
-    kpsr::vision_ocv::MJPEGWriter streamingService(8080, 180000, 95,
+    kpsr::vision_ocv::MJPEGWriter streamingService(8080,
+                                                   180000,
+                                                   95,
                                                    imageEventEmitter.getSubscriber(),
                                                    encodedImageEventEmitter.getPublisher(),
                                                    encodedImageEventEmitter.getSubscriber());
@@ -55,4 +62,3 @@ TEST(VideoStreamingTest, BasicStreamingTest) {
     streamingService.stop();
     writeService.stop();
 }
-

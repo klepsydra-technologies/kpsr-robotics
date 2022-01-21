@@ -20,12 +20,9 @@
 #ifndef IMAGE_ENCODING_HELPER_H
 #define IMAGE_ENCODING_HELPER_H
 
-namespace kpsr
-{
-namespace vision_ocv
-{
-namespace ros_mdlw
-{
+namespace kpsr {
+namespace vision_ocv {
+namespace ros_mdlw {
 /**
  * @brief The ImageEncodingHelper class
  *
@@ -39,17 +36,16 @@ namespace ros_mdlw
 class ImageEncodingHelper
 {
 public:
-    static int cvTypeFromRosImageEncoding(const char * rosImgEncoding);
+    static int cvTypeFromRosImageEncoding(const char *rosImgEncoding);
 
     /**
      * @brief cvTypeToRosImageEncoding
      * @param cvType
      * @param rosImageEncoding
      */
-    static void cvTypeToRosImageEncoding(int cvType, char * rosImageEncoding);
-
+    static void cvTypeToRosImageEncoding(int cvType, char *rosImageEncoding);
 };
-}
-}
-}
+} // namespace ros_mdlw
+} // namespace vision_ocv
+} // namespace kpsr
 #endif

@@ -19,19 +19,23 @@
 
 #include <klepsydra/mem_vision_ocv/basic_vision_ocv_provider.h>
 
-kpsr::vision_ocv::mem::BasicVisionMiddlewareProvider::BasicVisionMiddlewareProvider(Container * container,
-                                                                                    int rows,
-                                                                                    int cols,
-                                                                                    int type,
-                                                                                    const std::string& frameId,
-                                                                                    const std::string& eventName,
-                                                                                    int queueSize,
-                                                                                    int poolSize,
-                                                                                    bool discardItemsWhenFull)
+kpsr::vision_ocv::mem::BasicVisionMiddlewareProvider::BasicVisionMiddlewareProvider(
+    Container *container,
+    int rows,
+    int cols,
+    int type,
+    const std::string &frameId,
+    const std::string &eventName,
+    int queueSize,
+    int poolSize,
+    bool discardItemsWhenFull)
     : _imageDataFactory(new kpsr::vision_ocv::ImageDataFactory(rows, cols, type, frameId))
-    , underlying(new kpsr::mem::BasicMiddlewareProvider<kpsr::vision_ocv::ImageData>
-                 (container, eventName, queueSize, poolSize,
-                  _imageDataFactory->initializerFunction,
-                  _imageDataFactory->eventClonerFunction,
-                  discardItemsWhenFull))
+    , underlying(new kpsr::mem::BasicMiddlewareProvider<kpsr::vision_ocv::ImageData>(
+          container,
+          eventName,
+          queueSize,
+          poolSize,
+          _imageDataFactory->initializerFunction,
+          _imageDataFactory->eventClonerFunction,
+          discardItemsWhenFull))
 {}

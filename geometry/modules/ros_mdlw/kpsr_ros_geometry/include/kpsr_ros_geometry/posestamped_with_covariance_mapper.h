@@ -26,8 +26,7 @@
 #include <klepsydra/serialization/mapper.h>
 #include <kpsr_ros_geometry/pose_builder.h>
 
-namespace kpsr
-{
+namespace kpsr {
 template<>
 /**
  * @brief The Mapper<kpsr::geometry::PoseEventData, geometry_msgs::PoseWithCovarianceStamped> class
@@ -48,21 +47,23 @@ public:
      * @param message
      * @param event
      */
-    void fromMiddleware(const geometry_msgs::PoseWithCovarianceStamped & message, kpsr::geometry::PoseEventData & event) {
-        kpsr::geometry::ros_mdlw::PoseBuilder::createPoseEvent(
-                    message.header.frame_id,
-                    message.pose.pose.position.x,
-                    message.pose.pose.position.y,
-                    message.pose.pose.position.z,
-                    message.pose.pose.orientation.x,
-                    message.pose.pose.orientation.y,
-                    message.pose.pose.orientation.z,
-                    message.pose.pose.orientation.w,
-                    message.pose.covariance.data(),
-                    true,
-                    event);
+    void fromMiddleware(const geometry_msgs::PoseWithCovarianceStamped &message,
+                        kpsr::geometry::PoseEventData &event)
+    {
+        kpsr::geometry::ros_mdlw::PoseBuilder::createPoseEvent(message.header.frame_id,
+                                                               message.pose.pose.position.x,
+                                                               message.pose.pose.position.y,
+                                                               message.pose.pose.position.z,
+                                                               message.pose.pose.orientation.x,
+                                                               message.pose.pose.orientation.y,
+                                                               message.pose.pose.orientation.z,
+                                                               message.pose.pose.orientation.w,
+                                                               message.pose.covariance.data(),
+                                                               true,
+                                                               event);
         event.seq = message.header.seq;
-        std::chrono::milliseconds ms = std::chrono::duration_cast< std::chrono::milliseconds >(std::chrono::system_clock::now().time_since_epoch());
+        std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+            std::chrono::system_clock::now().time_since_epoch());
         event.timestamp = ms.count();
     }
 
@@ -71,20 +72,21 @@ public:
      * @param event
      * @param message
      */
-    void toMiddleware(const kpsr::geometry::PoseEventData & event, geometry_msgs::PoseWithCovarianceStamped & message) {
-        kpsr::geometry::ros_mdlw::PoseBuilder::createPose(
-            event.x,
-            event.y,
-            event.z,
-            event.qx,
-            event.qy,
-            event.qz,
-            event.qw,
-            event.roll,
-            event.pitch,
-            event.yaw,
-            true,
-            message.pose.pose);
+    void toMiddleware(const kpsr::geometry::PoseEventData &event,
+                      geometry_msgs::PoseWithCovarianceStamped &message)
+    {
+        kpsr::geometry::ros_mdlw::PoseBuilder::createPose(event.x,
+                                                          event.y,
+                                                          event.z,
+                                                          event.qx,
+                                                          event.qy,
+                                                          event.qz,
+                                                          event.qw,
+                                                          event.roll,
+                                                          event.pitch,
+                                                          event.yaw,
+                                                          true,
+                                                          message.pose.pose);
         std_msgs::Header header;
         header.seq = event.seq;
         header.stamp = ros::Time::now();
@@ -92,13 +94,11 @@ public:
 
         message.header = header;
         if (event.positionCovariance.size() == 36) {
-            std::copy(event.positionCovariance.begin(), event.positionCovariance.end(), message.pose.covariance.begin());
+            std::copy(event.positionCovariance.begin(),
+                      event.positionCovariance.end(),
+                      message.pose.covariance.begin());
         }
     }
-
 };
-}
+} // namespace kpsr
 #endif
-
-
-

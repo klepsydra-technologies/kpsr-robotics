@@ -24,22 +24,24 @@
 #include "simple_read_service.h"
 #include "slow_read_service.h"
 
-#include "spdlog/spdlog.h"
 #include "spdlog/sinks/basic_file_sink.h"
+#include "spdlog/spdlog.h"
 
 #include "gtest/gtest.h"
 
 #include "config.h"
 
-TEST(BasicVisionTest, BasicVisionTest) {
-    kpsr::vision_ocv::mem::BasicVisionMiddlewareProvider provider(nullptr, 1080, 2040, 16, "body", "raw_image", 4, 6, false);
+TEST(BasicVisionTest, BasicVisionTest)
+{
+    kpsr::vision_ocv::mem::BasicVisionMiddlewareProvider
+        provider(nullptr, 1080, 2040, 16, "body", "raw_image", 4, 6, false);
     provider.underlying->start();
 
     //spdlog::info("Creating services.");
-    kpsr::Publisher<kpsr::vision_ocv::ImageData> * publisher = provider.underlying->getPublisher();
+    kpsr::Publisher<kpsr::vision_ocv::ImageData> *publisher = provider.underlying->getPublisher();
     kpsr::vision_ocv::FileImageStreamingService writeService(nullptr, publisher, TEST_DATA, true);
 
-    kpsr::Subscriber<kpsr::vision_ocv::ImageData> * subscriber = provider.underlying->getSubscriber();
+    kpsr::Subscriber<kpsr::vision_ocv::ImageData> *subscriber = provider.underlying->getSubscriber();
     SimpleReadService simpleReadService(nullptr, subscriber);
     SlowReadService slowReadService(nullptr, subscriber);
 
@@ -70,4 +72,3 @@ TEST(BasicVisionTest, BasicVisionTest) {
     ASSERT_EQ(simpleReadService.receivedEvents, 50);
     ASSERT_EQ(slowReadService.receivedEvents, 50);
 }
-
