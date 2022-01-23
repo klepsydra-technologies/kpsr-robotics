@@ -33,7 +33,7 @@
 #include "config.h"
 
 TEST(HPVisionTest, HPVisionTest) {
-    kpsr::vision_ocv::high_performance::ImageMultiplexerVisionMiddlewareProvider<128> provider(nullptr, "test", 1080, 2040, 16, "body");
+    kpsr::vision_ocv::high_performance::ImageMultiplexerVisionMiddlewareProvider<256> provider(nullptr, "test", 1080, 2040, 16, "body");
 
     //spdlog::info("Creating services.");
     kpsr::Publisher<kpsr::vision_ocv::ImageData> * publisher = provider.underlying->getPublisher();
