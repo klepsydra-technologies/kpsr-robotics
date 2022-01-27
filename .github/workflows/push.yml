@@ -57,7 +57,8 @@ jobs:
           cd ${GITHUB_WORKSPACE}/kpsr-ros/src/build
           cmake -DCATKIN_DEVEL_PREFIX=../devel -DCMAKE_INSTALL_PREFIX=/usr/local ../
           make -j$(nproc)
-          sudo make install
+          sudo su
+          make install
 
       - name: Remove kpsr-core sources
         run: |
