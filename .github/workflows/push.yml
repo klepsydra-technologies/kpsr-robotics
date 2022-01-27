@@ -55,9 +55,10 @@ jobs:
         run: |
           source /opt/ros/$ROS_DISTRO/setup.bash
           cd ${GITHUB_WORKSPACE}/kpsr-ros/src/build
-          cmake -DCATKIN_DEVEL_PREFIX=../devel -DCMAKE_INSTALL_PREFIX=/usr/local ../
+          cmake ../
           make -j$(nproc)
           sudo su
+          source /opt/ros/$ROS_DISTRO/setup.bash
           make install
 
       - name: Remove kpsr-core sources
@@ -101,7 +102,7 @@ jobs:
         run: |
           source /opt/ros/$ROS_DISTRO/setup.bash
           cd ${GITHUB_WORKSPACE}/kpsr-ros/src/build
-          cmake ../ -DCMAKE_INSTALL_PREFIX=../install -DCATKIN_DEVEL_PREFIX=../devel
+          cmake ../
           make -j$(nproc)
 
       - name: Test ROS
