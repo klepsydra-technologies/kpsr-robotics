@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        rosrelease: ["noetic"]
+        rosrelease: ["melodic", "noetic"]
     name: ROS ${{ matrix.rosrelease }}
     env:
       ROS_DISTRO: ${{ matrix.rosrelease }}
@@ -40,8 +40,33 @@ jobs:
           make test
           sudo make install
         working-directory: kpsr-core
+    
+      - name: Clone kpsr-robotics
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+          path: kpsr-robotics
 
-      - name: Create ROS environment for kpsr-core
+      - name: Build
+        run: |
+          mkdir -p build && cd build
+          cmake -DKPSR_WITH_DOXYGEN=true -DKPSR_WITH_DDS=false -DKPSR_WITH_ZMQ=false -DKPSR_WITH_CODE_METRICS=true -DKPSR_WITH_OCV=true -DCMAKE_BUILD_TYPE=Release ../
+          make -j$(nproc)
+        working-directory: kpsr-robotics
+
+      - name: Test
+        run: |
+          cd build
+          make test ARGS="--gtest_shuffle"
+        working-directory: kpsr-robotics
+
+      - name: Install
+        run: |
+          cd build
+          sudo make install
+        working-directory: kpsr-robotics
+
+      - name: Create ROS environment
         run: |
           source /opt/ros/$ROS_DISTRO/setup.bash
           mkdir -p ${GITHUB_WORKSPACE}/kpsr-ros/src/build
@@ -50,63 +75,20 @@ jobs:
           ln -s ${GITHUB_WORKSPACE}/kpsr-core/core/modules/ros_mdlw/kpsr_ros_core . 
           ln -s ${GITHUB_WORKSPACE}/kpsr-core/serialization/modules/ros_mdlw/kpsr_ros_serialization .
           ln -s ${GITHUB_WORKSPACE}/kpsr-core/code_generator/cpp_testing/tests/kpsr_ros_codegen .
-
-      - name: Build ROS kpsr-core
-        run: |
-          source /opt/ros/$ROS_DISTRO/setup.bash
-          cd ${GITHUB_WORKSPACE}/kpsr-ros/src/build
-          cmake ../
-          make -j$(nproc)
-          sudo su
-          source /opt/ros/$ROS_DISTRO/setup.bash
-          make install
-
-      - name: Remove kpsr-core sources
-        run: |
-          sudo rm -rf ${GITHUB_WORKSPACE}/kpsr-core
-          sudo rm -rf ${GITHUB_WORKSPACE}/kpsr-ros
-
-      - name: Clone kpsr-robotics
-        uses: actions/checkout@v2
-        with:
-          submodules: recursive
-
-      - name: Build
-        run: |
-          mkdir -p ${GITHUB_WORKSPACE}/build
-          cd ${GITHUB_WORKSPACE}/build
-          cmake -DKPSR_WITH_DOXYGEN=true -DKPSR_WITH_DDS=false -DKPSR_WITH_ZMQ=false -DKPSR_WITH_CODE_METRICS=true -DKPSR_WITH_OCV=true -DCMAKE_BUILD_TYPE=Release ../
-          make -j$(nproc)
-
-      - name: Test
-        run: |
-          cd ${GITHUB_WORKSPACE}/build
-          make test ARGS="--gtest_shuffle"
-
-      - name: Install
-        run: |
-          cd ${GITHUB_WORKSPACE}/build
-          sudo make install
-
-      - name: Create ROS environment
-        run: |
-          source /usr/local/setup.bash
-          mkdir -p ${GITHUB_WORKSPACE}/kpsr-ros/src/build
-          cd ${GITHUB_WORKSPACE}/kpsr-ros/src
-          catkin_init_workspace
-          ln -s ${GITHUB_WORKSPACE}/geometry/modules/ors_mdlw/kpsr_ros_geometry .
-          ln -s ${GITHUB_WORKSPACE}/vision_ocv/modules/ros_mdlw/kpsr_ros_vision_ocv .
+          ln -s ${GITHUB_WORKSPACE}/kpsr-robotics/geometry/modules/ros_mdlw/kpsr_ros_geometry .
+          ln -s ${GITHUB_WORKSPACE}/kpsr-robotics/uav_sensors/modules/ros_mdlw/kpsr_ros_sensors .
+          ln -s ${GITHUB_WORKSPACE}/kpsr-robotics/vision_ocv/modules/ros_mdlw/kpsr_ros_vision_ocv .
 
       - name: Build ROS
         run: |
-          source /usr/local/setup.bash
+          source /opt/ros/$ROS_DISTRO/setup.bash
           cd ${GITHUB_WORKSPACE}/kpsr-ros/src/build
-          cmake ../
+          cmake -DTENSORFLOW_SRC_DIR=/opt/tensorflow ../
           make -j$(nproc)
 
       - name: Test ROS
         run: |
-          source /usr/local/setup.bash
+          source /opt/ros/$ROS_DISTRO/setup.bash
           cd ${GITHUB_WORKSPACE}/kpsr-ros/src/build
           make tests
           roscore &
