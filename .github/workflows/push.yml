@@ -90,24 +90,23 @@ jobs:
 
       - name: Create ROS environment
         run: |
-          source /opt/ros/$ROS_DISTRO/setup.bash
+          source /usr/local/setup.bash
           mkdir -p ${GITHUB_WORKSPACE}/kpsr-ros/src/build
           cd ${GITHUB_WORKSPACE}/kpsr-ros/src
           catkin_init_workspace
           ln -s ${GITHUB_WORKSPACE}/geometry/modules/ors_mdlw/kpsr_ros_geometry .
-          ln -s ${GITHUB_WORKSPACE}/uav_sensors/modules/ros_mdlw/kpsr_ros_sensors . 
           ln -s ${GITHUB_WORKSPACE}/vision_ocv/modules/ros_mdlw/kpsr_ros_vision_ocv .
 
       - name: Build ROS
         run: |
-          source /opt/ros/$ROS_DISTRO/setup.bash
+          source /usr/local/setup.bash
           cd ${GITHUB_WORKSPACE}/kpsr-ros/src/build
           cmake ../
           make -j$(nproc)
 
       - name: Test ROS
         run: |
-          source /opt/ros/$ROS_DISTRO/setup.bash
+          source /usr/local/setup.bash
           cd ${GITHUB_WORKSPACE}/kpsr-ros/src/build
           make tests
           roscore &
