@@ -38,6 +38,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   kpsr_ros_core
   kpsr_ros_serialization
+  tf
 )
 
 ## System dependencies are found with CMake's conventions
@@ -131,7 +132,7 @@ find_package(yaml-cpp REQUIRED)
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES kpsr_ros_geometry
-  CATKIN_DEPENDS geometry_msgs roscpp rospy std_msgs sensor_msgs
+  CATKIN_DEPENDS geometry_msgs roscpp rospy std_msgs sensor_msgs tf
   DEPENDS system_lib
 )
 
