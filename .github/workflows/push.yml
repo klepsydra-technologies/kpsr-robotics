@@ -66,6 +66,11 @@ jobs:
           sudo make install
         working-directory: kpsr-robotics
 
+      - name: Install additional software
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install ros-${{ matrix.rosrelease }}-tf
+
       - name: Create ROS environment
         run: |
           source /opt/ros/$ROS_DISTRO/setup.bash
