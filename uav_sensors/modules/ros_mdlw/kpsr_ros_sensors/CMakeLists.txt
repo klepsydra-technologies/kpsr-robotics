@@ -38,6 +38,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   kpsr_ros_core
   kpsr_ros_serialization
+  tf
 )
 
 ## System dependencies are found with CMake's conventions
@@ -131,7 +132,7 @@ find_package(yaml-cpp REQUIRED)
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES kpsr_ros_sensors
-  CATKIN_DEPENDS sensor_msgs roscpp rospy std_msgs
+  CATKIN_DEPENDS sensor_msgs roscpp rospy std_msgs sensor_msgs tf
   DEPENDS system_lib
 )
 
@@ -169,9 +170,11 @@ add_library(kpsr_ros_sensors INTERFACE)
 #set_target_properties(kpsr_ros_sensors PROPERTIES LINKER_LANGUAGE CXX)
 
 ## Specify libraries to link a library or executable target against
-#target_link_libraries(kpsr_ros_sensors
-#  ${catkin_LIBRARIES}
-#)
+target_link_libraries(kpsr_ros_sensors INTERFACE
+  ${catkin_LIBRARIES}
+  kpsr_ros_core
+  kpsr_ros_serialization
+)
 
 #############
 ## Install ##
