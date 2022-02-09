@@ -181,7 +181,7 @@ jobs:
           make test
           sudo make install
         working-directory: kpsr-core
-    
+
       - name: Clone kpsr-robotics
         uses: actions/checkout@v2
         with:
@@ -232,8 +232,6 @@ jobs:
           source /opt/ros/$ROS_DISTRO/setup.bash
           cd ${GITHUB_WORKSPACE}/kpsr-ros/src/build
           make tests
-          roscore &
-          make test
 
       - name: Upload logs on failure
         if: failure()
