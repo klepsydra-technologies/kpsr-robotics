@@ -17,7 +17,7 @@ jobs:
     if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
     container:
-      image: 337955887028.dkr.ecr.eu-central-1.amazonaws.com/general:kpe-build-1.1.0
+      image: 337955887028.dkr.ecr.eu-central-1.amazonaws.com/general:kpe-build-1.3.0
       options: --user root
       credentials:
         username: AWS
@@ -60,10 +60,10 @@ jobs:
           sudo rm -rf ${GITHUB_WORKSPACE}/build
 
   codecoverage:
-    name: Code coverage      
+    name: Code coverage
     runs-on: ubuntu-latest
     container:
-      image: 337955887028.dkr.ecr.eu-central-1.amazonaws.com/general:kpe-build-1.1.0
+      image: 337955887028.dkr.ecr.eu-central-1.amazonaws.com/general:kpe-build-1.3.0
       options: --user root
       credentials:
         username: AWS
@@ -100,12 +100,17 @@ jobs:
           mkdir build && cd build 
           cmake -DKPSR_WITH_DOXYGEN=false -DKPSR_WITH_CODE_METRICS=true -DCMAKE_BUILD_TYPE=Debug -DKPSR_WITH_OCV=true ../
           make -j$(nproc)
+
+      - name: Coverage
+        timeout-minutes: 10
+        run: |
+          cd build
           make -j$(nproc) coverage
 
       - uses: codecov/codecov-action@v2
         with:
           files: build/coverage.xml
-      
+
       - name: Workspace cleanup
         if: always()
         run: |

@@ -13,7 +13,7 @@ jobs:
     name: Vanilla Debug
     runs-on: ubuntu-latest
     container:
-      image: 337955887028.dkr.ecr.eu-central-1.amazonaws.com/general:kpe-build-1.1.0
+      image: 337955887028.dkr.ecr.eu-central-1.amazonaws.com/general:kpe-build-1.3.0
       options: --user root
       credentials:
         username: AWS
@@ -59,6 +59,7 @@ jobs:
           make -j$(nproc)
 
       - name: Unit tests
+        timeout-minutes: 10
         run: cd build && make test ARGS="--gtest_shuffle"
 
       - name: Upload logs on failure
@@ -93,7 +94,7 @@ jobs:
     name: ${{ matrix.name }} Release
     runs-on: ubuntu-latest
     container:
-      image: 337955887028.dkr.ecr.eu-central-1.amazonaws.com/general:kpe-build-1.1.0
+      image: 337955887028.dkr.ecr.eu-central-1.amazonaws.com/general:kpe-build-1.3.0
       options: --user root
       credentials:
         username: AWS
@@ -131,6 +132,7 @@ jobs:
           make -j$(nproc)
 
       - name: Unit tests
+        timeout-minutes: 10
         run: cd build && make test ARGS="--gtest_shuffle"
 
       - name: Upload logs on failure
@@ -195,7 +197,8 @@ jobs:
           make -j$(nproc)
         working-directory: kpsr-robotics
 
-      - name: Test
+      - name: Unit tests
+        timeout-minutes: 10
         run: |
           cd build
           make test ARGS="--gtest_shuffle"
@@ -228,6 +231,7 @@ jobs:
           make -j$(nproc)
 
       - name: Test ROS
+        timeout-minutes: 15
         run: |
           source /opt/ros/$ROS_DISTRO/setup.bash
           cd ${GITHUB_WORKSPACE}/kpsr-ros/src/build
