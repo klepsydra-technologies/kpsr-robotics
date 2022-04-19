@@ -84,6 +84,7 @@ if (HAS_CXX11)
 endif()
 
 if (NOT APPLE)
+    set(CMAKE_INSTALL_RPATH $ORIGIN)
     check_cxx_compiler_flag(-Wl,--no-undefined HAS_NO_UNDEFINED)
     if (HAS_NO_UNDEFINED)
         set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--no-undefined")
