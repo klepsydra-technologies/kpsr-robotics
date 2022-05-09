@@ -118,12 +118,20 @@ add_definitions(-fno-strict-overflow)
 add_definitions(-Wno-deprecated-declarations)
 add_definitions(-Wno-comment)
 
-enable_testing()
+option(KPSR_ENABLE_EXAMPLES "Enable building and installing examples" OFF)
+option(KPSR_ENABLE_TESTS "Enable tests" ON)
 
-if (KPSR_WITH_CODE_METRICS)
-  include(CodeCoverage)
-  set(CODE_COVERAGE_VERBOSE ON)
-  APPEND_COVERAGE_COMPILER_FLAGS()
+IF(KPSR_ENABLE_TESTS)
+  enable_testing()
+ENDIF()
+
+
+IF (KPSR_WITH_CODE_METRICS)
+  IF (CMAKE_BUILD_TYPE MATCHES Debug AND CMAKE_COMPILER_IS_GNUCXX)
+    include(CodeCoverage)
+    set(CODE_COVERAGE_VERBOSE ON)
+    APPEND_COVERAGE_COMPILER_FLAGS()
+  ENDIF()
    # Code style check
    include(CppcheckTargets)
    include(Findcppcheck)
@@ -133,23 +141,6 @@ ENDIF()
 include(CodeFormat)
 # CCACHE support
 include(FindCcache)
-
-# Code Coverage
-if (KPSR_WITH_CODE_METRICS AND CMAKE_BUILD_TYPE MATCHES Debug AND CMAKE_COMPILER_IS_GNUCXX)
-  STRING(REPLACE ${CMAKE_SOURCE_DIR}/ "" THIRDPARTIES_PATH_COVERAGE ${THIRDPARTIES_PATH})
-  LIST(APPEND COVERAGE_EXCLUDES
-    ${THIRDPARTIES_PATH_COVERAGE}
-    ${CMAKE_PREFIX_PATH}
-    geometry/tests
-    uav_sensors/tests
-    vision_ocv/tests
-    )
-  setup_target_for_coverage_gcovr_xml(
-    NAME coverage
-    EXECUTABLE make test
-    )
-ENDIF()
-
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
@@ -176,6 +167,22 @@ ADD_SUBDIRECTORY(uav_sensors)
 if (KPSR_WITH_OCV)
   ADD_SUBDIRECTORY(vision_ocv)
 endif()
+
+# Code Coverage
+if (KPSR_WITH_CODE_METRICS AND CMAKE_BUILD_TYPE MATCHES Debug AND CMAKE_COMPILER_IS_GNUCXX)
+  STRING(REPLACE ${CMAKE_SOURCE_DIR}/ "" THIRDPARTIES_PATH_COVERAGE ${THIRDPARTIES_PATH})
+  LIST(APPEND COVERAGE_EXCLUDES
+    ${THIRDPARTIES_PATH_COVERAGE}
+    ${CMAKE_PREFIX_PATH}
+    geometry/tests
+    uav_sensors/tests
+    vision_ocv/tests
+    )
+  setup_target_for_coverage_gcovr_xml(
+    NAME coverage
+    EXECUTABLE make test
+    )
+ENDIF()
 
 if (KPSR_RUNTIME)
 else()
