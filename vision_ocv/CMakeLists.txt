@@ -20,7 +20,7 @@
 SET(PROJ_MAIN_NAME "vision_ocv")
 PROJECT(${PROJ_MAIN_NAME})
 
-FIND_PACKAGE( OpenCV REQUIRED )
+FIND_PACKAGE( OpenCV REQUIRED)
 
 set(TEST_DATA ${CMAKE_SOURCE_DIR}/${PROJ_MAIN_NAME}/tests/data)
 
@@ -28,7 +28,9 @@ set(TEST_DATA ${CMAKE_SOURCE_DIR}/${PROJ_MAIN_NAME}/tests/data)
 # ADD SUB FOLDERS
 ######################################################################################
 ADD_SUBDIRECTORY(modules)
-ADD_SUBDIRECTORY(tests)
+IF(KPSR_ENABLE_TESTS)
+  ADD_SUBDIRECTORY(tests)
+ENDIF()
 
 add_core_export_target()
 add_dds_export_target()

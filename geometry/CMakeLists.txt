@@ -24,7 +24,9 @@ PROJECT(${PROJ_MAIN_NAME})
 # ADD SUB FOLDERS
 ######################################################################################
 ADD_SUBDIRECTORY(modules)
-ADD_SUBDIRECTORY(tests)
+IF(KPSR_ENABLE_TESTS)
+  ADD_SUBDIRECTORY(tests)
+ENDIF()
 
 add_core_export_target()
 add_dds_export_target()
