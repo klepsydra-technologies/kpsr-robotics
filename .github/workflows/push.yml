@@ -20,7 +20,7 @@ jobs:
         password: ${{ secrets.ECR_PASSWORD }}
     steps:
       - name: Clone kpsr-core
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: klepsydra-technologies/kpsr-core
           submodules: recursive
@@ -48,7 +48,7 @@ jobs:
           sudo rm -rf ${GITHUB_WORKSPACE}/kpsr-core
 
       - name: Clone kpsr-robotics
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: recursive
 
@@ -101,7 +101,7 @@ jobs:
         password: ${{ secrets.ECR_PASSWORD }}
     steps:
       - name: Clone kpsr-core
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: klepsydra-technologies/kpsr-core
           submodules: recursive
@@ -121,7 +121,7 @@ jobs:
           sudo rm -rf ${GITHUB_WORKSPACE}/kpsr-core
 
       - name: Clone kpsr-robotics
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: recursive
 
@@ -168,7 +168,7 @@ jobs:
         password: ${{ secrets.ECR_PASSWORD }}
     steps:
       - name: Clone kpsr-core
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: klepsydra-technologies/kpsr-core
           submodules: recursive
@@ -185,7 +185,7 @@ jobs:
         working-directory: kpsr-core
 
       - name: Clone kpsr-robotics
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: recursive
           path: kpsr-robotics
