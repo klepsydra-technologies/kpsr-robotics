@@ -76,13 +76,16 @@ TARGET_INCLUDE_DIRECTORIES(kpsr_dds_${PROJ_MAIN_NAME}_datamodel
 INSTALL(TARGETS kpsr_dds_${PROJ_MAIN_NAME}_datamodel
     EXPORT KlepsydraRoboticsTargets
     DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    COMPONENT libs
 )
 INSTALL(DIRECTORY "include/klepsydra"
     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+    COMPONENT dev
 )
 INSTALL(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/gen/"
     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/klepsydra/gen_dds_${PROJ_MAIN_NAME}"
     FILES_MATCHING PATTERN "*.h*"
+    COMPONENT dev
 )
 
 add_dds_export_target(kpsr_dds_${PROJ_MAIN_NAME}_datamodel)
