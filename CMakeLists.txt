@@ -166,6 +166,7 @@ ADD_SUBDIRECTORY(geometry)
 ADD_SUBDIRECTORY(uav_sensors)
 if (KPSR_WITH_OCV)
   ADD_SUBDIRECTORY(vision_ocv)
+  string(APPEND KPSR_PACKAGE_OPTIONS "-ocv")
 endif()
 
 # Code Coverage
@@ -209,8 +210,7 @@ else()
 ENDIF()
 
 
-set(DEF_INSTALL_CMAKE_DIR lib/cmake/klepsydrarobotics)
-set(INSTALL_CMAKE_DIR ${DEF_INSTALL_CMAKE_DIR} CACHE PATH "Installation directory for CMake files")
+set(INSTALL_CMAKE_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/klepsydrarobotics)
 
 # Make relative paths absolute (needed later on)
 foreach(p LIB BIN INCLUDE CMAKE)
@@ -246,3 +246,21 @@ install(FILES
 # Install the export set for use with the install-tree
 install(EXPORT KlepsydraRoboticsTargets DESTINATION
   "${INSTALL_CMAKE_DIR}" COMPONENT dev)
+
+  # PACKAGING
+if(NOT DEFINED KPSR_VERSION_MAJOR)
+set(KPSR_VERSION_MAJOR ${KPSR_ROBOTICS_MAJOR_VERSION})
+endif()
+
+if(NOT DEFINED KPSR_VERSION_MINOR)
+set(KPSR_VERSION_MINOR ${KPSR_ROBOTICS_MINOR_VERSION})
+endif()
+
+if(NOT DEFINED KPSR_VERSION_PATCH)
+set(KPSR_VERSION_PATCH ${KPSR_ROBOTICS_PATCH_VERSION})
+endif()
+
+set(KPSR_PACKAGE_DESCRIPTION "Klepsydra SDK Robotics Libraries")
+set(KPSR_PACKAGE_DESCRIPTION_SUMMARY "Klepsydra SDK Robotics Libraries")
+
+include(KlepsydraPackaging)
