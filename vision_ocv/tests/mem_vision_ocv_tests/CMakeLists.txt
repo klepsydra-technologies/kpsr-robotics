@@ -17,29 +17,22 @@
 #
 #****************************************************************************
 
-SET(PROJ_NAME kpsr_mem_${PROJ_MAIN_NAME}_tests)
-PROJECT(${PROJ_NAME})
+set(PROJ_NAME kpsr_mem_${PROJ_MAIN_NAME}_tests)
+project(${PROJ_NAME})
 
 # Source
-#---------------------------------------------------#
-FILE(GLOB ${PROJ_NAME}_SRC
-    "src/*.cpp"
-)
+# ---------------------------------------------------#
+file(GLOB ${PROJ_NAME}_SRC "src/*.cpp")
 
 # Link libraries with Project
-#---------------------------------------------------#
-ADD_EXECUTABLE(${PROJ_NAME} ${${PROJ_NAME}_HEADERS} ${${PROJ_NAME}_SRC} ) 
+# ---------------------------------------------------#
+add_executable(${PROJ_NAME} ${${PROJ_NAME}_HEADERS} ${${PROJ_NAME}_SRC})
 
-#---------------------------------------------------#
-TARGET_LINK_LIBRARIES(${PROJ_NAME} 
-  gtest_main 
-  kpsr_mem_${PROJ_MAIN_NAME} 
-  kpsr_common_${PROJ_MAIN_NAME}_tests 
-  ${OpenCV_LIBS})
+# ---------------------------------------------------#
+target_link_libraries(${PROJ_NAME} gtest_main kpsr_mem_${PROJ_MAIN_NAME}
+                      kpsr_common_${PROJ_MAIN_NAME}_tests ${OpenCV_LIBS})
 
-TARGET_INCLUDE_DIRECTORIES(${PROJ_NAME}
-  PRIVATE
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
-  )
+target_include_directories(${PROJ_NAME}
+                           PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 add_test(NAME ${PROJ_NAME} COMMAND ${PROJ_NAME})

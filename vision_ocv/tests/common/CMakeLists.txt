@@ -17,28 +17,22 @@
 #
 #****************************************************************************
 
-SET(PROJ_NAME kpsr_common_${PROJ_MAIN_NAME}_tests)
-PROJECT(${PROJ_NAME})
+set(PROJ_NAME kpsr_common_${PROJ_MAIN_NAME}_tests)
+project(${PROJ_NAME})
 
 # Source
-#---------------------------------------------------#
-FILE(GLOB ${PROJ_NAME}_SRC
-    "src/*.cpp"
-)
-FILE(GLOB ${PROJ_NAME}_HEADERS
-    "include/*.h"
-)
+# ---------------------------------------------------#
+file(GLOB ${PROJ_NAME}_SRC "src/*.cpp")
+file(GLOB ${PROJ_NAME}_HEADERS "include/*.h")
 
 # Link libraries with Project
-#---------------------------------------------------#
-ADD_LIBRARY(${PROJ_NAME} ${${PROJ_MAIN_NAME}_LIB_TYPE} ${${PROJ_NAME}_HEADERS} ${${PROJ_NAME}_SRC} ) 
-TARGET_INCLUDE_DIRECTORIES(${PROJ_NAME}
-  PUBLIC
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
-  ${CMAKE_CURRENT_SOURCE_DIR}
-  )
-
+# ---------------------------------------------------#
+add_library(${PROJ_NAME} ${${PROJ_MAIN_NAME}_LIB_TYPE} ${${PROJ_NAME}_HEADERS}
+                         ${${PROJ_NAME}_SRC})
+target_include_directories(
+    ${PROJ_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
+                        ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Link libraries with Project
-#---------------------------------------------------#
-TARGET_LINK_LIBRARIES(${PROJ_NAME} ${OpenCV_LIBS} kpsr_${PROJ_MAIN_NAME})
+# ---------------------------------------------------#
+target_link_libraries(${PROJ_NAME} ${OpenCV_LIBS} kpsr_${PROJ_MAIN_NAME})

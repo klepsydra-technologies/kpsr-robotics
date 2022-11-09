@@ -17,35 +17,27 @@
 #
 #****************************************************************************
 
-SET(PROJ_NAME kpsr_zmq_${PROJ_MAIN_NAME}_tests)
-PROJECT(${PROJ_NAME})
+set(PROJ_NAME kpsr_zmq_${PROJ_MAIN_NAME}_tests)
+project(${PROJ_NAME})
 
-#find cppzmq wrapper, installed by make of cppzmq
+# find cppzmq wrapper, installed by make of cppzmq
 find_package(cppzmq)
 
 # Source
-#---------------------------------------------------#
-FILE(GLOB ${PROJ_NAME}_SRC
-    "src/*.cpp"
-)
-FILE(GLOB ${PROJ_NAME}_HEADERS
-    "include/*.h"
-)
+# ---------------------------------------------------#
+file(GLOB ${PROJ_NAME}_SRC "src/*.cpp")
+file(GLOB ${PROJ_NAME}_HEADERS "include/*.h")
 
 # Link libraries with Project
-#---------------------------------------------------#
-ADD_EXECUTABLE(${PROJ_NAME} ${${PROJ_NAME}_HEADERS} ${${PROJ_NAME}_SRC} ) 
+# ---------------------------------------------------#
+add_executable(${PROJ_NAME} ${${PROJ_NAME}_HEADERS} ${${PROJ_NAME}_SRC})
 
-#---------------------------------------------------#
-TARGET_LINK_LIBRARIES(${PROJ_NAME}
-    ${KLEPSYDRA_CORE_LIBRARIES}
-    kpsr_zmq_${PROJ_MAIN_NAME}
-    cppzmq gtest_main )
+# ---------------------------------------------------#
+target_link_libraries(${PROJ_NAME} ${KLEPSYDRA_CORE_LIBRARIES}
+                      kpsr_zmq_${PROJ_MAIN_NAME} cppzmq gtest_main)
 
-  TARGET_INCLUDE_DIRECTORIES(${PROJ_NAME}
-  PUBLIC
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
-  ${CMAKE_CURRENT_SOURCE_DIR}
-  )
+target_include_directories(
+    ${PROJ_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
+                        ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_test(NAME ${PROJ_NAME} COMMAND ${PROJ_NAME})

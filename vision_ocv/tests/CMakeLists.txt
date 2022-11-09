@@ -17,38 +17,39 @@
 #
 #****************************************************************************
 
-# Prevent overriding the parent project's compiler/linker
-# settings on Windows
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+# Prevent overriding the parent project's compiler/linker settings on Windows
+set(gtest_force_shared_crt
+    ON
+    CACHE BOOL "" FORCE)
 
-# Add googletest directly to our build. This defines
-# the gtest and gtest_main targets.
+# Add googletest directly to our build. This defines the gtest and gtest_main
+# targets.
 if(NOT TARGET gtest)
-    add_subdirectory(${GTEST_PATH}
-                    ${CMAKE_BINARY_DIR}/googletest-build
-                    EXCLUDE_FROM_ALL)
+    add_subdirectory(${GTEST_PATH} ${CMAKE_BINARY_DIR}/googletest-build
+                     EXCLUDE_FROM_ALL)
 endif()
 
-# The gtest/gtest_main targets carry header search path
-# dependencies automatically when using CMake 2.8.11 or
-# later. Otherwise we have to add them here ourselves.
+# The gtest/gtest_main targets carry header search path dependencies
+# automatically when using CMake 2.8.11 or later. Otherwise we have to add them
+# here ourselves.
 include_directories("${GTEST_PATH}/googletest/include")
 
 # Configure modules header with variables configured, last position to work!
-configure_file ("${CMAKE_CURRENT_SOURCE_DIR}/common/config.h.in"
-                "${CMAKE_CURRENT_SOURCE_DIR}/common/config.h" )
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/common/config.h.in"
+               "${CMAKE_CURRENT_SOURCE_DIR}/common/config.h")
 
 # Configure modules header with variables configured, last position to work!
-configure_file ("${CMAKE_CURRENT_SOURCE_DIR}/common/config.h.in"
-                "${CMAKE_SOURCE_DIR}/${PROJ_MAIN_NAME}/modules/ros_mdlw/kpsr_ros_vision_ocv/test/config.h")
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/common/config.h.in"
+    "${CMAKE_SOURCE_DIR}/${PROJ_MAIN_NAME}/modules/ros_mdlw/kpsr_ros_vision_ocv/test/config.h"
+)
 
 add_subdirectory(common)
 
 add_subdirectory(mem_${PROJ_MAIN_NAME}_tests)
-IF(KPSR_WITH_DDS)
-   ADD_SUBDIRECTORY(dds_${PROJ_MAIN_NAME}_tests)
-ENDIF()
-IF(KPSR_WITH_ZMQ)
-   ADD_SUBDIRECTORY(zmq_${PROJ_MAIN_NAME}_tests)
-ENDIF()
-
+if(KPSR_WITH_DDS)
+    add_subdirectory(dds_${PROJ_MAIN_NAME}_tests)
+endif()
+if(KPSR_WITH_ZMQ)
+    add_subdirectory(zmq_${PROJ_MAIN_NAME}_tests)
+endif()
