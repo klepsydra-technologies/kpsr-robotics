@@ -41,7 +41,8 @@ TEST(HPVisionTest, HPVisionTest)
     kpsr::Publisher<kpsr::vision_ocv::ImageData> *publisher = provider.underlying->getPublisher();
     kpsr::vision_ocv::FileImageStreamingService writeService(nullptr, publisher, TEST_DATA, true);
 
-    kpsr::Subscriber<kpsr::vision_ocv::ImageData> *subscriber = provider.underlying->getSubscriber();
+    kpsr::Subscriber<kpsr::vision_ocv::ImageData> *subscriber = provider.underlying->getSubscriber(
+        "test");
     SimpleReadService simpleReadService(nullptr, subscriber);
     SlowReadService slowReadService(nullptr, subscriber);
 
