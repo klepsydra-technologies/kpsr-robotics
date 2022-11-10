@@ -22,6 +22,7 @@
 
 #include <cassert>
 #include <functional>
+#include <memory>
 
 #include <klepsydra/high_performance/data_multiplexer_middleware_provider.h>
 
@@ -79,8 +80,10 @@ public:
     /**
      * @brief _high_performanceProvider
      */
-    kpsr::high_performance::DataMultiplexerMiddlewareProvider<kpsr::vision_ocv::ImageData,
-                                                              BufferSize> *underlying;
+    using HighPerformanceImageDataPovider =
+        kpsr::high_performance::DataMultiplexerMiddlewareProvider<kpsr::vision_ocv::ImageData,
+                                                                  BufferSize>;
+    std::unique_ptr<HighPerformanceImageDataPovider> underlying;
 };
 } // namespace high_performance
 } // namespace vision_ocv
