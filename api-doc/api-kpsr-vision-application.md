@@ -21,7 +21,7 @@ struct kpsr::vision_ocv::ImageData
 
 The [ImageData](#structkpsr_1_1vision__ocv_1_1ImageData) struct.
 
-Klepsydra Robotics 2017-2018.
+2023 Klepsydra Technologies AG
 
 2.0.1
 

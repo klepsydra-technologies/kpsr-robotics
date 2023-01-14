@@ -16,7 +16,7 @@ This group of classes relates exclusively to the assemblying of the application 
 
 The [Mapper<kpsr::geometry::PoseEventData, kpsr_dds_geometry::PoseEventData>](#classkpsr_1_1Mapper_3_01kpsr_1_1geometry_1_1PoseEventData_00_01kpsr__dds__geometry_1_1PoseEventData_01_4) class.
 
-Klepsydra Technologies 2019-2020.
+2023 Klepsydra Technologies AG
 
 2.1.0
 

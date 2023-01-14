@@ -21,7 +21,7 @@ struct kpsr::geometry::PoseEventData
 
 The [PoseEventData](#structkpsr_1_1geometry_1_1PoseEventData) struct.
 
-Klepsydra Technologies 2019-2020.
+2023 Klepsydra Technologies AG
 
 2.1.0
 
