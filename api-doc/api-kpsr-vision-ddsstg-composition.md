@@ -16,7 +16,7 @@ This group of classes relates exclusively to the assemblying of the application 
 
 The Mapper<kpsr::vision::ImageData, kpsr_dds_vision::ImageData> class.
 
-Klepsydra Technologies 2019-2020.
+2023 Klepsydra Technologies AG
 
 2.1.0
 

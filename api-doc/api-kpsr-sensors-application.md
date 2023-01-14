@@ -17,7 +17,7 @@ This group of classes contains the API for the application development. That mea
 
 The [Mapper<kpsr::sensors::LaserScanEvent, kpsr_dds_sensors::LaserScanEvent>](#classkpsr_1_1Mapper_3_01kpsr_1_1sensors_1_1LaserScanEvent_00_01kpsr__dds__sensors_1_1LaserScanEvent_01_4) class.
 
-Klepsydra Technologies 2019-2020.
+2023 Klepsydra Technologies AG
 
 2.1.0
 
@@ -43,7 +43,7 @@ class kpsr::sensors::LaserScanEvent
 
 The [LaserScanEvent](#classkpsr_1_1sensors_1_1LaserScanEvent) struct.
 
-Klepsydra Technologies 2019-2020.
+2023 Klepsydra Technologies AG
 
 2.1.0
 

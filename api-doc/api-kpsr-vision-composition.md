@@ -17,7 +17,7 @@ This group of classes relates exclusively to the assemblying of the application.
 
 The [BasicVisionMiddlewareProvider](#classkpsr_1_1vision__ocv_1_1mem_1_1BasicVisionMiddlewareProvider) class.
 
-Klepsydra Technologies 2019-2020.
+2023 Klepsydra Technologies AG
 
 2.1.0
 
@@ -79,7 +79,7 @@ underlying
 
 The [ImageDataFactory](#classkpsr_1_1vision__ocv_1_1ImageDataFactory) class.
 
-Klepsydra Robotics 2017-2018.
+2023 Klepsydra Technologies AG
 
 2.0.1
 
