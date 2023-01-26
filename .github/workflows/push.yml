@@ -27,11 +27,7 @@ jobs:
     name: Vanilla Debug
     runs-on: ubuntu-latest
     container:
-      image: 337955887028.dkr.ecr.eu-central-1.amazonaws.com/amd64:base-1.4.2
-      options: --user root
-      credentials:
-        username: AWS
-        password: ${{ secrets.ECR_PASSWORD }}
+      image: ghcr.io/klepsydra-technologies/kpsrbase:1.0.0
     steps:
       - name: Clone kpsr-core
         uses: actions/checkout@v3
@@ -107,11 +103,7 @@ jobs:
     name: ${{ matrix.name }} Release
     runs-on: ubuntu-latest
     container:
-      image: 337955887028.dkr.ecr.eu-central-1.amazonaws.com/amd64:base-1.4.2
-      options: --user root
-      credentials:
-        username: AWS
-        password: ${{ secrets.ECR_PASSWORD }}
+      image: ghcr.io/klepsydra-technologies/kpsrbase:1.0.0
     steps:
       - name: Clone kpsr-core
         uses: actions/checkout@v3
@@ -195,11 +187,7 @@ jobs:
     env:
       ROS_DISTRO: ${{ matrix.rosrelease }}
     container:
-      image: "337955887028.dkr.ecr.eu-central-1.amazonaws.com/amd64:${{ matrix.rosrelease }}-1.2.2"
-      options: --user root
-      credentials:
-        username: AWS
-        password: ${{ secrets.ECR_PASSWORD }}
+      image: "ghcr.io/klepsydra-technologies/kpsr${{ matrix.rosrelease }}:1.0.0"
     steps:
       - name: Clone kpsr-core
         uses: actions/checkout@v3
