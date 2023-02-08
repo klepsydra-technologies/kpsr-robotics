@@ -12,17 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Add module code
-add_subdirectory(${PROJ_MAIN_NAME})
-add_subdirectory(mem_mdlw)
-if(KPSR_WITH_DDS)
-    add_subdirectory(dds_mdlw)
-endif()
-if(KPSR_WITH_ZMQ)
-    add_subdirectory(zmq_mdlw)
-endif()
+set(PROJ_MAIN_NAME "robotics_benchmark")
+project(${PROJ_MAIN_NAME})
 
-add_core_export_target()
-add_dds_export_target()
-add_zmq_export_target()
-add_include_dirs()
+find_package(OpenCV REQUIRED)
+find_package(benchmark REQUIRED)
+
+configure_file(
+    "${CMAKE_SOURCE_DIR}/vision_ocv/tests/common/config.h.in"
+    "${CMAKE_SOURCE_DIR}/vision_ocv/benchmark/modules/include/config.h")
+
+# ##############################################################################
+# ADD SUB FOLDERS
+# ##############################################################################
+add_subdirectory(modules)

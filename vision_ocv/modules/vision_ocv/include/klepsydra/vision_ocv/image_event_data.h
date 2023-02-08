@@ -71,7 +71,7 @@ public:
     void clone(const ImageData &that)
     {
         Sensor::clone(that);
-        img = that.img;
+        that.img.copyTo(img);
     }
 
     /**

@@ -12,27 +12,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set(PROJ_NAME kpsr_zmq_${PROJ_MAIN_NAME}_tests)
+set(PROJ_NAME kpsr_vision_${PROJ_MAIN_NAME})
 project(${PROJ_NAME})
-
-# find cppzmq wrapper, installed by make of cppzmq
-find_package(cppzmq)
 
 # Source
 # ---------------------------------------------------#
 file(GLOB ${PROJ_NAME}_SRC "src/*.cpp")
-file(GLOB ${PROJ_NAME}_HEADERS "include/*.h")
+file(GLOB_RECURSE ${PROJ_NAME}_HEADERS "include/*.h")
+
+# Create Library
+# ---------------------------------------------------#
+add_executable(${PROJ_NAME} ${${PROJ_MAIN_NAME}_LIB_TYPE}
+                            ${${PROJ_NAME}_HEADERS} ${${PROJ_NAME}_SRC})
 
 # Link libraries with Project
 # ---------------------------------------------------#
-add_executable(${PROJ_NAME} ${${PROJ_NAME}_HEADERS} ${${PROJ_NAME}_SRC})
-
-# ---------------------------------------------------#
-target_link_libraries(${PROJ_NAME} ${KLEPSYDRA_CORE_LIBRARIES}
-                      kpsr_zmq_${PROJ_MAIN_NAME} cppzmq gtest_main)
+target_link_libraries(
+    ${PROJ_NAME}
+    PUBLIC kpsr_core kpsr_mem_vision_ocv kpsr_vision_ocv benchmark::benchmark
+           ${OpenCV_LIBS} ${CMAKE_THREAD_LIBS_INIT})
 
 target_include_directories(
-    ${PROJ_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
-                        ${CMAKE_CURRENT_SOURCE_DIR})
+    ${PROJ_NAME} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+                        $<INSTALL_INTERFACE:include>)
 
-add_test(NAME ${PROJ_NAME} COMMAND ${PROJ_NAME})
+add_core_export_target(${PROJ_NAME})
+# PRINTBASICINFO(${PROJ_NAME})
