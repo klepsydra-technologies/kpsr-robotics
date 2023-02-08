@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 set(PROJ_NAME kpsr_zmq_${PROJ_MAIN_NAME})
 project(${PROJ_NAME})
 
@@ -26,7 +25,7 @@ file(GLOB_RECURSE ${PROJ_NAME}_HEADERS "include/*.h")
 
 # Create Library
 # ---------------------------------------------------#
-add_library(${PROJ_NAME} INTERFACE ${${PROJ_NAME}_HEADERS})
+add_library(${PROJ_NAME} INTERFACE)
 
 # Link libraries with Project
 # ---------------------------------------------------#

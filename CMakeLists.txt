@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 # Main header: Project name & Configuration
 # ------------------------------------------------------------------------------------------------------
 cmake_minimum_required(VERSION 3.12)
@@ -195,7 +194,8 @@ if(KPSR_WITH_CODE_METRICS
         ${CMAKE_PREFIX_PATH}
         geometry/tests
         uav_sensors/tests
-        vision_ocv/tests)
+        vision_ocv/tests
+        vision_ocv/benchmark)
     setup_target_for_coverage_gcovr_xml(NAME coverage EXECUTABLE make test)
 endif()
 
