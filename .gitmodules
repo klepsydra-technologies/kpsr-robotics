@@ -3,4 +3,4 @@
 	url = https://github.com/klepsydra-technologies/googletest.git
 [submodule "kpsr-build"]
 	path = kpsr-build
-	url = git@github.com:klepsydra-technologies/kpsr-build.git
+	url = https://github.com/klepsydra-technologies/kpsr-build.git
