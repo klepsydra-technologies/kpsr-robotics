@@ -42,9 +42,6 @@ configure_file(
 add_subdirectory(common)
 
 add_subdirectory(mem_${PROJ_MAIN_NAME}_tests)
-if(KPSR_WITH_DDS)
-    add_subdirectory(dds_${PROJ_MAIN_NAME}_tests)
-endif()
 if(KPSR_WITH_ZMQ)
     add_subdirectory(zmq_${PROJ_MAIN_NAME}_tests)
 endif()

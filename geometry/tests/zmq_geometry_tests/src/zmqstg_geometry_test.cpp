@@ -68,10 +68,10 @@ TEST(ZmqGeometryTest, ZmqGeometryTest)
         _fromZmqMiddlewareProvider
             .getJsonFromMiddlewareChannel<kpsr::geometry::PoseEventData>(subscriber, 1);
 
-    kpsr::Publisher<kpsr::geometry::PoseEventData> *poseEventDataToDDSChannel =
+    kpsr::Publisher<kpsr::geometry::PoseEventData> *poseEventDataToZmqChannel =
         toZMQMiddlewareProvider.getJsonToMiddlewareChannel<kpsr::geometry::PoseEventData>(topic);
 
-    PoseEventDataPublisherService poseEventDataPublisherService(nullptr, poseEventDataToDDSChannel);
+    PoseEventDataPublisherService poseEventDataPublisherService(nullptr, poseEventDataToZmqChannel);
 
     kpsr::EventEmitterMiddlewareProvider<kpsr::geometry::PoseEventData>
         geometryProvider(nullptr, "telemetry", 0, nullptr, nullptr);

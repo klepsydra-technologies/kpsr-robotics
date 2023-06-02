@@ -15,14 +15,10 @@
 # Add module code
 add_subdirectory(${PROJ_MAIN_NAME})
 add_subdirectory(mem_mdlw)
-if(KPSR_WITH_DDS)
-    add_subdirectory(dds_mdlw)
-endif()
 if(KPSR_WITH_ZMQ)
     add_subdirectory(zmq_mdlw)
 endif()
 
 add_core_export_target()
-add_dds_export_target()
 add_zmq_export_target()
 add_include_dirs()
