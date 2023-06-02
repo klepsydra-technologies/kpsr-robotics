@@ -32,6 +32,5 @@ if(KPSR_ENABLE_TESTS)
 endif()
 
 add_core_export_target()
-add_dds_export_target()
 add_zmq_export_target()
 add_include_dirs()

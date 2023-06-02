@@ -18,7 +18,7 @@
 #define GROUP_DEFINITIONS_H
 
 /**
- * @defgroup kpsr-sensors-zmq-composition DDS Composition API
+ * @defgroup kpsr-sensors-zmq-composition Composition API
  *
  * This group of classes relates exclusively to the assemblying of the application for ZMQ middleware. In Spring terms, the 'wiring'
  * of the application is done using this API. The use of ZMQ is light and minimal intrusion is needed as this modules does not peform

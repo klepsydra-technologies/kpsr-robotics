@@ -19,9 +19,9 @@ cmake_minimum_required(VERSION 3.12)
 set(PROJ_MAIN_NAME "klepsydra-robotics")
 project(${PROJ_MAIN_NAME})
 
-set(KPSR_ROBOTICS_MAJOR_VERSION 3)
-set(KPSR_ROBOTICS_MINOR_VERSION 2)
-set(KPSR_ROBOTICS_PATCH_VERSION 1)
+set(KPSR_ROBOTICS_MAJOR_VERSION 4)
+set(KPSR_ROBOTICS_MINOR_VERSION 0)
+set(KPSR_ROBOTICS_PATCH_VERSION 0)
 set(KPSR_ROBOTICS_VERSION
     ${KPSR_ROBOTICS_MAJOR_VERSION}.${KPSR_ROBOTICS_MINOR_VERSION}.${KPSR_ROBOTICS_PATCH_VERSION}
 )
@@ -83,7 +83,7 @@ set(BUILD_SHARED_LIBS
 
 cmake_policy(SET CMP0057 NEW)
 cmake_policy(SET CMP0054 NEW)
-find_package(Klepsydra 7 REQUIRED)
+find_package(Klepsydra 8 REQUIRED)
 
 include(CheckCXXCompilerFlag)
 include(CheckIncludeFileCXX)
@@ -241,8 +241,7 @@ foreach(p LIB BIN INCLUDE CMAKE)
 endforeach()
 
 list(APPEND EXPORT_INCLUDE_DIRS ${CMAKE_INSTALL_FULL_INCLUDEDIR})
-export(TARGETS ${CORE_EXPORT_TARGETS} ${DDS_EXPORT_TARGETS}
-               ${ZMQ_EXPORT_TARGETS}
+export(TARGETS ${CORE_EXPORT_TARGETS} ${ZMQ_EXPORT_TARGETS}
        FILE "${PROJECT_BINARY_DIR}/KlepsydraRoboticsTargets.cmake")
 
 # Export the package for use from the build-tree (this registers the build-tree

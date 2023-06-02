@@ -68,11 +68,11 @@ TEST(ZmqSensorsTest, ZmqSensorsTest)
         _fromZmqMiddlewareProvider
             .getJsonFromMiddlewareChannel<kpsr::sensors::LaserScanEvent>(subscriber, 1);
 
-    kpsr::Publisher<kpsr::sensors::LaserScanEvent> *laserScanEventToDDSChannel =
+    kpsr::Publisher<kpsr::sensors::LaserScanEvent> *laserScanEventToZmqChannel =
         toZMQMiddlewareProvider.getJsonToMiddlewareChannel<kpsr::sensors::LaserScanEvent>(topic);
 
     LaserScanEventPublisherService laserScanEventPublisherService(nullptr,
-                                                                  laserScanEventToDDSChannel);
+                                                                  laserScanEventToZmqChannel);
 
     kpsr::EventEmitterMiddlewareProvider<kpsr::sensors::LaserScanEvent> sensorsProvider(nullptr,
                                                                                         "telemetry",

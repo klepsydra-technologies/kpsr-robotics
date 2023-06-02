@@ -4,26 +4,37 @@
 
 [![Build](https://github.com/klepsydra-technologies/kpsr-robotics/actions/workflows/push.yml/badge.svg)](https://github.com/klepsydra-technologies/kpsr-robotics/actions/workflows/push.yml) [![codecov](https://codecov.io/gh/klepsydra-technologies/kpsr-robotics/branch/main/graph/badge.svg?token=PDALQNPJRD)](https://codecov.io/gh/klepsydra-technologies/kpsr-robotics)
 
-# Installation Instructions
+- [Installation instructions](#installation-instructions)
+    - [System dependencies](#system-dependencies)
+    - [Klepsydra dependencies](#klepsydra-dependencies)
+    - [System installation](#system-installation)
+    - [Installation](#installation)
+        - [ROS installation](#ros-installation)
+- [Documentation](#documentation)
+    - [Location of documentation](#location-of-documentation)
+    - [Documentation generation](#documentation-generation)
+- [License](#license)
+- [Contact](#contact)
+
+# Installation instructions
 
 ## System dependencies
 
-* Ubuntu 14.04 or above
-* ConcurrentQueue (<https://github.com/klepsydra-technologies/concurrentqueue>)
-* Cereal (<https://github.com/klepsydra-technologies/cereal>)
-* ROS Indigo or above (optional)
-* ZMQ 3 or above (optional)
-* DDS (optional)
-* CMake 3.12 or above
-* gcc for C++11 5.4.0 or above
-* Doxygen (optional)
-* Moxygen (<https://github.com/sourcey/moxygen>) (optional)
-* OpenCV 3.4.x or above (optional)
-* ROS Vision Package (optional)
+- Ubuntu 14.04 or above
+- ConcurrentQueue (<https://github.com/klepsydra-technologies/concurrentqueue>)
+- Cereal (<https://github.com/klepsydra-technologies/cereal>)
+- ROS Indigo or above (optional)
+- ZMQ 3 or above (optional)
+- CMake 3.12 or above
+- gcc for C++11 5.4.0 or above
+- Doxygen (optional)
+- Moxygen (<https://github.com/sourcey/moxygen>) (optional)
+- OpenCV 3.4.x or above (optional)
+- ROS Vision Package (optional)
 
 ## Klepsydra dependencies
 
-* kpsr-core
+- kpsr-core
 
 ## System installation
 
@@ -37,24 +48,22 @@ Given ```$KLEPSYDRA_HOME```, for example ```$HOME/klepsydra```:
 
 ``` bash
 git clone https://github.com/klepsydra-technologies/kpsr-robotics.git
-cd kpsr-robotics
+cd kpsr-robotics/
 git submodule update --init
-mkdir build
-cd build
-cmake -DKPSR_WITH_OCV=true ..
-make
-make test
+mkdir build && cd build/
+cmake .. -DKPSR_WITH_OCV=true
+make -j$(nproc)
+make -j$(nproc) test
 sudo make install
 ```
 
 The cmake has the following options:
 
-* -DCMAKE_INSTALL_PREFIX for specifying the Klepsydra robotics installation location (`/opt/klepsydra` by default)
-* -DCMAKE_PREFIX_PATH Klepsydra SDK installation location (`/usr/local` by default), same as -DCMAKE_INSTALL_PREFIX when building kpsr-core
-* -DKPSR_WITH_OCV=true for building the OpenCV module
-* -DKPSR_WITH_DDS=true for building the DDS binding
-* -DKPSR_WITH_ZMQ=true for building the ZMQ binding
-* -DKPSR_WITH_DOXYGEN to allow generation of documentation
+- -DCMAKE_INSTALL_PREFIX for specifying the Klepsydra robotics installation location (`/opt/klepsydra` by default)
+- -DCMAKE_PREFIX_PATH Klepsydra SDK installation location (`/usr/local` by default), same as -DCMAKE_INSTALL_PREFIX when building kpsr-core
+- -DKPSR_WITH_OCV=true for building the OpenCV module
+- -DKPSR_WITH_ZMQ=true for building the ZMQ binding
+- -DKPSR_WITH_DOXYGEN to allow generation of documentation
 
 ### ROS installation
 
