@@ -21,6 +21,7 @@
 #define FILE_IMG_STREAM__SERVICE_H
 
 #include <opencv2/opencv.hpp>
+#include <opencv2/imgproc/imgproc_c.h>
 
 #include <klepsydra/core/service.h>
 #include <klepsydra/core/publisher.h>

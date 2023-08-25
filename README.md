@@ -21,7 +21,7 @@ ROS | [![Build Status](https://jenkins1.klepsydra.com/buildStatus/icon?job=kpsr-
 * gcc for C++11 5.4.0 or above.
 * Doxygen (optional)
 * Moxygen (https://github.com/sourcey/moxygen) (optional)
-* Open CV (Version 3.4.x) (optional)
+* Open CV (Version 4.2.x) (optional)
 * Ros Vision Package
 
 ## Klepsydra dependencies
