@@ -62,9 +62,9 @@ TEST(HPVisionTest, HPVisionTest)
             break;
     }
 
-    writeService.stop();
     simpleReadService.stop();
     slowReadService.stop();
+    writeService.stop();
 
     ASSERT_EQ(writeService.publishedEvents, 50);
     ASSERT_EQ(simpleReadService.receivedEvents, 50);

@@ -29,8 +29,24 @@ jobs:
     container:
       image: ghcr.io/klepsydra-technologies/kpsrbase:1.0.0
     steps:
+      - name: Clone kpsr-sdk
+        uses: actions/checkout@v4
+        with:
+          repository: klepsydra-technologies/kpsr-sdk
+          ref: main
+          submodules: recursive
+          path: kpsr-sdk
+
+      - name: Build and install SDK
+        run: |
+          mkdir build && cd build/
+          cmake ..
+          make -j$(nproc)
+          make install
+        working-directory: kpsr-sdk
+
       - name: Clone kpsr-core
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: klepsydra-technologies/kpsr-core
           submodules: recursive
@@ -40,7 +56,8 @@ jobs:
       - name: Install kpsr-core
         run: |
           mkdir build && cd build
-          cmake -DKPSR_WITH_DOXYGEN=true -DKPSR_WITH_ZMQ=false -DKPSR_TEST_PERFORMANCE=false -DKPSR_WITH_SOCKET=true -DKPSR_WITH_YAML=false -DKPSR_WITH_CODE_METRICS=true -DCMAKE_BUILD_TYPE=Debug -DKPSR_ENABLE_TESTS=false -DKPSR_ENABLE_EXAMPLES=false ../
+          cmake -DKPSR_WITH_DOXYGEN=true -DKPSR_WITH_ZMQ=false -DKPSR_TEST_PERFORMANCE=false -DKPSR_WITH_SOCKET=true \
+                -DKPSR_WITH_CODE_METRICS=true -DCMAKE_BUILD_TYPE=Debug -DKPSR_ENABLE_TESTS=false -DKPSR_ENABLE_EXAMPLES=false ../
           make -j$(nproc)
           sudo make -j$(nproc) install
         working-directory: kpsr-core
@@ -57,14 +74,15 @@ jobs:
           sudo rm -rf ${GITHUB_WORKSPACE}/kpsr-core
 
       - name: Clone kpsr-robotics
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
 
       - name: Build
         run: |
           mkdir build && cd build
-          cmake -DKPSR_WITH_DOXYGEN=true -DCMAKE_BUILD_TYPE=Debug -DKPSR_WITH_OCV=true -DKPSR_ENABLE_TESTS=true -DKPSR_ENABLE_EXAMPLES=true ../
+          cmake -DKPSR_WITH_DOXYGEN=true -DCMAKE_BUILD_TYPE=Debug -DKPSR_WITH_OCV=true -DKPSR_ENABLE_TESTS=true \
+                -DKPSR_ENABLE_EXAMPLES=true ../
           make -j$(nproc)
 
       - name: Unit tests
@@ -103,8 +121,24 @@ jobs:
     container:
       image: ghcr.io/klepsydra-technologies/kpsrbase:1.0.0
     steps:
+      - name: Clone kpsr-sdk
+        uses: actions/checkout@v4
+        with:
+          repository: klepsydra-technologies/kpsr-sdk
+          ref: main
+          submodules: recursive
+          path: kpsr-sdk
+
+      - name: Build and install SDK
+        run: |
+          mkdir build && cd build/
+          cmake ..
+          make -j$(nproc)
+          make install
+        working-directory: kpsr-sdk
+
       - name: Clone kpsr-core
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: klepsydra-technologies/kpsr-core
           submodules: recursive
@@ -114,7 +148,9 @@ jobs:
       - name: Install kpsr-core
         run: |
           mkdir build && cd build
-          cmake -DKPSR_WITH_DOXYGEN=false -DKPSR_WITH_ZMQ=${{ matrix.zmq }} -DKPSR_TEST_PERFORMANCE=false -DKPSR_WITH_SOCKET=true -DKPSR_WITH_YAML=false -DKPSR_WITH_CODE_METRICS=true -DCMAKE_BUILD_TYPE=Release -DKPSR_ENABLE_TESTS=false -DKPSR_ENABLE_EXAMPLES=false ../
+          cmake -DKPSR_WITH_DOXYGEN=false -DKPSR_WITH_ZMQ=${{ matrix.zmq }} -DKPSR_TEST_PERFORMANCE=false \
+                -DKPSR_WITH_SOCKET=true -DKPSR_WITH_CODE_METRICS=true -DCMAKE_BUILD_TYPE=Release -DKPSR_ENABLE_TESTS=false \
+                -DKPSR_ENABLE_EXAMPLES=false ../
           make -j$(nproc)
           sudo make -j$(nproc) install
         working-directory: kpsr-core
@@ -124,7 +160,7 @@ jobs:
           sudo rm -rf ${GITHUB_WORKSPACE}/kpsr-core
 
       - name: Clone kpsr-robotics
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
 
@@ -169,104 +205,6 @@ jobs:
             build/CMakeFiles/CMakeError.log
             build/Testing/Temporary
             build/code_generator/kpsr_codegen/build_cpptesting/Testing/Temporary
-
-      - name: Workspace cleanup
-        if: always()
-        run: |
-          sudo rm -rf ${GITHUB_WORKSPACE}/build
-
-  ros:
-    needs: builddebug
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        rosrelease: ["noetic"]
-    name: ROS ${{ matrix.rosrelease }}
-    env:
-      ROS_DISTRO: ${{ matrix.rosrelease }}
-    container:
-      image: "ghcr.io/klepsydra-technologies/kpsr${{ matrix.rosrelease }}:1.0.0"
-    steps:
-      - name: Clone kpsr-core
-        uses: actions/checkout@v3
-        with:
-          repository: klepsydra-technologies/kpsr-core
-          submodules: recursive
-          ref: main
-          path: kpsr-core
-
-      - name: Install kpsr-core
-        run: |
-          mkdir build && cd build
-          cmake -DKPSR_WITH_DOXYGEN=false -DKPSR_WITH_ZMQ=false -DKPSR_TEST_PERFORMANCE=false -DKPSR_WITH_SOCKET=true -DKPSR_WITH_YAML=true -DKPSR_WITH_CODE_METRICS=false -DKPSR_ENABLE_TESTS=true -DKPSR_ENABLE_EXAMPLES=false -DCMAKE_BUILD_TYPE=Release ../
-          make -j$(nproc)
-          make test
-          sudo make install
-        working-directory: kpsr-core
-
-      - name: Clone kpsr-robotics
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
-          path: kpsr-robotics
-
-      - name: Build
-        run: |
-          mkdir -p build && cd build
-          cmake -DKPSR_WITH_DOXYGEN=true -DKPSR_WITH_ZMQ=false -DKPSR_WITH_CODE_METRICS=true -DKPSR_WITH_OCV=true -DCMAKE_BUILD_TYPE=Release -DKPSR_ENABLE_TESTS=true -DKPSR_ENABLE_EXAMPLES=false ../
-          make -j$(nproc)
-        working-directory: kpsr-robotics
-
-      - name: Unit tests
-        timeout-minutes: 10
-        run: |
-          cd build
-          make test ARGS="--gtest_shuffle"
-        working-directory: kpsr-robotics
-
-      - name: Install
-        run: |
-          cd build
-          sudo make install
-        working-directory: kpsr-robotics
-
-      - name: Create ROS environment
-        run: |
-          source /opt/ros/$ROS_DISTRO/setup.bash
-          mkdir -p ${GITHUB_WORKSPACE}/kpsr-ros/src/build
-          cd ${GITHUB_WORKSPACE}/kpsr-ros/src
-          catkin_init_workspace
-          ln -s ${GITHUB_WORKSPACE}/kpsr-core/core/modules/ros_mdlw/kpsr_ros_core .
-          ln -s ${GITHUB_WORKSPACE}/kpsr-core/serialization/modules/ros_mdlw/kpsr_ros_serialization .
-          ln -s ${GITHUB_WORKSPACE}/kpsr-core/code_generator/cpp_testing/tests/kpsr_ros_codegen .
-          ln -s ${GITHUB_WORKSPACE}/kpsr-robotics/geometry/modules/ros_mdlw/kpsr_ros_geometry .
-          ln -s ${GITHUB_WORKSPACE}/kpsr-robotics/uav_sensors/modules/ros_mdlw/kpsr_ros_sensors .
-          ln -s ${GITHUB_WORKSPACE}/kpsr-robotics/vision_ocv/modules/ros_mdlw/kpsr_ros_vision_ocv .
-
-      - name: Build ROS
-        run: |
-          source /opt/ros/$ROS_DISTRO/setup.bash
-          cd ${GITHUB_WORKSPACE}/kpsr-ros/src/build
-          cmake ../
-          make -j$(nproc)
-
-      - name: Test ROS
-        timeout-minutes: 15
-        run: |
-          source /opt/ros/$ROS_DISTRO/setup.bash
-          cd ${GITHUB_WORKSPACE}/kpsr-ros/src/build
-          make tests
-
-      - name: Upload logs on failure
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: ros-${{ matrix.rosrelease }}
-          path: |
-            build/Testing/Temporary
-            build/code_generator/kpsr_codegen/build_cpptesting/Testing/Temporary
-            ${GITHUB_WORKSPACE}/kpsr-ros/src/build/Testing/Temporary
-            ${GITHUB_WORKSPACE}/kpsr-ros/src/build/test_results
 
       - name: Workspace cleanup
         if: always()

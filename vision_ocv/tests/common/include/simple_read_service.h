@@ -21,8 +21,8 @@
 
 #include <spdlog/spdlog.h>
 
-#include <klepsydra/core/service.h>
-#include <klepsydra/core/subscriber.h>
+#include <klepsydra/sdk/service.h>
+#include <klepsydra/sdk/subscriber.h>
 
 #include <klepsydra/vision_ocv/image_event_data.h>
 

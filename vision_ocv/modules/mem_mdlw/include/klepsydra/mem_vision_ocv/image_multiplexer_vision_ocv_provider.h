@@ -19,7 +19,6 @@
 
 #include <cassert>
 #include <functional>
-#include <memory>
 
 #include <klepsydra/high_performance/data_multiplexer_middleware_provider.h>
 

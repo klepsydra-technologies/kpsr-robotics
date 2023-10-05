@@ -22,8 +22,8 @@
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/spdlog.h"
 
-#include <klepsydra/core/publisher.h>
-#include <klepsydra/core/service.h>
+#include <klepsydra/sdk/publisher.h>
+#include <klepsydra/sdk/service.h>
 
 #include <klepsydra/sensors/laser_scan_event.h>
 
@@ -37,7 +37,7 @@ class LaserScanEventPublisherService : public kpsr::Service
 public:
     LaserScanEventPublisherService(kpsr::Environment *environment,
                                    kpsr::Publisher<kpsr::sensors::LaserScanEvent> *publisher)
-        : kpsr::Service(environment, "laserScanEvent_service")
+        : kpsr::Service(nullptr, environment, "laserScanEvent_service")
         , _publisher(publisher)
     {
         // Initialize random number generation with a seed

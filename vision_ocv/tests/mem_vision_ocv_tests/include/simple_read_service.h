@@ -23,8 +23,8 @@
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/spdlog.h"
 
-#include <klepsydra/core/service.h>
-#include <klepsydra/core/subscriber.h>
+#include <klepsydra/sdk/service.h>
+#include <klepsydra/sdk/subscriber.h>
 
 #include <klepsydra/vision_ocv/image_event_data.h>
 
@@ -33,7 +33,7 @@ class SimpleReadService : public kpsr::Service
 public:
     SimpleReadService(kpsr::Environment *environment,
                       kpsr::Subscriber<kpsr::vision_ocv::ImageData> *subscriber)
-        : kpsr::Service(environment, "SimpleReadService")
+        : kpsr::Service(nullptr, environment, "SimpleReadService")
         , _subscriber(subscriber)
     {}
 

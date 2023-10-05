@@ -19,12 +19,11 @@
 
 #define SOCKET int
 
-#include <klepsydra/core/publisher.h>
-#include <klepsydra/core/subscriber.h>
+#include <thread>
+
+#include <klepsydra/sdk/publisher.h>
+#include <klepsydra/sdk/subscriber.h>
 #include <klepsydra/vision_ocv/image_event_data.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
 
 namespace kpsr {
 namespace vision_ocv {

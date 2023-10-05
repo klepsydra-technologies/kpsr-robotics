@@ -19,7 +19,7 @@
 
 kpsr::vision_ocv::SimpleReadService::SimpleReadService(
     kpsr::Environment *environment, kpsr::Subscriber<kpsr::vision_ocv::ImageData> *subscriber)
-    : kpsr::Service(environment, "SimpleReadService")
+    : kpsr::Service(nullptr, environment, "SimpleReadService")
     , _subscriber(subscriber)
 {}
 
