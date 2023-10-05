@@ -21,9 +21,9 @@
 #include <sstream>
 
 #include <klepsydra/core/event_emitter_middleware_provider.h>
-#include <klepsydra/core/publisher.h>
-#include <klepsydra/core/service.h>
-#include <klepsydra/core/subscriber.h>
+#include <klepsydra/sdk/publisher.h>
+#include <klepsydra/sdk/service.h>
+#include <klepsydra/sdk/subscriber.h>
 
 #include <klepsydra/serialization/json_cereal_mapper.h>
 
@@ -64,7 +64,7 @@ TEST(ZmqGeometryTest, ZmqGeometryTest)
 
     //  Process 100 updates
     kpsr::zmq_mdlw::FromZmqMiddlewareProvider _fromZmqMiddlewareProvider;
-    kpsr::zmq_mdlw::FromZmqChannel<std::string> *_jsonFromZMQProvider =
+    auto _jsonFromZMQProvider =
         _fromZmqMiddlewareProvider
             .getJsonFromMiddlewareChannel<kpsr::geometry::PoseEventData>(subscriber, 1);
 

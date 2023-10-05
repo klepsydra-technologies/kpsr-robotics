@@ -27,7 +27,7 @@ kpsr::vision_ocv::FileImageStreamingService::FileImageStreamingService(
     int height,
     const std::string &frameId,
     const std::string &serviceName)
-    : kpsr::Service(environment, serviceName)
+    : kpsr::Service(nullptr, environment, serviceName)
     , _publisher(publisher)
     , _imageDirname(imageDirname)
     , _restartIfNoMoreImages(restartIfNoMoreImages)
@@ -48,7 +48,7 @@ kpsr::vision_ocv::FileImageStreamingService::FileImageStreamingService(
     std::function<void(const cv::Mat &, cv::Mat &)> postProcessing,
     const std::string &frameId,
     const std::string &serviceName)
-    : kpsr::Service(environment, serviceName)
+    : kpsr::Service(nullptr, environment, serviceName)
     , _publisher(publisher)
     , _imageDirname(imageDirname)
     , _restartIfNoMoreImages(restartIfNoMoreImages)

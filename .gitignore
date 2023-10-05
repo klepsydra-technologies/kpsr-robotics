@@ -6,3 +6,6 @@ Config.cmake
 gen/**
 gen
 .vscode
+.idea
+version.h
+Testing

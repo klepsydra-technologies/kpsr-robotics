@@ -34,6 +34,9 @@ target_include_directories(
     ${PROJ_NAME} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
                         $<INSTALL_INTERFACE:include>)
 
+set_target_properties(
+    ${PROJ_NAME} PROPERTIES VERSION ${KLEPSYDRA_ROBOTICS_VERSION}
+                            SOVERSION ${KLEPSYDRA_ROBOTICS_VERSION_MAJOR})
 # Install
 # ---------------------------------------------------#
 install(

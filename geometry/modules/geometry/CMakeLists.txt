@@ -27,7 +27,6 @@ add_library(${PROJ_NAME} INTERFACE)
 
 # Link libraries with Project
 # ---------------------------------------------------#
-# TARGET_LINK_LIBRARIES(${PROJ_NAME})
 target_include_directories(
     ${PROJ_NAME}
     INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

@@ -19,8 +19,8 @@
 
 #include <opencv2/opencv.hpp>
 
-#include <klepsydra/core/publisher.h>
-#include <klepsydra/core/service.h>
+#include <klepsydra/sdk/publisher.h>
+#include <klepsydra/sdk/service.h>
 
 #include <klepsydra/vision_ocv/image_event_data.h>
 

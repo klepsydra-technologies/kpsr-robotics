@@ -23,10 +23,6 @@ set(TEST_DATA ${CMAKE_SOURCE_DIR}/${PROJ_MAIN_NAME}/tests/data)
 # ADD SUB FOLDERS
 # ##############################################################################
 add_subdirectory(modules)
-
-if(KPSR_TEST_PERFORMANCE)
-    add_subdirectory(benchmark)
-endif()
 if(KPSR_ENABLE_TESTS)
     add_subdirectory(tests)
 endif()

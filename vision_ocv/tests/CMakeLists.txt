@@ -33,12 +33,6 @@ include_directories("${GTEST_PATH}/googletest/include")
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/common/config.h.in"
                "${CMAKE_CURRENT_SOURCE_DIR}/common/config.h")
 
-# Configure modules header with variables configured, last position to work!
-configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/common/config.h.in"
-    "${CMAKE_SOURCE_DIR}/${PROJ_MAIN_NAME}/modules/ros_mdlw/kpsr_ros_vision_ocv/test/config.h"
-)
-
 add_subdirectory(common)
 
 add_subdirectory(mem_${PROJ_MAIN_NAME}_tests)

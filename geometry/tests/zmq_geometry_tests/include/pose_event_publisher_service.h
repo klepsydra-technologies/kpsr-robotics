@@ -17,9 +17,9 @@
 #ifndef POSE_EVENT_DATA_PUBLISHER_SERVICE_H
 #define POSE_EVENT_DATA_PUBLISHER_SERVICE_H
 
-#include <klepsydra/core/publisher.h>
-#include <klepsydra/core/service.h>
 #include <klepsydra/geometry/pose_event_data.h>
+#include <klepsydra/sdk/publisher.h>
+#include <klepsydra/sdk/service.h>
 
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/spdlog.h"
@@ -36,7 +36,7 @@ class PoseEventDataPublisherService : public kpsr::Service
 public:
     PoseEventDataPublisherService(kpsr::Environment *environment,
                                   kpsr::Publisher<kpsr::geometry::PoseEventData> *publisher)
-        : kpsr::Service(environment, "poseEventData_service")
+        : kpsr::Service(nullptr, environment, "poseEventData_service")
         , _publisher(publisher)
     {
         // Initialize random number generation with a seed

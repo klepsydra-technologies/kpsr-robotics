@@ -16,15 +16,8 @@
 # ------------------------------------------------------------------------------------------------------
 cmake_minimum_required(VERSION 3.12)
 
-set(PROJ_MAIN_NAME "klepsydra-robotics")
+set(PROJ_MAIN_NAME "kpsr-robotics")
 project(${PROJ_MAIN_NAME})
-
-set(KPSR_ROBOTICS_MAJOR_VERSION 4)
-set(KPSR_ROBOTICS_MINOR_VERSION 0)
-set(KPSR_ROBOTICS_PATCH_VERSION 0)
-set(KPSR_ROBOTICS_VERSION
-    ${KPSR_ROBOTICS_MAJOR_VERSION}.${KPSR_ROBOTICS_MINOR_VERSION}.${KPSR_ROBOTICS_PATCH_VERSION}
-)
 
 # Configuration types
 set(CMAKE_CONFIGURATION_TYPES
@@ -75,18 +68,26 @@ set(EXECUTABLE_OUTPUT_PATH
 # Must use GNUInstallDirs to install libraries into correct locations on all
 # platforms.
 include(GNUInstallDirs)
+include(CheckCXXCompilerFlag)
+include(CheckIncludeFileCXX)
+include(GenerateVersion)
+
+set(KPSR_VERSION_HEADER_FILE
+    "${CMAKE_CURRENT_SOURCE_DIR}/geometry/modules/geometry/include/klepsydra/geometry/version.h"
+)
+get_kpsr_version(KLEPSYDRA_ROBOTICS_VERSION "${KPSR_VERSION_HEADER_FILE}")
+message(STATUS "Klepsydra ROBOTICS version is: ${KLEPSYDRA_ROBOTICS_VERSION}")
 
 # Build type
 set(BUILD_SHARED_LIBS
     ON
     CACHE BOOL "Build shared libraries" FORCE)
 
-cmake_policy(SET CMP0057 NEW)
-cmake_policy(SET CMP0054 NEW)
-find_package(Klepsydra 8 REQUIRED)
-
-include(CheckCXXCompilerFlag)
-include(CheckIncludeFileCXX)
+find_package(Klepsydra 11 REQUIRED)
+set(CPACK_DEBIAN_LIBS_PACKAGE_DEPENDS "kpe-core (<< 12)")
+set(CPACK_DEBIAN_DEV_PACKAGE_DEPENDS "kpe-core-dev (<< 12)")
+set(KPSR_CHECK_DEPS "include(CMakeFindDependencyMacro)
+find_dependency(Klepsydra 11)")
 
 check_cxx_compiler_flag(-std=gnu++11 HAS_CXX11)
 if(HAS_CXX11)
@@ -178,7 +179,11 @@ add_subdirectory(geometry)
 add_subdirectory(uav_sensors)
 if(KPSR_WITH_OCV)
     add_subdirectory(vision_ocv)
-    string(APPEND KPSR_PACKAGE_OPTIONS "-ocv")
+else()
+    string(APPEND KPSR_PACKAGE_OPTIONS "-noocv")
+endif()
+if(KPSR_WITH_ZMQ)
+    string(APPEND KPSR_PACKAGE_OPTIONS "-zmq")
 endif()
 
 # Code Coverage
@@ -194,8 +199,7 @@ if(KPSR_WITH_CODE_METRICS
         ${CMAKE_PREFIX_PATH}
         geometry/tests
         uav_sensors/tests
-        vision_ocv/tests
-        vision_ocv/benchmark)
+        vision_ocv/tests)
     setup_target_for_coverage_gcovr_xml(NAME coverage EXECUTABLE make test)
 endif()
 
@@ -250,24 +254,23 @@ export(PACKAGE robotics)
 
 # Create the KlepsydraRoboticsConfig.cmake and KlepsydraRoboticsConfigVersion
 # files
-configure_file(KlepsydraRoboticsConfig.cmake.in
-               "${PROJECT_BINARY_DIR}/KlepsydraRoboticsConfig.cmake" @ONLY)
-
-configure_file(
+include(CMakePackageConfigHelpers)
+configure_package_config_file(
     KlepsydraRoboticsConfig.cmake.in
-    "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/KlepsydraRoboticsConfig.cmake"
-    @ONLY)
-# ... for both
-configure_file(
-    KlepsydraRoboticsConfigVersion.cmake.in
-    "${PROJECT_BINARY_DIR}/KlepsydraRoboticsConfigVersion.cmake" @ONLY)
+    "${PROJECT_BINARY_DIR}/KlepsydraRoboticsConfig.cmake"
+    INSTALL_DESTINATION ${INSTALL_CMAKE_DIR}
+    PATH_VARS CMAKE_INSTALL_INCLUDEDIR CMAKE_INSTALL_LIBDIR)
+
+write_basic_package_version_file(
+    "${PROJECT_BINARY_DIR}/KlepsydraRoboticsConfigVersion.cmake"
+    VERSION ${KLEPSYDRA_ROBOTICS_VERSION}
+    COMPATIBILITY SameMajorVersion)
 
 # Install the KlepsydraRoboticsConfig.cmake and
 # KlepsydraRoboticsConfigVersion.cmake
 install(
-    FILES
-        "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/KlepsydraRoboticsConfig.cmake"
-        "${PROJECT_BINARY_DIR}/KlepsydraRoboticsConfigVersion.cmake"
+    FILES "${PROJECT_BINARY_DIR}/KlepsydraRoboticsConfig.cmake"
+          "${PROJECT_BINARY_DIR}/KlepsydraRoboticsConfigVersion.cmake"
     DESTINATION "${INSTALL_CMAKE_DIR}"
     COMPONENT dev)
 
@@ -279,15 +282,15 @@ install(
 
 # PACKAGING
 if(NOT DEFINED KPSR_VERSION_MAJOR)
-    set(KPSR_VERSION_MAJOR ${KPSR_ROBOTICS_MAJOR_VERSION})
+    set(KPSR_VERSION_MAJOR ${KLEPSYDRA_ROBOTICS_VERSION_MAJOR})
 endif()
 
 if(NOT DEFINED KPSR_VERSION_MINOR)
-    set(KPSR_VERSION_MINOR ${KPSR_ROBOTICS_MINOR_VERSION})
+    set(KPSR_VERSION_MINOR ${KLEPSYDRA_ROBOTICS_VERSION_MINOR})
 endif()
 
 if(NOT DEFINED KPSR_VERSION_PATCH)
-    set(KPSR_VERSION_PATCH ${KPSR_ROBOTICS_PATCH_VERSION})
+    set(KPSR_VERSION_PATCH ${KLEPSYDRA_ROBOTICS_VERSION_PATCH})
 endif()
 
 set(KPSR_PACKAGE_DESCRIPTION "Klepsydra SDK Robotics Libraries")

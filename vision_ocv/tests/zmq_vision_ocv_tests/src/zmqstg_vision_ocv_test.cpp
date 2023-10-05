@@ -16,9 +16,9 @@
 
 #include <klepsydra/core/cache_listener.h>
 #include <klepsydra/core/event_emitter_middleware_provider.h>
-#include <klepsydra/core/publisher.h>
-#include <klepsydra/core/service.h>
-#include <klepsydra/core/subscriber.h>
+#include <klepsydra/sdk/publisher.h>
+#include <klepsydra/sdk/service.h>
+#include <klepsydra/sdk/subscriber.h>
 
 #include <klepsydra/mem_core/basic_middleware_provider.h>
 
@@ -74,7 +74,7 @@ TEST(ZmqVisionTest, ZmqVisionTest)
 
     //  Process 100 updates
     kpsr::zmq_mdlw::FromZmqMiddlewareProvider _fromZmqMiddlewareProvider;
-    kpsr::zmq_mdlw::FromZmqChannel<Base> *_binaryFromZMQProvider =
+    auto _binaryFromZMQProvider =
         _fromZmqMiddlewareProvider
             .getBinaryFromMiddlewareChannel<kpsr::vision_ocv::ImageData>(subscriber, 10);
     _binaryFromZMQProvider->start();

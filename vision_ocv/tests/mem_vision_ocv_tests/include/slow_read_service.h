@@ -25,8 +25,8 @@
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/spdlog.h"
 
-#include <klepsydra/core/service.h>
-#include <klepsydra/core/subscriber.h>
+#include <klepsydra/sdk/service.h>
+#include <klepsydra/sdk/subscriber.h>
 
 #include <klepsydra/vision_ocv/image_event_data.h>
 
@@ -35,7 +35,7 @@ class SlowReadService : public kpsr::Service
 public:
     SlowReadService(kpsr::Environment *environment,
                     kpsr::Subscriber<kpsr::vision_ocv::ImageData> *subscriber)
-        : kpsr::Service(environment, "SlowReadService")
+        : kpsr::Service(nullptr, environment, "SlowReadService")
         , _subscriber(subscriber)
     {}
 

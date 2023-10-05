@@ -22,9 +22,9 @@
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/spdlog.h"
 
-#include <klepsydra/core/service.h>
-#include <klepsydra/core/subscriber.h>
 #include <klepsydra/geometry/pose_event_data.h>
+#include <klepsydra/sdk/service.h>
+#include <klepsydra/sdk/subscriber.h>
 
 class PoseEventDataSubscriberService : public kpsr::Service
 {
@@ -32,7 +32,7 @@ public:
     PoseEventDataSubscriberService(
         kpsr::Environment *environment,
         kpsr::Subscriber<kpsr::geometry::PoseEventData> *poseEventDataSubscriber)
-        : Service(environment, "poseEventData_subs_service")
+        : Service(nullptr, environment, "poseEventData_subs_service")
         , _poseEventDataSubscriber(poseEventDataSubscriber)
     {}
 
