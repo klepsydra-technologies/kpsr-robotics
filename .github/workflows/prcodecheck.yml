@@ -38,7 +38,7 @@ jobs:
       image: ghcr.io/klepsydra-technologies/kpsrbase:1.0.0
     steps:
       - name: Clone kpsr-sdk
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: klepsydra-technologies/kpsr-sdk
           ref: main
@@ -54,7 +54,7 @@ jobs:
         working-directory: kpsr-sdk
 
       - name: Clone kpsr-core
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: klepsydra-technologies/kpsr-core
           submodules: recursive
@@ -75,7 +75,7 @@ jobs:
           sudo rm -rf ${GITHUB_WORKSPACE}/kpsr-core
 
       - name: Clone kpsr-robotics
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           submodules: recursive
 
@@ -97,7 +97,7 @@ jobs:
       image: ghcr.io/klepsydra-technologies/kpsrbase:1.0.0
     steps:
       - name: Clone kpsr-sdk
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: klepsydra-technologies/kpsr-sdk
           ref: main
@@ -113,7 +113,7 @@ jobs:
         working-directory: kpsr-sdk
 
       - name: Clone kpsr-core
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: klepsydra-technologies/kpsr-core
           submodules: recursive
@@ -134,7 +134,7 @@ jobs:
           sudo rm -rf ${GITHUB_WORKSPACE}/kpsr-core
 
       - name: Clone kpsr-robotics
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           submodules: recursive
 
