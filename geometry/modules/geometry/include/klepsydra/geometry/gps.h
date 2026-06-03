@@ -17,8 +17,7 @@
 #ifndef KPSR_GEOMETRY_GPS_H_
 #define KPSR_GEOMETRY_GPS_H_
 
-// Include section.
-#include "header.h"
+#include <klepsydra/geometry/header.h>
 
 namespace kpsr {
 namespace geometry {

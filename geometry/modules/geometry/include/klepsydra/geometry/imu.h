@@ -17,12 +17,13 @@
 #ifndef KPSR_GEOMETRY_IMU_H_
 #define KPSR_GEOMETRY_IMU_H_
 
-// Include section.
-#include "header.h"
-#include "quaternion.h"
-#include "vector3.h"
 #include <array>
+
 #include <klepsydra/core/sensor.h>
+
+#include <klepsydra/geometry/header.h>
+#include <klepsydra/geometry/quaternion.h>
+#include <klepsydra/geometry/vector3.h>
 
 namespace kpsr {
 namespace geometry {
